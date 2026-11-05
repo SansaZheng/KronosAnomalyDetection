@@ -121,3 +121,13 @@ kronos-ad --reference runs/demo-data/reference.csv \
 - [SciPy generalized Pareto distribution](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.genpareto.html)
 
 本项目的预测误差异常定义、逐维评分及组合规则来自本任务指定方案；POT 借鉴极值理论。本仓库不直接沿用 TranAD 两阶段重构误差或其参数/实验结论。
+
+## 公开数据目录
+
+新增[金融异常检测数据目录](data/README.md)：检索35个来源/数据家族，实际保存8个来源包、38个文件（约103.5MiB）。包含ULB、BankSim、pump-and-dump发布特征、S-FFSD、SD-FMM数组，以及明确标注为部分数据的SynthAML告警、ADMA事件区间和CardSim代码/输入。完整范围、未下载原因、逐文件SHA256和无监督评估约定均见数据目录；不是全部数据已下载的声明。
+
+```bash
+python scripts/download_datasets.py --list
+python scripts/download_datasets.py
+python scripts/audit_datasets.py
+```

@@ -13,3 +13,4 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install -e '.[test]'
       - run: python -m pytest -q
+      - run: python scripts/audit_datasets.py --report /tmp/kronos-data-audit.json
