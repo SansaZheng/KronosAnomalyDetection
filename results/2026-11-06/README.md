@@ -1,9 +1,10 @@
 # 金融异常检测实验结果（2026-11-06）
 
-已完成两条实际实验：
+已完成三类实际实验：
 
 - **下载数据基线**：5个数据家族的10个发布版本 × 2种无监督检测器，共20组结果。
 - **真实K线Kronos实验**：Kronos-mini 对 BRD/BTC 5分钟真实OHLCVA作滚动单步预测，固定POT阈值检测。
+- **授权的Kronos-Proxy实验**：10个非OHLCVA版本的逐特征代理预测，采用固定上限抽样，[单独报告](kronos_proxy/README.md)。
 
 所有表格和图片均从实际推理输出生成，没有用预测桩代替模型，没有手工填写性能数字，没有用测试标签调阈值。运行失败列表为空。该实验不是充分调优后的论文性能基准；真实/合成数据、不同标签粒度、同源派生版本不能合并成一个“总体准确率”。
 
@@ -11,7 +12,7 @@
 
 | 产物 | 内容 |
 | --- | --- |
-| [all_results.csv](all_results.csv) | 21组结果，明确区分20组基线与1个Kronos案例 |
+| [all_results.csv](all_results.csv) | 31组记录，明确区分20组基线、1个原生Kronos案例和10组抽样Kronos-Proxy实验 |
 | [BASELINE_TABLE.md](BASELINE_TABLE.md) / [原始汇总CSV](baselines/summary.csv) | 完整基线数值表 |
 | [基线表格图片](baseline_results_table.png) | 可直接阅读或引用的结果表 |
 | [基线比较图](baseline_comparison.png) | F1和Average Precision，附随机排序的AP参照 |
@@ -99,3 +100,7 @@ python -m pytest -q
 ## 数据使用与署名
 
 输入数据的原始许可与出处见 [数据目录](../../data/README.md)。本目录逐点分数、标签及表格属于相应输入数据的派生输出：ULB继续遵守ODbL/DbCL，BankSim遵守CC-BY-NC-SA-4.0，S-FFSD保留原仓库GPL-3.0条件，Sapienza/SD-FMM保留原项目MIT署名；不以统一软件许可覆盖数据权利。绘图只用于展示这些研究结果。新增行情来自 [Binance Public Data](https://github.com/binance/binance-public-data)；Kronos来自 [原作者仓库](https://github.com/shiyu-coder/Kronos)。
+
+## 新增：非OHLCVA数据的Kronos代理适配
+
+用户明确允许逐特征代理表示后，新增[10组Kronos-Proxy实测](kronos_proxy/README.md)。它们使用真实冻结Kronos-mini权重，和本页的20组传统基线、1个原生OHLCVA案例分开命名。本轮每版本最多512个校准点、1024个测试点，保留每组/case预热；不是全量测试。总表新增`experiment_family`与`sampling`列区分实验类别。

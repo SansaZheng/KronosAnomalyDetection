@@ -39,12 +39,18 @@ def main():
     for key,value in computed.items():
         np.testing.assert_allclose(value,summary['weak_annotation_metrics'][key])
     assert pd.to_datetime(kronos.loc[kronos.split=='calibration','timestamps']).max() < pd.to_datetime(test.timestamps).min()
+    proxy_count=0
+    if (OUT/'kronos_proxy/all_metrics.json').exists():
+        from verify_kronos_proxy import main as verify_proxy
+        verify_proxy()
+        proxy_count=10
+        assert len(pd.read_csv(OUT/'all_results.csv'))==31
     files=[]
     for p in sorted(OUT.rglob('*')):
         if p.is_file() and p.name!='result_checksums.json':
             files.append(dict(path=str(p.relative_to(OUT)),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
-    (OUT/'result_checksums.json').write_text(json.dumps(dict(row_level_consistency='passed',baseline_experiments=20,kronos_cases=1,files=files),indent=2)+'\n')
-    print('Verified all 21 published results against saved scores, thresholds and labels.')
+    (OUT/'result_checksums.json').write_text(json.dumps(dict(row_level_consistency='passed',baseline_experiments=20,kronos_cases=1,kronos_proxy_experiments=proxy_count,files=files),indent=2)+'\n')
+    print(f'Verified 20 baseline, 1 native Kronos and {proxy_count} Kronos-Proxy experiments against saved outputs.')
 
 
 if __name__=='__main__':main()

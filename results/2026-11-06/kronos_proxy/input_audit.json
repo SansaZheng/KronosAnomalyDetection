@@ -1,0 +1,76 @@
+{
+  "source_receipts_verified": true,
+  "feature_forecasts": 126592,
+  "datasets": [
+    {
+      "dataset": "ulb_creditcard",
+      "selected_points": 1536,
+      "feature_forecasts": 44544,
+      "input_sha256": "3ae40c8a3c0792f16a1a0759eec12b8b98621e5ab7c5178deaa488ae6a529527",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "banksim",
+      "selected_points": 1536,
+      "feature_forecasts": 9216,
+      "input_sha256": "0695925759f142bbe481633ba0a21955435d0bb99fbc7dd7267f1736daf1d3fd",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "s_ffsd",
+      "selected_points": 1536,
+      "feature_forecasts": 7680,
+      "input_sha256": "ab76aef1628f30cd11ebf410e05417f9da7d481b78f824d66893d87aa1b5ab89",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sapienza_5s",
+      "selected_points": 1536,
+      "feature_forecasts": 19968,
+      "input_sha256": "363d9497e4c6658306be5195497698c2495688e6d2185411a715531b046e9222",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sapienza_15s",
+      "selected_points": 1536,
+      "feature_forecasts": 19968,
+      "input_sha256": "ec34788de95a27c6d88cf4a51e37487cd2ab10723d08bcd2b2ed2e9672a0aee5",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sapienza_25s",
+      "selected_points": 1536,
+      "feature_forecasts": 19968,
+      "input_sha256": "4b73a87ab476df099c8dfc92bd1b5cda01cbdc88e8e98d0a32beaa35b5577089",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sd_crypto",
+      "selected_points": 1536,
+      "feature_forecasts": 1536,
+      "input_sha256": "c62f8b7d635eb5d5ef2c9acd6f450883dec3deaa724ae0246898010d7d5d2ac8",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sd_stock",
+      "selected_points": 1280,
+      "feature_forecasts": 1280,
+      "input_sha256": "4de394ee15800cb0f71bbe340e451cf3b8ff62257155cc8d38d7fda0ce5e6836",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sd_prices",
+      "selected_points": 896,
+      "feature_forecasts": 896,
+      "input_sha256": "74a2265ca9360e512d8d3e4bcfeaa6c96391aefa44a90d1c372b596b64a75e86",
+      "source_files_verified": true
+    },
+    {
+      "dataset": "sd_synthetic",
+      "selected_points": 1536,
+      "feature_forecasts": 1536,
+      "input_sha256": "6ef29c7fd508e50ec3571598c629d474439703ad1839e5fbd7f544bd9f3e96e0",
+      "source_files_verified": true
+    }
+  ]
+}

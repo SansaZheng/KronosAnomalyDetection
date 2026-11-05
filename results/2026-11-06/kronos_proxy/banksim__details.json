@@ -1,0 +1,133 @@
+{
+  "summary": {
+    "dataset": "banksim",
+    "model": "Kronos-mini-Proxy",
+    "representation": "out-of-domain per-feature numeric proxy, not real OHLCVA",
+    "protocol": "chronological whole-day 60/20/20",
+    "lookback": 32,
+    "reference_rows": 332592,
+    "original_calibration_rows": 128820,
+    "original_test_rows": 133231,
+    "calibration_scored": 512,
+    "test_rows": 1024,
+    "features": [
+      "customer_reference_frequency",
+      "age_reference_frequency",
+      "gender_reference_frequency",
+      "merchant_reference_frequency",
+      "category_reference_frequency",
+      "amount"
+    ],
+    "dimensions": 6,
+    "active_dimensions": 6,
+    "failed_dimensions": [],
+    "selection": "deterministic evenly-spaced valid positions; labels not used; history resets within event/case",
+    "calibration_cap": 512,
+    "test_cap": 1024,
+    "per_feature_risk": 0.01,
+    "pot_quantile": 0.9,
+    "max_score_ratio_definition": "max over successfully calibrated feature scores divided by their POT thresholds",
+    "calibration_joint_alarm_rate": 0.046875,
+    "evaluated": 1024,
+    "unknown_excluded": 0,
+    "positives": 17,
+    "prevalence": 0.0166015625,
+    "precision": 0.21739130434782608,
+    "recall": 0.29411764705882354,
+    "f1": 0.25,
+    "average_precision": 0.13732241136908924,
+    "roc_auc": 0.7755125883521234,
+    "tn": 989,
+    "fp": 18,
+    "fn": 12,
+    "tp": 5,
+    "false_positive_rate": 0.01787487586891758,
+    "alarm_rate": 0.0224609375
+  },
+  "tail_fits": {
+    "customer_reference_frequency": {
+      "threshold": 19.720061503524214,
+      "initial_threshold": 5.435271350477369,
+      "shape": 0.28199827861140225,
+      "scale": 4.366062044469064,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "age_reference_frequency": {
+      "threshold": 10.647403016895971,
+      "initial_threshold": 5.102308227761255,
+      "shape": -0.22154003864604127,
+      "scale": 3.0586707236171766,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "gender_reference_frequency": {
+      "threshold": 10.279404491580577,
+      "initial_threshold": 4.455263662631849,
+      "shape": 1.0909544724106115,
+      "scale": 0.550591747670568,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "merchant_reference_frequency": {
+      "threshold": 29.175936749637934,
+      "initial_threshold": 7.943086089665079,
+      "shape": 0.8344694169642106,
+      "scale": 2.9930771966894385,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "category_reference_frequency": {
+      "threshold": 100.18723302961533,
+      "initial_threshold": 7.906916845988969,
+      "shape": 1.9554352561031125,
+      "scale": 1.9608500924504306,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "amount": {
+      "threshold": 78.61241605931224,
+      "initial_threshold": 4.852688999849896,
+      "shape": 1.5831592643342918,
+      "scale": 3.05304623035021,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    }
+  },
+  "epsilon": [
+    1e-08,
+    8.830258212956336e-08,
+    5.35315511282905e-08,
+    1.4712657282833732e-07,
+    2.956537043575129e-07,
+    0.00011767753030042309
+  ],
+  "reference_center": [
+    0.00030066868716024437,
+    0.24608228700630203,
+    0.54533181796315,
+    0.4162066435753115,
+    0.8502700004810699,
+    26.91
+  ],
+  "reference_scale": [
+    5.682583289317101e-05,
+    0.08830258212956336,
+    0.0535315511282905,
+    0.14712657282833733,
+    0.29565370435751287,
+    117.67753030042309
+  ]
+}

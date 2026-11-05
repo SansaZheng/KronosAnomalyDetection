@@ -1,0 +1,12 @@
+dataset,dimensions,native_kronos_compatible,status,reason,existing_result_model,proxy_status,proxy_result
+ulb_creditcard,29,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/ulb_creditcard__details.json
+banksim,6,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/banksim__details.json
+s_ffsd,5,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/s_ffsd__details.json
+sapienza_5s,13,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sapienza_5s__details.json
+sapienza_15s,13,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sapienza_15s__details.json
+sapienza_25s,13,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sapienza_25s__details.json
+sd_crypto,1,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sd_crypto__details.json
+sd_stock,1,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sd_stock__details.json
+sd_prices,1,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sd_prices__details.json
+sd_synthetic,1,False,native_not_applicable_proxy_completed,No true OHLCVA channels; a feature proxy would be a new experiment,IsolationForest / RobustMAD,completed_subsample,../kronos_proxy/sd_synthetic__details.json
+BRDBTC_5m_2018_12,6,True,existing_verified_Kronos_run,"Original exchange OHLCVA, local pretrained Kronos-mini",Kronos-mini,native_only_existing_run,

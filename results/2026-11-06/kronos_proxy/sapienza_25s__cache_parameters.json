@@ -1,0 +1,28 @@
+{
+  "dataset": "sapienza_25s",
+  "lookback": 32,
+  "sample_count": 1,
+  "batch_size": 256,
+  "seed": 42,
+  "device": "mps",
+  "calibration_cap": 512,
+  "test_cap": 1024,
+  "features": [
+    "std_rush_order",
+    "avg_rush_order",
+    "std_trades",
+    "std_volume",
+    "avg_volume",
+    "std_price",
+    "avg_price",
+    "avg_price_max",
+    "hour_sin",
+    "hour_cos",
+    "minute_sin",
+    "minute_cos",
+    "symbol_reference_frequency"
+  ],
+  "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+  "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+  "input_sha256": "4b73a87ab476df099c8dfc92bd1b5cda01cbdc88e8e98d0a32beaa35b5577089"
+}

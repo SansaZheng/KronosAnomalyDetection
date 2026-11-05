@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "dataset": "sd_prices",
+    "model": "Kronos-mini-Proxy",
+    "representation": "out-of-domain per-feature numeric proxy, not real OHLCVA",
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "lookback": 32,
+    "reference_rows": 1440,
+    "original_calibration_rows": 480,
+    "original_test_rows": 640,
+    "calibration_scored": 384,
+    "test_rows": 512,
+    "features": [
+      "value"
+    ],
+    "dimensions": 1,
+    "active_dimensions": 1,
+    "failed_dimensions": [],
+    "selection": "deterministic evenly-spaced valid positions; labels not used; history resets within event/case",
+    "calibration_cap": 512,
+    "test_cap": 1024,
+    "per_feature_risk": 0.01,
+    "pot_quantile": 0.9,
+    "max_score_ratio_definition": "max over successfully calibrated feature scores divided by their POT thresholds",
+    "calibration_joint_alarm_rate": 0.0078125,
+    "evaluated": 512,
+    "unknown_excluded": 0,
+    "positives": 76,
+    "prevalence": 0.1484375,
+    "precision": 0.5,
+    "recall": 0.06578947368421052,
+    "f1": 0.11627906976744186,
+    "average_precision": 0.2566998018115991,
+    "roc_auc": 0.6538809753742154,
+    "tn": 431,
+    "fp": 5,
+    "fn": 71,
+    "tp": 5,
+    "false_positive_rate": 0.011467889908256881,
+    "alarm_rate": 0.01953125
+  },
+  "tail_fits": {
+    "value": {
+      "threshold": 6.925916397930341,
+      "initial_threshold": 2.1880956886298177,
+      "shape": 0.23916537895124557,
+      "scale": 1.5293707074307463,
+      "n": 384,
+      "n_exceedances": 39,
+      "quantile": 0.9,
+      "risk": 0.01
+    }
+  },
+  "epsilon": [
+    2.549177908476065e-07
+  ],
+  "reference_center": [
+    0.4999999999999989
+  ],
+  "reference_scale": [
+    0.2549177908476065
+  ]
+}

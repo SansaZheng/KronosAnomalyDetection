@@ -137,3 +137,9 @@ python scripts/audit_datasets.py
 [2026-11-06 实验结果与图片](results/2026-11-06/README.md)：已下载数据的20组无监督基线结果，以及真实BRD/BTC K线的Kronos-mini单步预测误差检测。包括CSV结果表、逐点分数、PNG/PDF图、维度热图和复现脚本。Kronos测试1152根K线，触发54根统计告警；这是单一回顾案例，不代表确诊54次欺诈。
 
 ![Kronos异常检测](results/2026-11-06/kronos_timeseries.png)
+
+## Kronos-Proxy 非OHLCVA适配实验
+
+[新增Kronos-Proxy结果](results/2026-11-06/kronos_proxy/README.md)：按用户明确授权，将此前10个非OHLCVA版本逐特征表示为数值代理，实际调用冻结Kronos-mini权重完成预测误差检测。本轮为固定上限抽样（每版本最多512校准点、1024测试点），与[原生OHLCVA结果](results/2026-11-06/kronos/summary.json)分开报告，不声称原论文已验证该域外表示。
+
+![Kronos-Proxy结果表](results/2026-11-06/kronos_proxy/kronos_proxy_table.png)

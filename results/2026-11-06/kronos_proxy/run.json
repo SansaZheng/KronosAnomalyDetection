@@ -1,0 +1,20 @@
+{
+  "failures": [],
+  "arguments": {
+    "device": "mps",
+    "batch_size": 256,
+    "lookback": 32,
+    "calibration_cap": 512,
+    "test_cap": 1024,
+    "ids": null,
+    "output": "results/2026-11-06/kronos_proxy"
+  },
+  "versions": {
+    "torch": "2.8.0",
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scipy": "1.13.1",
+    "scikit-learn": "1.6.1"
+  },
+  "native_Kronos_results_are_separate": "../kronos/summary.json"
+}

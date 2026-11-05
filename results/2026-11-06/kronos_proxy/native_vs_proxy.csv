@@ -1,0 +1,12 @@
+dataset,model,mode,calibration,test,dimensions,alarm_rate,label_scope
+BRDBTC_5m_2018_12,Kronos-mini,native_ohlcva,1728,1152,6,0.046875,396 weak-labeled test bars; one positive; remainder unknown
+ulb_creditcard,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,29,0.212890625,selected test subset of upstream labels
+banksim,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,6,0.0224609375,selected test subset of upstream labels
+s_ffsd,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,5,0.025390625,selected test subset of upstream labels
+sapienza_5s,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,13,0.0546875,selected test subset of upstream labels
+sapienza_15s,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,13,0.083984375,selected test subset of upstream labels
+sapienza_25s,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,13,0.09765625,selected test subset of upstream labels
+sd_crypto,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,1,0.0107421875,selected test subset of upstream labels
+sd_stock,Kronos-mini-Proxy,numeric_proxy_subsample,512,768,1,0.00390625,selected test subset of upstream labels
+sd_prices,Kronos-mini-Proxy,numeric_proxy_subsample,384,512,1,0.01953125,selected test subset of upstream labels
+sd_synthetic,Kronos-mini-Proxy,numeric_proxy_subsample,512,1024,1,0.01171875,selected test subset of upstream labels

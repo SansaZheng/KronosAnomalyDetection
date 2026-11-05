@@ -1,0 +1,16 @@
+{
+  "dataset": "sd_stock",
+  "lookback": 32,
+  "sample_count": 1,
+  "batch_size": 256,
+  "seed": 42,
+  "device": "mps",
+  "calibration_cap": 512,
+  "test_cap": 1024,
+  "features": [
+    "value"
+  ],
+  "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+  "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+  "input_sha256": "4de394ee15800cb0f71bbe340e451cf3b8ff62257155cc8d38d7fda0ce5e6836"
+}

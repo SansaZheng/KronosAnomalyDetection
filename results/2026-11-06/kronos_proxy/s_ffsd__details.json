@@ -1,0 +1,119 @@
+{
+  "summary": {
+    "dataset": "s_ffsd",
+    "model": "Kronos-mini-Proxy",
+    "representation": "out-of-domain per-feature numeric proxy, not real OHLCVA",
+    "protocol": "transaction-index 60/20/20; label 2 unknown",
+    "lookback": 32,
+    "reference_rows": 46728,
+    "original_calibration_rows": 15576,
+    "original_test_rows": 15577,
+    "calibration_scored": 512,
+    "test_rows": 1024,
+    "features": [
+      "Source_reference_frequency",
+      "Target_reference_frequency",
+      "Amount",
+      "Location_reference_frequency",
+      "Type_reference_frequency"
+    ],
+    "dimensions": 5,
+    "active_dimensions": 5,
+    "failed_dimensions": [],
+    "selection": "deterministic evenly-spaced valid positions; labels not used; history resets within event/case",
+    "calibration_cap": 512,
+    "test_cap": 1024,
+    "per_feature_risk": 0.01,
+    "pot_quantile": 0.9,
+    "max_score_ratio_definition": "max over successfully calibrated feature scores divided by their POT thresholds",
+    "calibration_joint_alarm_rate": 0.037109375,
+    "evaluated": 391,
+    "unknown_excluded": 633,
+    "positives": 154,
+    "prevalence": 0.3938618925831202,
+    "precision": 0.2222222222222222,
+    "recall": 0.012987012987012988,
+    "f1": 0.024539877300613498,
+    "average_precision": 0.30501336807436535,
+    "roc_auc": 0.35071784755329066,
+    "tn": 230,
+    "fp": 7,
+    "fn": 152,
+    "tp": 2,
+    "false_positive_rate": 0.029535864978902954,
+    "alarm_rate": 0.025390625
+  },
+  "tail_fits": {
+    "Source_reference_frequency": {
+      "threshold": 110.79026976606201,
+      "initial_threshold": 4.454727996504505,
+      "shape": 1.345884739255144,
+      "scale": 6.612339157420308,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "Target_reference_frequency": {
+      "threshold": 13.206443356353704,
+      "initial_threshold": 4.785893834103295,
+      "shape": 0.29844716305265695,
+      "scale": 2.519736890473254,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "Amount": {
+      "threshold": 411.8945564059075,
+      "initial_threshold": 3.7759098350328015,
+      "shape": 2.3106254715739762,
+      "scale": 4.470811132628128,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "Location_reference_frequency": {
+      "threshold": 205.66385347429386,
+      "initial_threshold": 4.873319760749014,
+      "shape": 2.730906695050819,
+      "scale": 0.9784291948700611,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "Type_reference_frequency": {
+      "threshold": 21.939408052916253,
+      "initial_threshold": 5.129627029490966,
+      "shape": 0.7165348500466153,
+      "scale": 2.824413402548745,
+      "n": 512,
+      "n_exceedances": 52,
+      "quantile": 0.9,
+      "risk": 0.01
+    }
+  },
+  "epsilon": [
+    1e-08,
+    6.616887340711723e-08,
+    0.0028606133851629724,
+    2.5625779662108727e-07,
+    7.633402842180278e-08
+  ],
+  "reference_center": [
+    0.00014980311590481082,
+    0.07021486046909775,
+    17.08,
+    0.6217471323403527,
+    0.1750342407122068
+  ],
+  "reference_scale": [
+    0.004638336740087405,
+    0.06616887340711723,
+    2860.6133851629725,
+    0.2562577966210873,
+    0.07633402842180279
+  ]
+}

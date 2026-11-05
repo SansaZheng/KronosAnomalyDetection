@@ -1,0 +1,21 @@
+{
+  "dataset": "banksim",
+  "lookback": 32,
+  "sample_count": 1,
+  "batch_size": 256,
+  "seed": 42,
+  "device": "mps",
+  "calibration_cap": 512,
+  "test_cap": 1024,
+  "features": [
+    "customer_reference_frequency",
+    "age_reference_frequency",
+    "gender_reference_frequency",
+    "merchant_reference_frequency",
+    "category_reference_frequency",
+    "amount"
+  ],
+  "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+  "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+  "input_sha256": "0695925759f142bbe481633ba0a21955435d0bb99fbc7dd7267f1736daf1d3fd"
+}
