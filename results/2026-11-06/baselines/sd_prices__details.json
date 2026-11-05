@@ -1,0 +1,76 @@
+[
+  {
+    "dataset": "sd_prices",
+    "model": "IsolationForest",
+    "reference_rows": 1440,
+    "calibration_rows": 480,
+    "test_rows": 640,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 0.6826560630983298,
+      "initial_threshold": 0.5973501500614635,
+      "shape": -1.208124778574005,
+      "scale": 0.11228067114033818,
+      "n": 480,
+      "n_exceedances": 38,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 640,
+    "unknown_excluded": 0,
+    "positives": 76,
+    "prevalence": 0.11875,
+    "precision": 0.1875,
+    "recall": 0.039473684210526314,
+    "f1": 0.06521739130434782,
+    "average_precision": 0.16681858234286734,
+    "roc_auc": 0.5691839305711085,
+    "tn": 551,
+    "fp": 13,
+    "fn": 73,
+    "tp": 3,
+    "false_positive_rate": 0.02304964539007092,
+    "alarm_rate": 0.025
+  },
+  {
+    "dataset": "sd_prices",
+    "model": "RobustMAD",
+    "reference_rows": 1440,
+    "calibration_rows": 480,
+    "test_rows": 640,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 1.731356198837703,
+      "initial_threshold": 1.6333950100837464,
+      "shape": -1.640762825094748,
+      "scale": 0.1649239268456042,
+      "n": 480,
+      "n_exceedances": 45,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 640,
+    "unknown_excluded": 0,
+    "positives": 76,
+    "prevalence": 0.11875,
+    "precision": 0.24,
+    "recall": 0.07894736842105263,
+    "f1": 0.1188118811881188,
+    "average_precision": 0.1948229914616691,
+    "roc_auc": 0.619552538260545,
+    "tn": 545,
+    "fp": 19,
+    "fn": 70,
+    "tp": 6,
+    "false_positive_rate": 0.03368794326241135,
+    "alarm_rate": 0.0390625
+  }
+]

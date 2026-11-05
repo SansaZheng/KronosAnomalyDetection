@@ -1,0 +1,61 @@
+{
+  "kronos_commit": "67b630e67f6a18c9e9be918d9b4337c960db1e9a",
+  "files": [
+    {
+      "path": "vendor/Kronos/model/__init__.py",
+      "url": "https://raw.githubusercontent.com/shiyu-coder/Kronos/67b630e67f6a18c9e9be918d9b4337c960db1e9a/model/__init__.py",
+      "bytes": 412,
+      "sha256": "f8f856ca3fedadcaac97e196be23d1aeda1c3c9ffe8903d66d43ea3bcac6240c"
+    },
+    {
+      "path": "vendor/Kronos/model/kronos.py",
+      "url": "https://raw.githubusercontent.com/shiyu-coder/Kronos/67b630e67f6a18c9e9be918d9b4337c960db1e9a/model/kronos.py",
+      "bytes": 30133,
+      "sha256": "0a5f90282e2039c2de0771473419715c845def154896dbd0f5747837e6241032"
+    },
+    {
+      "path": "vendor/Kronos/model/module.py",
+      "url": "https://raw.githubusercontent.com/shiyu-coder/Kronos/67b630e67f6a18c9e9be918d9b4337c960db1e9a/model/module.py",
+      "bytes": 23426,
+      "sha256": "a07edbadc0e96804c8158c021bbc6063bb7cc43b34d7fc470d5c8ff2005a409f"
+    },
+    {
+      "path": "weights/Kronos-mini/config.json",
+      "url": "https://huggingface.co/NeoQuasar/Kronos-mini/resolve/main/config.json",
+      "bytes": 225,
+      "sha256": "70daca2cb11e3a979dd6b8ac12ee08e2aace877acf28f5b8dfb4fe5609736201"
+    },
+    {
+      "path": "weights/Kronos-mini/model.safetensors",
+      "url": "https://huggingface.co/NeoQuasar/Kronos-mini/resolve/main/model.safetensors",
+      "bytes": 16440776,
+      "sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c"
+    },
+    {
+      "path": "weights/Kronos-Tokenizer-2k/config.json",
+      "url": "https://huggingface.co/NeoQuasar/Kronos-Tokenizer-2k/resolve/main/config.json",
+      "bytes": 301,
+      "sha256": "0b30a443affb03e05a876a083857de9164f899feb7b4d261da02c485c9a3e3b6"
+    },
+    {
+      "path": "weights/Kronos-Tokenizer-2k/model.safetensors",
+      "url": "https://huggingface.co/NeoQuasar/Kronos-Tokenizer-2k/resolve/main/model.safetensors",
+      "bytes": 15842376,
+      "sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717"
+    },
+    {
+      "path": "runs/market/BRDBTC-5m-2018-12.zip",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BRDBTC/5m/BRDBTC-5m-2018-12.zip",
+      "bytes": 186741,
+      "sha256": "a0247d2be0473c8d09644fbcade609a9e05dfc07a9b60ab0df023aedab0d8c46"
+    },
+    {
+      "path": "runs/market/BRDBTC-5m-2018-12.zip.CHECKSUM",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BRDBTC/5m/BRDBTC-5m-2018-12.zip.CHECKSUM",
+      "bytes": 87,
+      "sha256": "5b2400d90c91ec9a969ca6dd2f5bc0af541995ca31cd091278b20056f6095cbe"
+    }
+  ],
+  "baseline_data_manifest": "../../data/raw/download_manifest.json",
+  "baseline_data_manifest_sha256": "a896875b7f63faea9d1a3b14bad963d81e8ac2c3c6f0904620c9b4b30c95d5fa"
+}

@@ -1,0 +1,10 @@
+source,status,models,reason_or_scope
+ulb_creditcard,completed,IsolationForest + RobustMAD,支付PCA特征，不满足Kronos OHLCV
+banksim,completed,IsolationForest + RobustMAD,交易表与网络表是同一批记录，只评估交易表
+s_ffsd,completed,IsolationForest + RobustMAD,未知标签2保留参与无标签训练/推理，最终指标中排除
+sapienza_pump_dump,completed,3 resolutions × 2 baselines,上游工程特征非原始OHLCV；跨时间分组并清除边界重叠事件
+sd_fmm,completed,4 numeric releases × 2 baselines,文件顺序按完整case划分；非时间外推证据；不加载object数组
+synthaml,not_scored,none,仅有告警ID、日期、审核结果；缺交易表，没有独立交易输入特征
+adma21,not_scored,none,仅发布事件区间，未下载相应股票行情
+cardsim,not_scored,none,包内为代码和公共支付调查输入，非已生成的有标签欺诈交易
+BRDBTC_2018_12,completed,Kronos-mini,本次补充真实5分钟OHLCVA，与Sapienza BRD事件对应；单一回顾案例

@@ -1,0 +1,17 @@
+{
+  "failures": [],
+  "versions": {
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scipy": "1.13.1",
+    "scikit-learn": "1.6.1"
+  },
+  "models": [
+    "IsolationForest 100 trees max_samples256 seed42",
+    "mean absolute robust-MAD standardized deviation"
+  ],
+  "pot_quantile": 0.9,
+  "pot_risk": 0.01,
+  "min_exceedances": 30,
+  "labels_used_for_training_or_thresholds": false
+}

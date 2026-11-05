@@ -1,0 +1,76 @@
+[
+  {
+    "dataset": "sd_synthetic",
+    "model": "IsolationForest",
+    "reference_rows": 95840,
+    "calibration_rows": 32000,
+    "test_rows": 32000,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 0.7487760775579915,
+      "initial_threshold": 0.541434260148574,
+      "shape": -0.847958943598168,
+      "scale": 0.20501326689707705,
+      "n": 32000,
+      "n_exceedances": 3187,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 32000,
+    "unknown_excluded": 0,
+    "positives": 1573,
+    "prevalence": 0.04915625,
+    "precision": 0.974293059125964,
+    "recall": 0.24094087730451366,
+    "f1": 0.38634046890927626,
+    "average_precision": 0.6920059011021635,
+    "roc_auc": 0.8919506801172905,
+    "tn": 30417,
+    "fp": 10,
+    "fn": 1194,
+    "tp": 379,
+    "false_positive_rate": 0.00032865547047030596,
+    "alarm_rate": 0.01215625
+  },
+  {
+    "dataset": "sd_synthetic",
+    "model": "RobustMAD",
+    "reference_rows": 95840,
+    "calibration_rows": 32000,
+    "test_rows": 32000,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 8.315114116627308,
+      "initial_threshold": 2.225424849440936,
+      "shape": 0.06582888226776788,
+      "scale": 2.4493414250927863,
+      "n": 32000,
+      "n_exceedances": 3200,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 32000,
+    "unknown_excluded": 0,
+    "positives": 1573,
+    "prevalence": 0.04915625,
+    "precision": 0.9619450317124736,
+    "recall": 0.2892561983471074,
+    "f1": 0.4447702834799609,
+    "average_precision": 0.7002285219330281,
+    "roc_auc": 0.8934228602256699,
+    "tn": 30409,
+    "fp": 18,
+    "fn": 1118,
+    "tp": 455,
+    "false_positive_rate": 0.0005915798468465507,
+    "alarm_rate": 0.01478125
+  }
+]

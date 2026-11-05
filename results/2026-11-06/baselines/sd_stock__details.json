@@ -1,0 +1,76 @@
+[
+  {
+    "dataset": "sd_stock",
+    "model": "IsolationForest",
+    "reference_rows": 2560,
+    "calibration_rows": 800,
+    "test_rows": 960,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 0.6881539028148878,
+      "initial_threshold": 0.548225103912156,
+      "shape": -0.5011192320093434,
+      "scale": 0.11084701156005927,
+      "n": 800,
+      "n_exceedances": 59,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 960,
+    "unknown_excluded": 0,
+    "positives": 91,
+    "prevalence": 0.09479166666666666,
+    "precision": 0.8947368421052632,
+    "recall": 0.18681318681318682,
+    "f1": 0.3090909090909091,
+    "average_precision": 0.6599515935995874,
+    "roc_auc": 0.9136875782445404,
+    "tn": 867,
+    "fp": 2,
+    "fn": 74,
+    "tp": 17,
+    "false_positive_rate": 0.0023014959723820483,
+    "alarm_rate": 0.019791666666666666
+  },
+  {
+    "dataset": "sd_stock",
+    "model": "RobustMAD",
+    "reference_rows": 2560,
+    "calibration_rows": 800,
+    "test_rows": 960,
+    "protocol": "whole-case file-order 60/20/20; timestamps/source overlap unverified, NOT chronological evidence",
+    "features": [
+      "value"
+    ],
+    "seed": 42,
+    "pot": {
+      "threshold": 5.361035406529776,
+      "initial_threshold": 1.2609501145534934,
+      "shape": -0.26098059048981465,
+      "scale": 2.3981134599315963,
+      "n": 800,
+      "n_exceedances": 77,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "evaluated": 960,
+    "unknown_excluded": 0,
+    "positives": 91,
+    "prevalence": 0.09479166666666666,
+    "precision": 0.88,
+    "recall": 0.24175824175824176,
+    "f1": 0.3793103448275862,
+    "average_precision": 0.68086046780121,
+    "roc_auc": 0.9270223447438637,
+    "tn": 866,
+    "fp": 3,
+    "fn": 69,
+    "tp": 22,
+    "false_positive_rate": 0.0034522439585730723,
+    "alarm_rate": 0.026041666666666668
+  }
+]

@@ -1,0 +1,130 @@
+{
+  "dataset": "BRDBTC_5m_2018_12",
+  "model": "Kronos-mini",
+  "lookback": 64,
+  "sample_count": 3,
+  "temperature": 1.0,
+  "top_p": 0.9,
+  "top_k": 0,
+  "seed": 42,
+  "batch_size": 32,
+  "device": "mps",
+  "calibrated_rows": 1728,
+  "test_rows": 1152,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "amount"
+  ],
+  "epsilon": [
+    1e-08,
+    1e-08,
+    1e-08,
+    1e-08,
+    0.001,
+    1e-08
+  ],
+  "pot": {
+    "open": {
+      "threshold": 43.33341110539019,
+      "initial_threshold": 10.735748191361706,
+      "shape": 0.418117566453238,
+      "scale": 8.412542928316093,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "high": {
+      "threshold": 100.13943574009431,
+      "initial_threshold": 18.210866698266045,
+      "shape": 0.3723133312249701,
+      "scale": 22.46568185539545,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "low": {
+      "threshold": 129.9445621212299,
+      "initial_threshold": 21.939856038734447,
+      "shape": 0.20873455463520874,
+      "scale": 36.510084131661515,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "close": {
+      "threshold": 93.0907784946758,
+      "initial_threshold": 19.057257891261056,
+      "shape": 0.20117318484569222,
+      "scale": 25.26258018639754,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "volume": {
+      "threshold": 69.77782200155396,
+      "initial_threshold": 1.3045210584246407,
+      "shape": 1.5837621720343271,
+      "scale": 2.8980574957523393,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    },
+    "amount": {
+      "threshold": 70.42187687304269,
+      "initial_threshold": 1.311634853021694,
+      "shape": 1.5872956295175622,
+      "scale": 2.9071449623869383,
+      "n": 1728,
+      "n_exceedances": 173,
+      "quantile": 0.9,
+      "risk": 0.01
+    }
+  },
+  "calibration_end": "2018-12-27 23:55:00",
+  "test_start": "2018-12-28 00:00:00",
+  "test_alarms": 54,
+  "test_alarm_rate": 0.046875,
+  "calibration_joint_alarm_rate": 0.041087962962962965,
+  "per_feature_test_alarms": {
+    "open": 17,
+    "high": 15,
+    "low": 11,
+    "close": 19,
+    "volume": 11,
+    "amount": 11
+  },
+  "weak_annotation_metrics": {
+    "evaluated": 396,
+    "unknown_excluded": 756,
+    "positives": 1,
+    "prevalence": 0.0025252525252525255,
+    "precision": 0.0625,
+    "recall": 1.0,
+    "f1": 0.11764705882352941,
+    "average_precision": 0.5,
+    "roc_auc": 0.9974683544303797,
+    "tn": 380,
+    "fp": 15,
+    "fn": 0,
+    "tp": 1,
+    "false_positive_rate": 0.0379746835443038,
+    "alarm_rate": 0.046875
+  },
+  "warning": "Single retrospective case. Labels are mapped from published 25-second feature chunks, not exhaustive market-fraud ground truth. Unannotated bars remain unknown. Pretrained model may have seen 2018 data.",
+  "versions": {
+    "torch": "2.8.0",
+    "huggingface_hub": "0.36.2",
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scipy": "1.13.1"
+  }
+}

@@ -131,3 +131,9 @@ python scripts/download_datasets.py --list
 python scripts/download_datasets.py
 python scripts/audit_datasets.py
 ```
+
+## 已运行的检测结果
+
+[2026-11-06 实验结果与图片](results/2026-11-06/README.md)：已下载数据的20组无监督基线结果，以及真实BRD/BTC K线的Kronos-mini单步预测误差检测。包括CSV结果表、逐点分数、PNG/PDF图、维度热图和复现脚本。Kronos测试1152根K线，触发54根统计告警；这是单一回顾案例，不代表确诊54次欺诈。
+
+![Kronos异常检测](results/2026-11-06/kronos_timeseries.png)

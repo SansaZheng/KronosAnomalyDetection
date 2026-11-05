@@ -1,0 +1,13 @@
+{
+  "lookback": 64,
+  "sample_count": 3,
+  "batch_size": 32,
+  "device": "mps",
+  "seed": 42,
+  "T": 1.0,
+  "top_p": 0.9,
+  "top_k": 0,
+  "first_scored": "2018-12-22",
+  "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+  "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717"
+}
