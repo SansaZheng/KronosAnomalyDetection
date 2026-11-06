@@ -1,0 +1,20 @@
+{
+  "experiment": "BRD/BTC rerun with real Kronos-mini weights",
+  "status": "frozen before any inference; weights and market archive not yet available in this session",
+  "inputs": "results/2026-11-06/input_manifest.json (official code commit 67b630e, Kronos-mini, Kronos-Tokenizer-2k, BRDBTC-5m-2018-12.zip), SHA256-checked",
+  "arms": {"prescale": "each window column divided by its std before the official (std + 1e-5) normalization", "raw": "official normalization unchanged"},
+  "lookback": 64,
+  "sample_count": 20,
+  "sampling": {"T": 1.0, "top_p": 0.9, "top_k": 0, "seed": 42},
+  "scored_bars": "every 5-minute bar from 2018-12-22 00:00 to 2018-12-31 23:55 (2880); calibration before 2018-12-28 (1728: fit = first half, validation = second half), test 1152",
+  "point_forecast": "median over draws of the transformed features; spread = IQR/1.349 over draws",
+  "features": ["log_return", "log_range", "log1p_volume", "log1p_amount"],
+  "scoring": "evidence fusion with the frozen kronos_fusion configuration; variants: kronos mean + spread term, kronos mean only, no kronos",
+  "endpoints": {
+    "E1_scale_collapse": "MAE of the mean-of-draws raw OHLC forecast / same-field persistence on calibration bars. Published run: 3.7-5.0. Prescale is judged to fix the collapse if all four ratios < 1.5.",
+    "E2_skill": "stacked Kronos weight per feature and MAE vs best naive on the four features. Kronos is judged to have skill if its weight >= 0.3 on log_return or log_range AND its MAE ratio vs best naive < 1 there.",
+    "E3_spread": "nonnegative pinball coefficient on the kronos:spread term; judged informative if > 0 on at least two features in the prescale arm.",
+    "E4_detection": "descriptive only (one labelled bar): alarms at nominal 1%, alarms on zero-volume bars, pump-bar rank, pump-type injection power at delta 3/6/12, fusion with vs without Kronos."
+  },
+  "not_allowed": "no change to lookback, sample count, sampling parameters, feature set, partitions or fusion configuration after the first draw is produced; any deviation is listed in the report with before/after numbers"
+}

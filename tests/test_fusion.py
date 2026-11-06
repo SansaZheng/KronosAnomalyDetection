@@ -132,3 +132,17 @@ def test_score_is_log_of_inverse_minimum_pvalue():
     model = fitted(x, windows)
     log_p = model.log_pvalues(x[600:], windows[600:], {})[:, model.active_mask()]
     np.testing.assert_allclose(model.score(x[600:], windows[600:], {}), -log_p.min(axis=1))
+
+
+def test_predictive_spread_enters_the_scale_model_only_when_it_helps():
+    rng = np.random.default_rng(9)
+    x, windows = stream(n=1500, d=2)
+    informative = rng.uniform(0.2, 3, size=(1500, 2))
+    x = windows[:, -1] + rng.normal(size=(1500, 2)) * informative
+    forecasts = {"kronos": windows[:, -1] + rng.normal(scale=0.01, size=(1500, 2)), "kronos:spread": informative}
+    useless = {"kronos": forecasts["kronos"], "kronos:spread": rng.uniform(0.2, 3, size=(1500, 2))}
+    fit = lambda f: EvidenceFusion(FusionConfig(channels=("forecast",))).fit(x[:800], windows[:800], {k: v[:800] for k, v in f.items()}, x[:800])
+    good, bad = fit(forecasts), fit(useless)
+    assert good.scale_terms_[-2] == "kronos:spread"
+    assert good.scale_coef_["forecast"][:, -2].min() > 0.5 * bad.scale_coef_["forecast"][:, -2].max() + 0.3
+    assert "kronos:spread" not in good.forecast_names_ and good.weights_.shape == (2, 3)

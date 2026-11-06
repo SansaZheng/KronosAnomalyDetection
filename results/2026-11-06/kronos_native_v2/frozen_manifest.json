@@ -1,0 +1,15 @@
+{
+  "frozen_at_utc": "2026-11-06T15:27:53+00:00",
+  "note": "frozen before any inference with real weights; weights and archive were unreachable from the session",
+  "sha256": {
+    "results/2026-11-06/kronos_native_v2/frozen_config.json": "2eb36512f44ff0c0339fd389c1543500919c996f62f6ad72e2d24109d8feface",
+    "kronos_ad/sampling.py": "8376598adb3c73028ac082de88900fd97bb428daf448a0af7be3a8c3bee2567f",
+    "kronos_ad/fusion.py": "948dad79248f2d17bc4b706b8db669853593869b070051798f26d4e661c67427",
+    "kronos_ad/backend.py": "e54960a7b39ac2537b1a448881bfe4193bd12d1a6981d3e52b7d3e8c0510f7a3",
+    "scripts/run_native_v2.py": "c9bf7544c746e150095775a3188f82fb3eebe390e39ca239e6325daae5d5055c",
+    "scripts/fusion_data.py": "efc8ff1eb753bfb5bb656dcd47e09d564ad7fc66ef590ff6727122a3f1fad523",
+    "scripts/run_fusion.py": "1af6a4ceba4fe71a3f1402556a278f3219fe1e6cf5624a64c2846045bf84dcf1",
+    "tests/test_sampling.py": "1770de530dde73a4ed4b3e3a6824b2eef83197baa7be633ab0c630c194b68d4d",
+    "tests/test_native_v2.py": "9d0cec815ae307cc973240cccbb6d96dcbde0a8846d1d014b080b28a86de01ec"
+  }
+}

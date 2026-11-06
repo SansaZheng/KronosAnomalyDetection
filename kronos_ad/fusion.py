@@ -7,7 +7,10 @@ Pipeline (each step is fitted on calibration rows only):
    degenerate forecast cannot dominate the residual.
 2. Conditional scale: a pinball-loss model of |residual| on robust and non-robust
    window scales. The fit decides how much a recent shock should widen the scale, so
-   volatility clustering is learned rather than assumed.
+   volatility clustering is learned rather than assumed. A forecaster's predictive
+   spread (a `forecasts` key ending in `:spread`, e.g. the std over Kronos draws) is
+   one more nonnegative term, so a calibrated predictive distribution tightens or
+   widens the scale only to the extent that it helped on the fit partition.
 3. Evidence channels: `forecast` (one-step onset), `local` (deviation from the window
    median, which persists through an interval) and `global` (deviation from the
    reference distribution, for stationary features only).
@@ -132,13 +135,18 @@ class EvidenceFusion:
                     level=mad(windows, 1), step=mad(steps, 1),
                     level_std=windows.std(axis=1), step_std=steps.std(axis=1))
 
+    @staticmethod
+    def _spreads(forecasts):
+        return sorted(name for name in forecasts if name.endswith(":spread"))
+
     def _forecast(self, context, forecasts, j):
-        names = [name for name in self.config.naive] + sorted(forecasts)
+        names = [name for name in self.config.naive] + sorted(n for n in forecasts if not n.endswith(":spread"))
         return names, np.column_stack([context[n][:, j] if n in context else forecasts[n][:, j] for n in names])
 
-    def _design(self, context, j):
+    def _design(self, context, forecasts, j):
         n = len(context["level"])
         terms = [context[name][:, j] for name in self.config.scale_terms]
+        terms += [np.abs(forecasts[name][:, j]) for name in self._spreads(forecasts)]
         return np.column_stack(terms + [np.full(n, self.reference_scale_[j])])
 
     def _raw(self, x, context, forecasts):
@@ -156,7 +164,7 @@ class EvidenceFusion:
                     prediction = candidates @ self.weights_[j]
                 else:
                     prediction = context["median"][:, j]
-                scale = self._design(context, j) @ self.scale_coef_[name][j]
+                scale = self._design(context, forecasts, j) @ self.scale_coef_[name][j]
                 out[:, j] = np.abs(x[:, j] - prediction) / np.maximum(scale, 1e-3 * self.reference_scale_[j])
             columns.append(out)
         return np.stack(columns, axis=2)
@@ -181,8 +189,9 @@ class EvidenceFusion:
                     prediction = self._forecast(context, forecasts, j)[1] @ self.weights_[j]
                 else:
                     prediction = context["median"][:, j]
-                coefficients.append(fit_pinball(self._design(context, j), np.abs(x[:, j] - prediction), c.scale_quantile))
+                coefficients.append(fit_pinball(self._design(context, forecasts, j), np.abs(x[:, j] - prediction), c.scale_quantile))
             self.scale_coef_[name] = np.asarray(coefficients)
+        self.scale_terms_ = list(c.scale_terms) + self._spreads(forecasts) + ["reference"]
         self.global_mask_ = np.ones(x.shape[1], bool) if global_mask is None else np.asarray(global_mask, bool)
         raw = self._raw(x, context, forecasts)
         self.tails_ = [[TailPValue(raw[:, j, k], c.tail_quantile) for k in range(raw.shape[2])]
@@ -228,7 +237,9 @@ class EvidenceFusion:
 
     def state(self):
         return dict(config=asdict(self.config), forecast_names=self.forecast_names_,
-                    weights=self.weights_.tolist(), threshold=self.threshold_)
+                    weights=self.weights_.tolist(), scale_terms=self.scale_terms_,
+                    scale_coefficients={k: v.tolist() for k, v in self.scale_coef_.items()},
+                    threshold=self.threshold_)
 
 
 def track_threshold(scores, calibration, alpha=0.01, gamma=0.005, window=512):
