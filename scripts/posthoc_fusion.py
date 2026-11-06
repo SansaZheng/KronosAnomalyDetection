@@ -14,17 +14,22 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from fusion_data import NATIVE, PROXY_NAMES, RESULTS, native_bundle, proxy_bundle
+import sys
+
+import run_fusion
+from fusion_data import NATIVE
 from kronos_ad.fusion import track_threshold
-from run_fusion import ALPHA, OUT, build, evaluate, subset
+from run_fusion import build, evaluate, load_bundles, subset
 
 GAMMAS = (0.005, 0.001, 0.0005, 0.0001)
 
 
 def main():
     warnings.filterwarnings('ignore')
+    OUT = run_fusion.use_round(sys.argv[1] if len(sys.argv) > 1 else 'r1')
+    ALPHA = run_fusion.ALPHA
     rows = []
-    bundles = [native_bundle()] + [proxy_bundle(n) for n in PROXY_NAMES]
+    bundles = load_bundles(run_fusion.FROZEN)
     for b in bundles:
         test = b['test']
         model, forecasts = build(b)

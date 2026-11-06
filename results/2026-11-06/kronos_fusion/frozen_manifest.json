@@ -37,6 +37,36 @@
         "scripts/report_fusion.py": "bd60c5116828980cfdac3b97b4db97f21a176742d157f799ac998a1d43721b8d",
         "scripts/verify_fusion.py": "5969ca277f4499efe5d6ee969221b83ad1570cb3f69bd7edc7b29a0e66b9a65c"
       }
+    },
+    {
+      "at_utc": "2026-11-06T22:14:26+00:00",
+      "reason": "round 2 extensions to fusion.py (long channel, skill gating, rank rarity, multi-statistic aggregation, row evidence; all opt-in), fusion_data.py (long context, contextual option, Isolation Forest scores), run_fusion.py (round argument, ensemble arm, round comparison), sparse pinball LP; round-1 defaults unchanged and the labelled section re-run gave bit-identical metrics.csv, bootstrap.csv, stack_weights.json and row files",
+      "sha256": {
+        "results/2026-11-06/kronos_fusion/frozen_config.json": "b508902925c53841c2d7f719e1b1d04e6b9f7d803fc4bbafedbf8f0d685380fd",
+        "kronos_ad/fusion.py": "ce81e0f1c23ee81282360e3d7c96e4a56683c6432f872f12c2c8c2c272af8af6",
+        "kronos_ad/backend.py": "e54960a7b39ac2537b1a448881bfe4193bd12d1a6981d3e52b7d3e8c0510f7a3",
+        "scripts/fusion_data.py": "a49d9c833b6e4ec82d2eb0c6b7ee7f31e54b64fe11ffc7705a446cfd4f442704",
+        "scripts/run_fusion.py": "83655fdd3f7da9005cb4cfceae8efdc3dafe7339f961eb33a7523d8ac2c85109",
+        "scripts/posthoc_fusion.py": "30afe11f9d0de5b9bde8db33fbd1e53d267d6ad1b37059915c8c1a0a576021ab",
+        "scripts/plot_fusion.py": "1e2bc8495adc567255cf8dda4659e8c1d9a4faf4bb5bef295933c0a096a1c269",
+        "scripts/report_fusion.py": "bd60c5116828980cfdac3b97b4db97f21a176742d157f799ac998a1d43721b8d",
+        "scripts/verify_fusion.py": "20f9a655238340fd717322285b6dbe840ef4ad5f8f55589bd3791d578b74fdeb"
+      }
+    },
+    {
+      "at_utc": "2026-11-06T22:30:21+00:00",
+      "reason": "run_fusion.py bug fixes made during round 2 (special forecast keys for the no-Kronos arm; native-section bundle options); neither path is exercised by the round-1 configuration; verify_fusion.py made round-aware",
+      "sha256": {
+        "results/2026-11-06/kronos_fusion/frozen_config.json": "b508902925c53841c2d7f719e1b1d04e6b9f7d803fc4bbafedbf8f0d685380fd",
+        "kronos_ad/fusion.py": "ce81e0f1c23ee81282360e3d7c96e4a56683c6432f872f12c2c8c2c272af8af6",
+        "kronos_ad/backend.py": "e54960a7b39ac2537b1a448881bfe4193bd12d1a6981d3e52b7d3e8c0510f7a3",
+        "scripts/fusion_data.py": "a49d9c833b6e4ec82d2eb0c6b7ee7f31e54b64fe11ffc7705a446cfd4f442704",
+        "scripts/run_fusion.py": "46b2d44f9c3b52dd94e7434042e048ac4740a6afde8bcb58acb802df2c773e37",
+        "scripts/posthoc_fusion.py": "30afe11f9d0de5b9bde8db33fbd1e53d267d6ad1b37059915c8c1a0a576021ab",
+        "scripts/plot_fusion.py": "6bcbd16238e5c542e819b7a25c6096081f5328b15e9a61ca302491e93b706d45",
+        "scripts/report_fusion.py": "bd60c5116828980cfdac3b97b4db97f21a176742d157f799ac998a1d43721b8d",
+        "scripts/verify_fusion.py": "03d5fc24148c406dd38e2f8f4cd6ed5a328b8b6c2a63474743847f0f4f866884"
+      }
     }
   ]
 }

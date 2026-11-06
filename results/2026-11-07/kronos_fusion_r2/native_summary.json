@@ -1,0 +1,48 @@
+{
+ "test_bars": 1152,
+ "rows_dropped_for_warmup": 0,
+ "original_alarms": 54,
+ "original_price_only": 43,
+ "original_with_flow": 11,
+ "fusion_alarms": 15,
+ "fusion_online_alarms": 10,
+ "overlap_original_fusion": 8,
+ "zero_volume_share_test": 0.2890625,
+ "original_alarm_on_zero_volume": 14,
+ "pump_bar": "2018-12-30 17:00:00",
+ "pump_fusion_alarm": true,
+ "pump_online_alarm": false,
+ "pump_original_alarm": true,
+ "pump_rank_fusion": 2,
+ "pump_rank_original": 4,
+ "pump_top_feature": "log_amount",
+ "pump_top_channel": "global",
+ "threshold": 4.940969516781893,
+ "weights": {
+  "log_return": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "log_range": [
+   0.45,
+   0.55,
+   0.0
+  ],
+  "log_volume": [
+   0.25,
+   0.35,
+   0.4
+  ],
+  "log_amount": [
+   0.25,
+   0.35,
+   0.4
+  ]
+ },
+ "forecast_names": [
+  "last",
+  "median",
+  "kronos"
+ ]
+}

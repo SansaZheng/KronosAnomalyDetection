@@ -1,0 +1,2 @@
+dataset,config,dev_rows,dev_positives,ap,auroc,r1,active_pairs
+ulb_creditcard,C11 C1+multi+iforest,30837,34,0.13858726965880058,0.93538205789734,0.6764705882352942,116

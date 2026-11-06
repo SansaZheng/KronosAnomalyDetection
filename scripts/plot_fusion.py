@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Figures for the evidence-fusion results. Reads only saved outputs."""
 import json
+import sys
 
 import matplotlib
 matplotlib.use('Agg')
@@ -11,6 +12,9 @@ import pandas as pd
 from fusion_data import RESULTS
 
 OUT = RESULTS / 'kronos_fusion'
+if len(sys.argv) > 1:
+    from run_fusion import ROUNDS
+    OUT = ROUNDS[sys.argv[1]]
 BLUE, ORANGE, AQUA, YELLOW = '#2a78d6', '#eb6834', '#1baf7a', '#eda100'
 INK, MUTED, GRID = '#1f1f1e', '#6b6b66', '#e6e6e2'
 plt.rcParams.update({'font.size': 9, 'axes.edgecolor': MUTED, 'axes.labelcolor': INK, 'xtick.color': INK,
@@ -18,7 +22,9 @@ plt.rcParams.update({'font.size': 9, 'axes.edgecolor': MUTED, 'axes.labelcolor':
                      'axes.titlesize': 9.5, 'axes.titleweight': 'medium', 'legend.frameon': False})
 PRIMARY = ['banksim', 's_ffsd', 'sd_stock', 'sd_prices', 'sd_synthetic']
 METHODS = [('fusion', 'Evidence fusion (Kronos + naive)', BLUE, 'o'),
+           ('fusion_r1', 'Evidence fusion, round 1', BLUE, '^'),
            ('fusion_no_kronos', 'Evidence fusion, no Kronos', BLUE, 's'),
+           ('fusion_ensemble', 'Fusion + Isolation Forest channel', BLUE, 'D'),
            ('per_feature_pot', 'Per-feature POT (published)', ORANGE, 'o'),
            ('joint_top3', 'Joint top-3 (published)', ORANGE, 's'),
            ('isolation_forest', 'Isolation Forest', AQUA, 'o'),
@@ -34,13 +40,14 @@ def save(fig, name):
 def labelled():
     metrics = pd.read_csv(OUT / 'metrics.csv').set_index(['dataset', 'method'])
     intervals = pd.read_csv(OUT / 'bootstrap.csv').set_index(['dataset', 'method'])
-    fig, axes = plt.subplots(1, len(PRIMARY), figsize=(13, 3.6), sharey=True, layout='constrained')
+    methods = [m for m in METHODS if (PRIMARY[0], m[0]) in metrics.index]
+    fig, axes = plt.subplots(1, len(PRIMARY), figsize=(13, 3.2 + 0.25 * len(methods)), sharey=True, layout='constrained')
     for ax, name in zip(axes, PRIMARY):
         prevalence = metrics.loc[(name, 'fusion'), 'prevalence']
         ax.axvline(prevalence, color=GRID, lw=1.5, zorder=0)
         ax.text(prevalence + 0.015, -0.55, 'chance', color=MUTED, fontsize=7.5, ha='left', va='center')
-        for row, (key, label, color, marker) in enumerate(METHODS):
-            y = len(METHODS) - 1 - row
+        for row, (key, label, color, marker) in enumerate(methods):
+            y = len(methods) - 1 - row
             value = metrics.loc[(name, key), 'ap']
             lo, hi = intervals.loc[(name, key), ['ap_lo', 'ap_hi']]
             ax.plot([lo, hi], [y, y], color=color, lw=2, solid_capstyle='round', alpha=0.9)
@@ -49,11 +56,11 @@ def labelled():
         positives = int(metrics.loc[(name, 'fusion'), 'positives'])
         ax.set_title(f'{name}  ({positives} positives)')
         ax.set_xlim(0, 1.05)
-        ax.set_ylim(-0.8, len(METHODS) - 0.4)
+        ax.set_ylim(-0.8, len(methods) - 0.4)
         ax.set_xlabel('Average precision')
         ax.grid(axis='x', color=GRID, lw=0.6)
         ax.tick_params(axis='y', length=0)
-    axes[0].set_yticks(range(len(METHODS)), [m[1] for m in METHODS][::-1])
+    axes[0].set_yticks(range(len(methods)), [m[1] for m in methods][::-1])
     fig.suptitle('Test rows identical to the published Kronos-proxy experiment; bars are 95% bootstrap intervals (whole groups or 64-row blocks)', fontsize=9, color=MUTED)
     save(fig, 'fusion_labelled')
 

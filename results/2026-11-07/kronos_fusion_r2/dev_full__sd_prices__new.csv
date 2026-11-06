@@ -1,0 +1,5 @@
+dataset,config,dev_rows,dev_positives,ap,auroc,r1,active_pairs
+sd_prices,C7 gate+long+multi4,128,10,0.9503174603174603,0.9949152542372882,0.9,3
+sd_prices,C8 C7+contextual,128,10,0.9503174603174603,0.9949152542372882,0.9,3
+sd_prices,C9 gate+multi4 nolong,128,10,0.9497222222222222,0.9957627118644067,1.0,2
+sd_prices,C10 C7 magnitude only,128,10,0.9503174603174603,0.9949152542372882,0.9,3

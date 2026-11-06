@@ -7,6 +7,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import IsolationForest
 
 from kronos_ad.proxy import select_targets
 from run_benchmarks import encode, pump, tabular, windows
@@ -55,27 +56,71 @@ def split_calibration(positions, groups):
     return first, ~first
 
 
-def proxy_bundle(name):
+LONG_WINDOW = 512
+LONG_MINIMUM = 32
+IQR_TO_STD = 1.349
+
+
+def long_context(values, groups, length=LONG_WINDOW, minimum=LONG_MINIMUM):
+    """Median and IQR scale of up to `length` earlier rows of the same group, strictly before each row.
+
+    Rows with fewer than `minimum` earlier rows get NaN; callers only use rows that
+    already have a 32-row history, so those never reach the detector.
+    """
+    frame = pd.DataFrame(np.asarray(values, dtype=float))
+    columns = list(frame.columns)
+    frame['group'] = np.asarray(groups)
+    grouped = frame.groupby('group', sort=False)
+    shifted = grouped[columns].shift(1)
+    shifted['group'] = frame['group']
+    rolling = shifted.groupby('group', sort=False)[columns].rolling(length, min_periods=minimum)
+    center = rolling.median().droplevel(0).sort_index().to_numpy()
+    lower = rolling.quantile(0.25).droplevel(0).sort_index().to_numpy()
+    upper = rolling.quantile(0.75).droplevel(0).sort_index().to_numpy()
+    return center, (upper - lower) / IQR_TO_STD
+
+
+def iforest_scores(reference, rows):
+    """Negative Isolation Forest score with the published baseline's settings."""
+    forest = IsolationForest(n_estimators=100, max_samples=256, contamination='auto',
+                             random_state=42, n_jobs=2).fit(reference)
+    return -forest.score_samples(rows)
+
+
+def proxy_bundle(name, contextual='exclude', long=False, iforest=False):
+    """`contextual`: 'exclude' drops calendar/symbol codes (round 1); 'global' keeps them
+    for the global channel only. `long` adds the long causal context, `iforest` the
+    row-level Isolation Forest evidence, both as special keys of `forecasts`."""
     rows = load_rows(name)
     targets, histories, _ = select_targets(rows['parts'], rows['groups'], 32, 512, 1024)
     with np.load(PROXY / (name + '__predictions.npz'), allow_pickle=False) as cached:
         np.testing.assert_array_equal(cached['targets'], targets)
         predictions = cached['predictions'].copy()
     values = rows['values']
-    keep = np.array([f not in NOT_DETECTION_TARGETS for f in rows['features']])
+    is_context = np.array([f in NOT_DETECTION_TARGETS for f in rows['features']])
+    keep = ~is_context if contextual == 'exclude' else np.ones(len(is_context), bool)
     split = rows['parts'][targets]
     calibration, test = np.flatnonzero(split == 'calibration'), np.flatnonzero(split == 'test')
     fit, validation = split_calibration(targets[calibration], rows['groups'][targets[calibration]])
+    reference = values[rows['parts'] == 'reference'][:, keep]
+    forecasts = {'kronos': predictions[:, keep]}
+    if long:
+        center, scale = long_context(values[:, keep], rows['groups'])
+        forecasts['long:center'], forecasts['long:scale'] = center[targets], scale[targets]
+        assert np.isfinite(forecasts['long:center']).all()
+    if iforest:
+        forecasts['row:iforest'] = iforest_scores(reference, values[targets][:, keep])
     return dict(name=name, x=values[targets][:, keep], windows=values[histories][:, :, keep],
-                forecasts={'kronos': predictions[:, keep]}, fit=calibration[fit],
+                forecasts=forecasts, fit=calibration[fit],
                 validation=calibration[validation], test=test,
-                reference=values[rows['parts'] == 'reference'][:, keep], y=rows['labels'][targets],
+                reference=reference, y=rows['labels'][targets],
                 groups=rows['groups'][targets], features=[f for f, k in zip(rows['features'], keep) if k],
                 # SD cases are min-max scaled over their whole length, so level is not causal.
-                global_mask=np.full(int(keep.sum()), name not in SD), block=64,
+                global_mask=np.full(int(keep.sum()), name not in SD),
+                sequential_mask=~is_context[keep], block=64,
                 raw=dict(x=values[targets], windows=values[histories], forecast=predictions,
                          calibration=calibration, features=rows['features'], parts=rows['parts'],
-                         values=values, targets=targets))
+                         values=values, targets=targets, groups=rows['groups'], keep=keep))
 
 
 def bar_features(frame, previous_close, volume_unit, amount_unit):
@@ -86,7 +131,7 @@ def bar_features(frame, previous_close, volume_unit, amount_unit):
                             np.log1p(np.maximum(frame[:, 5], 0) / amount_unit)])
 
 
-def native_bundle(lookback=64):
+def native_bundle(lookback=64, long=False, iforest=False):
     rows = pd.read_csv(RESULTS / 'kronos/detections.csv.gz', parse_dates=['timestamps'])
     names = ['open', 'high', 'low', 'close', 'volume', 'amount']
     bars = rows[names].to_numpy()
@@ -106,9 +151,17 @@ def native_bundle(lookback=64):
     calibration_rows = np.flatnonzero(calibration[index])
     half = len(calibration_rows) // 2
     fit = calibration_rows[:half]
-    return dict(name=NATIVE, x=observed[index], windows=history, forecasts={'kronos': predicted[index]},
+    reference = observed[index][fit]
+    forecasts = {'kronos': predicted[index]}
+    if long:
+        center, scale = long_context(observed, np.repeat('stream', len(observed)))
+        forecasts['long:center'], forecasts['long:scale'] = center[index], scale[index]
+    if iforest:
+        forecasts['row:iforest'] = iforest_scores(reference, observed[index])
+    return dict(name=NATIVE, x=observed[index], windows=history, forecasts=forecasts,
                 fit=fit, validation=calibration_rows[half:], test=np.flatnonzero(~calibration[index]),
-                reference=observed[index][fit], y=rows.weak_label.to_numpy()[index],
+                reference=reference, y=rows.weak_label.to_numpy()[index],
                 groups=np.repeat('stream', len(index)), features=['log_return', 'log_range', 'log_volume', 'log_amount'],
-                global_mask=np.ones(4, bool), block=64, timestamps=rows.timestamps.to_numpy()[index],
+                global_mask=np.ones(4, bool), sequential_mask=np.ones(4, bool), block=64,
+                timestamps=rows.timestamps.to_numpy()[index],
                 bars=rows.iloc[index].reset_index(drop=True), offset=lookback + 1)

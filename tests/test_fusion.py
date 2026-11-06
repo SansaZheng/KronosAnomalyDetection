@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 from kronos_ad.backend import prescale_window
-from kronos_ad.fusion import (EvidenceFusion, FusionConfig, TailPValue, fit_pinball, fit_stack,
+from kronos_ad.fusion import (EvidenceFusion, FusionConfig, RankRarity, TailPValue, fit_pinball, fit_stack,
                               simplex_grid, track_threshold)
 
 
@@ -146,3 +146,100 @@ def test_predictive_spread_enters_the_scale_model_only_when_it_helps():
     assert good.scale_terms_[-2] == "kronos:spread"
     assert good.scale_coef_["forecast"][:, -2].min() > 0.5 * bad.scale_coef_["forecast"][:, -2].max() + 0.3
     assert "kronos:spread" not in good.forecast_names_ and good.weights_.shape == (2, 3)
+
+
+def test_round_one_defaults_are_unchanged():
+    config = FusionConfig()
+    assert config.channels == ("forecast", "local", "global") and config.aggregate == "max"
+    assert config.gate_skill == 0 and config.global_rarity == "scale"
+
+
+def long_context(series, index, length=512, minimum=32):
+    centers, scales = [], []
+    for i in index:
+        block = series[max(0, i - length):i]
+        centers.append(np.median(block, axis=0))
+        q75, q25 = np.quantile(block, [0.75, 0.25], axis=0)
+        scales.append((q75 - q25) / 1.349)
+    return np.asarray(centers), np.asarray(scales)
+
+
+def test_long_channel_catches_a_level_shift_the_window_forgets():
+    rng = np.random.default_rng(9)
+    n, L = 1500, 32
+    series = rng.normal(size=(n + L, 1))
+    shift = np.zeros_like(series)
+    shift[L + 1200:] = 6.0
+    series = series + shift
+    windows = np.stack([series[i - L:i] for i in range(L, n + L)])
+    x = series[L:]
+    center, scale = long_context(series, np.arange(L, n + L), length=512, minimum=L)
+    forecasts = {"long:center": center, "long:scale": scale}
+    short = EvidenceFusion(FusionConfig(channels=("forecast", "local"))).fit(x[:600], windows[:600], {}, x[:600])
+    extended = EvidenceFusion(FusionConfig(channels=("forecast", "local", "long")))
+    extended.fit(x[:600], windows[:600], {k: v[:600] for k, v in forecasts.items()}, x[:600])
+    late = slice(1200 + 100, 1200 + 300)
+    short_score = short.score(x[late], windows[late], {})
+    long_score = extended.score(x[late], windows[late], {k: v[late] for k, v in forecasts.items()})
+    normal = slice(700, 900)
+    short_normal = short.score(x[normal], windows[normal], {})
+    long_normal = extended.score(x[normal], windows[normal], {k: v[normal] for k, v in forecasts.items()})
+    assert np.median(short_score) < np.quantile(short_normal, 0.9)
+    assert np.median(long_score) > np.quantile(long_normal, 0.99)
+
+
+def test_skill_gate_turns_sequential_channels_off_for_unordered_rows():
+    rng = np.random.default_rng(10)
+    n, L = 1200, 32
+    shuffled = rng.normal(size=(n + L, 2))
+    shuffled[:, 1] = np.cumsum(rng.normal(size=n + L))
+    windows = np.stack([shuffled[i - L:i] for i in range(L, n + L)])
+    x = shuffled[L:]
+    model = EvidenceFusion(FusionConfig(gate_skill=0.95)).fit(x[:800], windows[:800], {}, x[:800])
+    mask = model.active_mask()
+    assert not mask[0, 0] and not mask[0, 1] and mask[0, 2]
+    assert mask[1, 0] and mask[1, 1]
+
+
+def test_rank_rarity_is_two_sided_and_calibrated():
+    rng = np.random.default_rng(11)
+    reference = rng.exponential(size=5000)
+    rarity = RankRarity(reference)
+    assert rarity(np.array([0.0]))[0] > rarity(np.array([np.median(reference)]))[0]
+    assert rarity(np.array([60.0]))[0] > rarity(np.array([np.median(reference)]))[0]
+    fresh = rarity(rng.exponential(size=20000))
+    # min(F, 1 - F) < 0.02 happens in both tails; the conformal step calibrates it later.
+    assert (fresh > -np.log(0.02)).mean() == pytest.approx(0.04, abs=0.008)
+
+
+def test_multi_aggregate_rewards_diffuse_evidence():
+    rng = np.random.default_rng(12)
+    n, L, d = 2000, 32, 12
+    series = rng.normal(size=(n + L, d))
+    windows = np.stack([series[i - L:i] for i in range(L, n + L)])
+    x = series[L:]
+    shocked = x[1500:].copy()
+    shocked += 1.2 * np.sign(rng.normal(size=shocked.shape))
+    results = {}
+    for aggregate in ("max", "multi"):
+        model = EvidenceFusion(FusionConfig(channels=("forecast", "global"), aggregate=aggregate))
+        model.fit(x[:800], windows[:800], {}, x[:800]).calibrate(x[800:1500], windows[800:1500], {})
+        results[aggregate] = (model.score(shocked, windows[1500:], {}) > model.threshold_).mean()
+    assert results["multi"] > results["max"] + 0.2
+
+
+def test_row_evidence_is_calibrated_and_votes():
+    rng = np.random.default_rng(13)
+    n, L = 1500, 32
+    series = rng.normal(size=(n + L, 2))
+    windows = np.stack([series[i - L:i] for i in range(L, n + L)])
+    x = series[L:]
+    row = rng.exponential(size=n)
+    row[1400:] = 40.0
+    forecasts = {"row:detector": row}
+    model = EvidenceFusion(FusionConfig(channels=("forecast",), aggregate="multi"))
+    model.fit(x[:800], windows[:800], {"row:detector": row[:800]}, x[:800])
+    model.calibrate(x[800:1300], windows[800:1300], {"row:detector": row[800:1300]})
+    assert model.row_names_ == ["row:detector"] and "row:detector" in model.statistic_names_
+    flagged = model.score(x[1300:], windows[1300:], {"row:detector": row[1300:]}) > model.threshold_
+    assert flagged[100:].mean() > 0.95 and flagged[:100].mean() < 0.1

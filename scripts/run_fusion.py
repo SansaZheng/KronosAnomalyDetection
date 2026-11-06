@@ -17,19 +17,53 @@ import pandas as pd
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from fusion_data import (NATIVE, PROXY, PROXY_NAMES, RESULTS, SD, bar_features, load_rows,
-                         native_bundle, proxy_bundle, split_calibration, NOT_DETECTION_TARGETS)
-from kronos_ad.fusion import EvidenceFusion, FusionConfig, mad, robust_reference, track_threshold
+from fusion_data import (NATIVE, PROXY, PROXY_NAMES, RESULTS, SD, bar_features, iforest_scores, load_rows,
+                         long_context, native_bundle, proxy_bundle, split_calibration, NOT_DETECTION_TARGETS)
+from kronos_ad.fusion import EvidenceFusion, FusionConfig, is_forecaster, mad, robust_reference, track_threshold
 from kronos_ad.joint import JointResidualCalibrator
 from kronos_ad.pot import fit_pot
 from kronos_ad.proxy import select_targets
 
-OUT = RESULTS / 'kronos_fusion'
+ROUNDS = {'r1': RESULTS / 'kronos_fusion', 'r2': RESULTS.parent / '2026-11-07/kronos_fusion_r2'}
+OUT = ROUNDS['r1']
 FROZEN = json.loads((OUT / 'frozen_config.json').read_text())
 ALPHA = FROZEN['alpha']
 ONLINE = FROZEN['online_threshold']
 PRIMARY_MIN = FROZEN['endpoints']['primary_datasets_min_test_positives']
 SEED = 20261106
+
+
+def use_round(name):
+    """Point the module at a round's output directory and frozen configuration."""
+    global OUT, FROZEN, ALPHA, ONLINE, PRIMARY_MIN
+    OUT = ROUNDS[name]
+    FROZEN = json.loads((OUT / 'frozen_config.json').read_text())
+    ALPHA = FROZEN['alpha']
+    ONLINE = FROZEN['online_threshold']
+    PRIMARY_MIN = FROZEN['endpoints']['primary_datasets_min_test_positives']
+    return OUT
+
+
+def make_config(frozen, **overrides):
+    fields = dict(channels=tuple(frozen['channels']), naive=tuple(frozen['naive_forecasts']),
+                  tail_quantile=frozen['tail_quantile'], scale_quantile=frozen['scale_quantile'],
+                  aggregate=frozen['aggregate'], alpha=frozen['alpha'],
+                  gate_skill=frozen.get('gate_skill', 0.0), global_rarity=frozen.get('global_rarity', 'scale'),
+                  statistics=tuple(frozen.get('statistics', ('tippett', 'fisher'))),
+                  row_evidence=bool(frozen.get('row_evidence', False)))
+    fields.update(overrides)
+    return FusionConfig(**fields)
+
+
+def bundle_options(frozen):
+    return dict(contextual=frozen.get('contextual', 'exclude'), long='long' in frozen['channels'],
+                iforest=bool(frozen.get('row_evidence', False) or frozen.get('ensemble_arm', False)))
+
+
+def load_bundles(frozen):
+    options = bundle_options(frozen)
+    native = native_bundle(long=options['long'], iforest=options['iforest'])
+    return [native] + [proxy_bundle(n, **options) for n in PROXY_NAMES]
 DELTAS = (2, 3, 4, 6, 8, 12)
 INJECTION_SEEDS = (1, 2, 3)
 
@@ -38,15 +72,17 @@ def subset(forecasts, index):
     return {k: v[index] for k, v in forecasts.items()}
 
 
-def build(bundle, kronos=True, channels=None, naive=None):
-    config = FusionConfig(channels=tuple(channels or FROZEN['channels']),
-                          naive=tuple(FROZEN['naive_forecasts'] if naive is None else naive),
-                          tail_quantile=FROZEN['tail_quantile'], scale_quantile=FROZEN['scale_quantile'],
-                          aggregate=FROZEN['aggregate'], alpha=ALPHA)
-    forecasts = bundle['forecasts'] if kronos else {}
+def build(bundle, kronos=True, channels=None, naive=None, **overrides):
+    if channels is not None:
+        overrides['channels'] = tuple(channels)
+    if naive is not None:
+        overrides['naive'] = tuple(naive)
+    config = make_config(FROZEN, **overrides)
+    forecasts = {k: v for k, v in bundle['forecasts'].items() if kronos or not is_forecaster(k)}
+    forecasts = {k: v for k, v in forecasts.items() if not k.startswith('long:') or 'long' in config.channels}
     fit, validation = bundle['fit'], bundle['validation']
     model = EvidenceFusion(config).fit(bundle['x'][fit], bundle['windows'][fit], subset(forecasts, fit),
-                                       bundle['reference'], bundle['global_mask'])
+                                       bundle['reference'], bundle['global_mask'], bundle.get('sequential_mask'))
     model.calibrate(bundle['x'][validation], bundle['windows'][validation], subset(forecasts, validation))
     return model, forecasts
 
@@ -189,15 +225,24 @@ def section_labelled(bundles):
         name, test = b['name'], b['test']
         y, g = b['y'][test], b['groups'][test]
         model, forecasts = build(b)
-        plain, _ = build(b, kronos=False)
+        plain, plain_forecasts = build(b, kronos=False)
         score = model.score(b['x'][test], b['windows'][test], subset(forecasts, test))
-        score_plain = plain.score(b['x'][test], b['windows'][test], {})
+        score_plain = plain.score(b['x'][test], b['windows'][test], subset(plain_forecasts, test))
         methods = {'fusion': (score, score > model.threshold_),
                    'fusion_no_kronos': (score_plain, score_plain > plain.threshold_)}
         online, _ = track_threshold(score, model.calibration_scores_, ALPHA, ONLINE['gamma'], ONLINE['window'])
         online_plain, _ = track_threshold(score_plain, plain.calibration_scores_, ALPHA, ONLINE['gamma'], ONLINE['window'])
         methods['fusion_online'] = (score, online)
         methods['fusion_no_kronos_online'] = (score_plain, online_plain)
+        if FROZEN.get('ensemble_arm'):
+            ensemble, forecasts_ensemble = build(b, row_evidence=True)
+            score_ensemble = ensemble.score(b['x'][test], b['windows'][test], subset(forecasts_ensemble, test))
+            methods['fusion_ensemble'] = (score_ensemble, score_ensemble > ensemble.threshold_)
+        if FROZEN.get('compare_to_round'):
+            earlier = pd.read_csv(ROUNDS[FROZEN['compare_to_round']] / f'{name}__rows.csv.gz')
+            earlier = earlier[earlier.split == 'test']
+            np.testing.assert_array_equal(earlier.position.to_numpy(), test)
+            methods['fusion_' + FROZEN['compare_to_round']] = (earlier.score.to_numpy(), (earlier.score > earlier.threshold).to_numpy())
         if name == NATIVE:
             old = pd.read_csv(RESULTS / 'kronos/detections.csv.gz')
             old = old.iloc[b['offset']:].reset_index(drop=True).iloc[test]
@@ -210,10 +255,11 @@ def section_labelled(bundles):
             methods.update(level_baselines(name, b['raw']['targets'][test]))
         for method, (s, f) in methods.items():
             metrics.append(dict(dataset=name, method=method, **evaluate(y, s, f)))
-        save_rows(b, model, plain, forecasts, methods)
+        save_rows(b, model, plain, forecasts, plain_forecasts, methods)
         weights.append(dict(dataset=name, names=model.forecast_names_, mean_weight=model.weights_.mean(axis=0).tolist(),
                             kronos_weight_by_feature=dict(zip(b['features'], model.weights_[:, -1].tolist())),
-                            threshold=model.threshold_))
+                            threshold=model.threshold_, active=model.active_mask().astype(int).tolist(),
+                            statistics=getattr(model, 'statistic_names_', [])))
         positives = int((y == 1).sum())
         if positives >= PRIMARY_MIN:
             ranked = {k: v[0] for k, v in methods.items() if not k.endswith('_online')}
@@ -223,14 +269,14 @@ def section_labelled(bundles):
     return pd.DataFrame(metrics), pd.DataFrame(intervals), weights
 
 
-def save_rows(b, model, plain, forecasts, methods):
+def save_rows(b, model, plain, forecasts, plain_forecasts, methods):
     """Row-level scores for every partition, so thresholds and metrics can be recomputed."""
     parts = []
     for split, index in [('fit', b['fit']), ('validation', b['validation']), ('test', b['test'])]:
         source = b['raw']['targets'][index] if 'raw' in b else index + b['offset']
         frame = pd.DataFrame(dict(position=index, source_row=source, split=split, group=b['groups'][index], label=b['y'][index],
                                   score=model.score(b['x'][index], b['windows'][index], subset(forecasts, index)),
-                                  score_no_kronos=plain.score(b['x'][index], b['windows'][index], {})))
+                                  score_no_kronos=plain.score(b['x'][index], b['windows'][index], subset(plain_forecasts, index))))
         if split == 'test':
             for method, (s, f) in methods.items():
                 if method not in ('fusion', 'fusion_no_kronos'):
@@ -252,11 +298,12 @@ def step_scale(b):
 def proxy_shift(b, index, delta, seed):
     rng = np.random.default_rng(seed)
     d = b['x'].shape[1]
-    k = max(1, round(.2 * d))
+    allowed = np.flatnonzero(b.get('sequential_mask', np.ones(d, bool)))
+    k = max(1, round(.2 * len(allowed)))
     scale = step_scale(b)
     shift = np.zeros((len(index), d))
     for row in range(len(index)):
-        chosen = rng.choice(d, k, replace=False)
+        chosen = rng.choice(allowed, k, replace=False)
         shift[row, chosen] = rng.choice([-1, 1], k) * delta * scale[chosen]
     return shift
 
@@ -288,6 +335,8 @@ def section_injection(bundles):
             arms[label] = build(b, kronos=spec['kronos'], channels=('forecast',), naive=spec['naive'])
         arms['fusion'] = build(b)
         arms['fusion_no_kronos'] = build(b, kronos=False)
+        if FROZEN.get('ensemble_arm'):
+            arms['fusion_ensemble'] = build(b, row_evidence=True)
         for label, (model, forecasts) in arms.items():
             base = model.score(b['x'][test], b['windows'][test], subset(forecasts, test))
             cut = np.quantile(base, .99)
@@ -295,7 +344,10 @@ def section_injection(bundles):
                 hits = []
                 for seed in INJECTION_SEEDS:
                     x = pump_bar(b, test, delta, seed) if b['name'] == NATIVE else b['x'][test] + proxy_shift(b, test, delta, seed)
-                    hits.append(float((model.score(x, b['windows'][test], subset(forecasts, test)) > cut).mean()))
+                    shocked_forecasts = subset(forecasts, test)
+                    if 'row:iforest' in shocked_forecasts:
+                        shocked_forecasts = dict(shocked_forecasts, **{'row:iforest': iforest_scores(b['reference'], x)})
+                    hits.append(float((model.score(x, b['windows'][test], shocked_forecasts) > cut).mean()))
                     if b['name'] == NATIVE:
                         break
                 rows.append(dict(dataset=b['name'], method=label, delta=delta, power=float(np.mean(hits)), rows=len(test)))
@@ -337,7 +389,8 @@ def original_power(b, test, same_features=False):
             out.append(dict(dataset=b['name'], method='per_feature_pot', delta=delta, power=float(((s / thresholds).max(axis=1) > cut).mean()), rows=len(test)))
         return out
     raw = b['raw']
-    keep = np.array([f not in NOT_DETECTION_TARGETS for f in raw['features']])
+    detection = np.array([f not in NOT_DETECTION_TARGETS for f in raw['features']])
+    keep = raw.get('keep', detection)
     x, w, f = raw['x'], raw['windows'], raw['forecast']
     ref_std = raw['values'][raw['parts'] == 'reference'].std(axis=0)
     ref_std = np.where(ref_std > 1e-10, ref_std, 1.0)
@@ -347,7 +400,7 @@ def original_power(b, test, same_features=False):
     scores = np.square((x - f) / std)
     valid, thresholds = [], []
     for j in range(x.shape[1]):
-        if same_features and not keep[j]:
+        if same_features and not detection[j]:
             continue
         try:
             thresholds.append(fit_pot(scores[calibration, j], .9, .01, 30)['threshold'])
@@ -378,7 +431,8 @@ def section_coverage():
     for name in PROXY_NAMES:
         data = load_rows(name)
         values, parts, groups, labels = data['values'], data['parts'], data['groups'], data['labels']
-        keep = np.array([f not in NOT_DETECTION_TARGETS for f in data['features']])
+        is_context = np.array([f in NOT_DETECTION_TARGETS for f in data['features']])
+        keep = ~is_context if bundle_options(FROZEN)['contextual'] == 'exclude' else np.ones(len(is_context), bool)
         targets, histories, _ = select_targets(parts, groups, 32, 0, 0)
         split = parts[targets]
         cal = np.flatnonzero(split == 'calibration')
@@ -386,14 +440,16 @@ def section_coverage():
         fit, validation = thin(cal[fit]), thin(cal[validation])
         test = np.flatnonzero(split == 'test')
         x = values[targets][:, keep]
-        view = lambda index: (x[index], values[histories[index]][:, :, keep])
-        config = FusionConfig(channels=tuple(FROZEN['channels']), naive=tuple(FROZEN['naive_forecasts']),
-                              tail_quantile=FROZEN['tail_quantile'], scale_quantile=FROZEN['scale_quantile'],
-                              aggregate=FROZEN['aggregate'], alpha=ALPHA)
-        model = EvidenceFusion(config).fit(*view(fit), {}, values[parts == 'reference'][:, keep],
-                                           np.full(int(keep.sum()), name not in SD))
-        model.calibrate(*view(validation), {})
-        score = np.concatenate([model.score(*view(chunk), {}) for chunk in np.array_split(test, max(1, len(test) // 20000))])
+        config = make_config(FROZEN, row_evidence=False)
+        extra = {}
+        if 'long' in config.channels:
+            center, scale = long_context(values[:, keep], groups)
+            extra['long:center'], extra['long:scale'] = center[targets], scale[targets]
+        view = lambda index: (x[index], values[histories[index]][:, :, keep], {k: v[index] for k, v in extra.items()})
+        model = EvidenceFusion(config).fit(*view(fit), values[parts == 'reference'][:, keep],
+                                           np.full(int(keep.sum()), name not in SD), ~is_context[keep])
+        model.calibrate(*view(validation))
+        score = np.concatenate([model.score(*view(chunk)) for chunk in np.array_split(test, max(1, len(test) // 20000))])
         flags = score > model.threshold_
         online, _ = track_threshold(score, model.calibration_scores_, ALPHA, ONLINE['gamma'], ONLINE['window'])
         y = labels[targets[test]]
@@ -414,7 +470,6 @@ def section_coverage():
 def section_native(b):
     test = b['test']
     model, forecasts = build(b)
-    plain, _ = build(b, kronos=False)
     x, w = b['x'][test], b['windows'][test]
     f = subset(forecasts, test)
     score = model.score(x, w, f)
@@ -449,11 +504,13 @@ def section_native(b):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--sections', nargs='+', default=['skill', 'labelled', 'injection', 'coverage', 'native'])
+    p.add_argument('--round', default='r1', choices=sorted(ROUNDS))
     a = p.parse_args()
     warnings.filterwarnings('ignore')
+    use_round(a.round)
     bundles = None
     if set(a.sections) & {'skill', 'labelled', 'injection'}:
-        bundles = [native_bundle()] + [proxy_bundle(n) for n in PROXY_NAMES]
+        bundles = load_bundles(FROZEN)
     if 'skill' in a.sections:
         section_skill(bundles).to_csv(OUT / 'forecast_skill.csv', index=False)
     if 'labelled' in a.sections:
@@ -466,7 +523,8 @@ def main():
     if 'coverage' in a.sections:
         section_coverage().to_csv(OUT / 'full_coverage.csv', index=False)
     if 'native' in a.sections:
-        frame, summary = section_native(native_bundle())
+        options = bundle_options(FROZEN)
+        frame, summary = section_native(native_bundle(long=options['long'], iforest=options['iforest']))
         frame.to_csv(OUT / 'native_rows.csv.gz', index=False, compression={'method': 'gzip', 'mtime': 0})
         (OUT / 'native_summary.json').write_text(json.dumps(summary, indent=1) + '\n')
 

@@ -6,18 +6,21 @@ import json
 import numpy as np
 import pandas as pd
 
-from fusion_data import NATIVE, PROXY, PROXY_NAMES, RESULTS, ROOT
-from run_fusion import ALPHA, OUT, evaluate
+import sys
 
-FROZEN = json.loads((OUT / 'frozen_config.json').read_text())
+import run_fusion
+from fusion_data import NATIVE, PROXY, PROXY_NAMES, ROOT
+from run_fusion import evaluate
 
 
 def main():
+    OUT = run_fusion.use_round(sys.argv[1] if len(sys.argv) > 1 else 'r1')
+    ALPHA, FROZEN = run_fusion.ALPHA, run_fusion.FROZEN
     manifest = json.loads((OUT / 'frozen_manifest.json').read_text())
     current = manifest['revisions'][-1]['sha256'] if manifest.get('revisions') else manifest['sha256']
     for path, digest in current.items():
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest, path
-    config = 'results/2026-11-06/kronos_fusion/frozen_config.json'
+    config = str((OUT / 'frozen_config.json').relative_to(ROOT))
     assert current[config] == manifest['sha256'][config], 'frozen configuration changed after the freeze'
     metrics = pd.read_csv(OUT / 'metrics.csv').set_index(['dataset', 'method'])
     checked = 0
