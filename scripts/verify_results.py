@@ -46,10 +46,15 @@ def main():
         proxy_count=10
         assert len(pd.read_csv(OUT/'all_results.csv'))==31
     files=[]
+    tuning_count=0
+    if (OUT/'kronos_tuning/all_metrics.json').exists():
+        from verify_kronos_tuning import main as verify_tuning
+        verify_tuning()
+        tuning_count=20
     for p in sorted(OUT.rglob('*')):
         if p.is_file() and p.name!='result_checksums.json':
             files.append(dict(path=str(p.relative_to(OUT)),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
-    (OUT/'result_checksums.json').write_text(json.dumps(dict(row_level_consistency='passed',baseline_experiments=20,kronos_cases=1,kronos_proxy_experiments=proxy_count,files=files),indent=2)+'\n')
+    (OUT/'result_checksums.json').write_text(json.dumps(dict(row_level_consistency='passed',baseline_experiments=20,kronos_cases=1,kronos_proxy_experiments=proxy_count,kronos_tuning_experiments=tuning_count,files=files),indent=2)+'\n')
     print(f'Verified 20 baseline, 1 native Kronos and {proxy_count} Kronos-Proxy experiments against saved outputs.')
 
 

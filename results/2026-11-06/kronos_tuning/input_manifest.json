@@ -1,0 +1,122 @@
+[
+  {
+    "path": "results/2026-11-06/kronos_proxy/ulb_creditcard__predictions.npz",
+    "sha256": "9c4147ecd80da252b734ef623b64b6b84b48433a3d4acf17f22808abba5fdf82"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/ulb_creditcard__cache_parameters.json",
+    "sha256": "e0073963927949960545efdb04b0e2c33afda9f50b59e28267d9dff56c63333a"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/ulb_creditcard__details.json",
+    "sha256": "a1fdae276b6f0cbbfbf3ec2e7e3a24057b9eb7fe8a48045c9a1b9e36107dd9b0"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/banksim__predictions.npz",
+    "sha256": "72dcc5967269801191cfd73e4b0618b62378e8d8aa29933e2647b8644c12f5d8"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/banksim__cache_parameters.json",
+    "sha256": "8012e71f1c4de18fd4e909d272f5e7fc1d165d3b3853b425ab742232911a5b11"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/banksim__details.json",
+    "sha256": "d4368ca56c3038a3233eb3e1b64d7c245ca65304b4592be539d2ca24ed3cd415"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/s_ffsd__predictions.npz",
+    "sha256": "7eff40e58fbc2bebe5e74b53f5a726307d41d8e207b802ab095321c6d6b32f73"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/s_ffsd__cache_parameters.json",
+    "sha256": "df95d93b9c325bce2061b1e049336b863609792f0b4aa2d5024f1f3f1a7827b1"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/s_ffsd__details.json",
+    "sha256": "f7160b46052ec58d6de65ee20c5cd1afaed4ca4864f4c33844de2b7701b64869"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_5s__predictions.npz",
+    "sha256": "56123d13c719f23794b3928a27cee7115149e368288005162369037b094f115a"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_5s__cache_parameters.json",
+    "sha256": "a30e8f5f92e381f67f1069d73f06e39156133391c36d18cba19e1ca814120693"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_5s__details.json",
+    "sha256": "f2ee8fb75a44094d35e06b7dedfb44f7ff6c4cd8d4628da8c6c4bac1de4253b2"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_15s__predictions.npz",
+    "sha256": "5876fd326e5ceabdef2095781504296f1c23f198d84b645896f344f806db2ad6"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_15s__cache_parameters.json",
+    "sha256": "1132fa1d788cf9f93179e327368f5675b3e5ac2208500888c9494112ad5b1ad8"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_15s__details.json",
+    "sha256": "8226295cbfae0541348cc4a2fd48701e3686f310d12826aab69eab9411050ef4"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_25s__predictions.npz",
+    "sha256": "8e88d7f29f278dd76fef3437b04c82057933814cf8cc16bdd63f30fdce87255b"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_25s__cache_parameters.json",
+    "sha256": "455fbb69cb8246b895a393db380343051dac410af4ad05bb2c170da6550aef2b"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sapienza_25s__details.json",
+    "sha256": "5184afd86dbff45f39c94b0051dd8e88b2e5324d39b87b283eb495f5461b7ebe"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_crypto__predictions.npz",
+    "sha256": "62980f2518da939938e8bff80b2a85b4d499171268333e83f37d0f4ba00ee157"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_crypto__cache_parameters.json",
+    "sha256": "383b03d7ab85b56cd593c64726bb154b6902d5d200760be672e0aca4ded53202"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_crypto__details.json",
+    "sha256": "e5024faf34e4aadd31183cad6af00f7a235efadf764ca4a95bdd40053891dac4"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_stock__predictions.npz",
+    "sha256": "55c88efc9ccd0e0686a8dbb3ededc28fe1875e273b55e2b5cc7dd67c02a36fbd"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_stock__cache_parameters.json",
+    "sha256": "3da79991ec8bd412fdcee0d816b32245e6b3fc25a1320fbdfb06319f108f51fb"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_stock__details.json",
+    "sha256": "e535257af8d0d8ab649b6f71b67fc3ec0e10c5d228b9d52c6f8c1f6fb30a2686"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_prices__predictions.npz",
+    "sha256": "911b5c11da6b518cbe4173bbe00aaa1c5a83a3d5c9042d0eecce37f607cb459a"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_prices__cache_parameters.json",
+    "sha256": "67a1f9ac920fe24044fc306fc8da9542849255ee69bb66e178c3711a4fd4e7eb"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_prices__details.json",
+    "sha256": "c869c54c48f4624c64a076208cb1aa793987f821d2e58d0735f30e0566af936f"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_synthetic__predictions.npz",
+    "sha256": "2ab39f66f0eee0ca452956be4c4cd190dda9795067eff24e8cd3f880a6025edb"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_synthetic__cache_parameters.json",
+    "sha256": "ca6da50607591572f693b2f7be2fccdf4abacdc1eb7dd87b5461ca8432dfb3a4"
+  },
+  {
+    "path": "results/2026-11-06/kronos_proxy/sd_synthetic__details.json",
+    "sha256": "b6e6c3af75ed63e5b4b77dfaeafd10d16a4577e77000e51f95200e22fef2b0d1"
+  }
+]

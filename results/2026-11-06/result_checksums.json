@@ -3,6 +3,7 @@
   "baseline_experiments": 20,
   "kronos_cases": 1,
   "kronos_proxy_experiments": 10,
+  "kronos_tuning_experiments": 20,
   "files": [
     {
       "path": "BASELINE_TABLE.md",
@@ -11,8 +12,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9716,
-      "sha256": "d10610958244e4cebf7b2d94df11064cffbebe50630f7e1529413b5fa2da0eb4"
+      "bytes": 9983,
+      "sha256": "b9a80351ad40a13fc4add2cde42b6492b594c011f10cdf0ef534577c882a0799"
     },
     {
       "path": "all_results.csv",
@@ -573,6 +574,191 @@
       "path": "kronos_timeseries.png",
       "bytes": 540567,
       "sha256": "ac9447ecda6777d8da0526768dbffab520438d384864ad34389f682008054675"
+    },
+    {
+      "path": "kronos_tuning/README.md",
+      "bytes": 5038,
+      "sha256": "4df191d24a3a55a65895561173736a9c022408642e0098b2b2011b2421bf8b0f"
+    },
+    {
+      "path": "kronos_tuning/all_metrics.json",
+      "bytes": 42932,
+      "sha256": "01ef5e9082e81f64f002235a19d434f23866e26e87e63c8d4e94920976e297a6"
+    },
+    {
+      "path": "kronos_tuning/banksim__joint_unsupervised__detections.csv.gz",
+      "bytes": 23966,
+      "sha256": "defe1abd00f946da46ee181c81e39caf6a1b85cf68e8e66b19d12c8361e862b2"
+    },
+    {
+      "path": "kronos_tuning/banksim__score_inputs.npz",
+      "bytes": 136242,
+      "sha256": "1dbd2ebd252bc1722ded9ada4efc4693ad4fe3a5412350b5ec7f3fbaa100dce1"
+    },
+    {
+      "path": "kronos_tuning/banksim__validation_selected__detections.csv.gz",
+      "bytes": 23967,
+      "sha256": "21c54d05a4190849a25ff15a41879adaa75f51f6f8d7f181f9dd2a248db24848"
+    },
+    {
+      "path": "kronos_tuning/before_after.pdf",
+      "bytes": 18604,
+      "sha256": "2c687da6a4dd356756938d1288f0a6114923f80b34911b08815748cc5bf1a858"
+    },
+    {
+      "path": "kronos_tuning/before_after.png",
+      "bytes": 126370,
+      "sha256": "3dfad199d756c133cf707ad926f9336cc350a1ce709a335dd0e6181ae0c96a04"
+    },
+    {
+      "path": "kronos_tuning/comparison.csv",
+      "bytes": 5320,
+      "sha256": "9e18f860cbb4bfe81e3f645b1c302a0009645283e675e26c1067e6122e566754"
+    },
+    {
+      "path": "kronos_tuning/input_manifest.json",
+      "bytes": 4983,
+      "sha256": "98b5f422859504fd68fc83cbe54c058967c19b72d476f5b6a7b10b6f11851a2b"
+    },
+    {
+      "path": "kronos_tuning/s_ffsd__joint_unsupervised__detections.csv.gz",
+      "bytes": 25360,
+      "sha256": "a54d33a4d9a883948600af6249135919fcbd6e77c898d3d4ab10d8b61a30cc44"
+    },
+    {
+      "path": "kronos_tuning/s_ffsd__score_inputs.npz",
+      "bytes": 114089,
+      "sha256": "c7d86dc265f5e5a17d1cc5021897aa34b05007687b3c4e76233e4dcbed26a555"
+    },
+    {
+      "path": "kronos_tuning/s_ffsd__validation_selected__detections.csv.gz",
+      "bytes": 26489,
+      "sha256": "9ad76f519eeb0f2b195de4dc9374500085988e1fae45c80f453186e1cbc4e51f"
+    },
+    {
+      "path": "kronos_tuning/sapienza_15s__joint_unsupervised__detections.csv.gz",
+      "bytes": 33325,
+      "sha256": "7d7c76d7ce6415119bd2509a73acf7e1a9ce4203905b4d88ad14792ee20cff14"
+    },
+    {
+      "path": "kronos_tuning/sapienza_15s__score_inputs.npz",
+      "bytes": 219913,
+      "sha256": "d4c9ff32b05cbc5d2a6d9d90868d05f799c0cff619676e7afce3f28068f1246f"
+    },
+    {
+      "path": "kronos_tuning/sapienza_15s__validation_selected__detections.csv.gz",
+      "bytes": 33326,
+      "sha256": "0068c6d27a0bcdb60cc26dc24ec963c46056a69b02033d7d75cc24c6b5d1bb0b"
+    },
+    {
+      "path": "kronos_tuning/sapienza_25s__joint_unsupervised__detections.csv.gz",
+      "bytes": 33344,
+      "sha256": "7d13946a532fce25d26ed0bff54bad5a0f7b3e4a4885666ce14e026c8cfe8896"
+    },
+    {
+      "path": "kronos_tuning/sapienza_25s__score_inputs.npz",
+      "bytes": 219835,
+      "sha256": "616c3785a8c3183ae8641e070a10ffbc220ecd4c9fc7981254f6993753b876d3"
+    },
+    {
+      "path": "kronos_tuning/sapienza_25s__validation_selected__detections.csv.gz",
+      "bytes": 33345,
+      "sha256": "76c7e93f1b3253dfbc85241b13f79e0588d649b7bdd702a0bdd1ff1ca474ec85"
+    },
+    {
+      "path": "kronos_tuning/sapienza_5s__joint_unsupervised__detections.csv.gz",
+      "bytes": 33607,
+      "sha256": "af4ee20673d0dbf9b51b24619a705ba5faaf366015290c98e8d4f72b1532269a"
+    },
+    {
+      "path": "kronos_tuning/sapienza_5s__score_inputs.npz",
+      "bytes": 229618,
+      "sha256": "047916fca5c33c2ae9b9d561b9fb3be8fab501a9a366e1f47b4a5184f2dbf1a9"
+    },
+    {
+      "path": "kronos_tuning/sapienza_5s__validation_selected__detections.csv.gz",
+      "bytes": 33608,
+      "sha256": "fb15b089ab14bad8e8cd5613ae45c5efa2bc7e22f99501ff26076b2dfde4a31a"
+    },
+    {
+      "path": "kronos_tuning/sd_crypto__joint_unsupervised__detections.csv.gz",
+      "bytes": 28878,
+      "sha256": "b59f33e393911e6b10170f053cbb4ffe53cc5330924c96c14667f009786c8467"
+    },
+    {
+      "path": "kronos_tuning/sd_crypto__score_inputs.npz",
+      "bytes": 29595,
+      "sha256": "339c7e4784af4df45019bd28dc959f52a6b4b135a78a3e2b959f15fcaac70157"
+    },
+    {
+      "path": "kronos_tuning/sd_crypto__validation_selected__detections.csv.gz",
+      "bytes": 28879,
+      "sha256": "e524b4a571a5169affe0383070246abd4fd96f6652b0a2bcf794f745018f31ea"
+    },
+    {
+      "path": "kronos_tuning/sd_prices__joint_unsupervised__detections.csv.gz",
+      "bytes": 15368,
+      "sha256": "dae267e4c2a58ef0e42b333b311400cc6d3bc8026b83ee39d24413fb66ed5ff8"
+    },
+    {
+      "path": "kronos_tuning/sd_prices__score_inputs.npz",
+      "bytes": 17275,
+      "sha256": "9c5b98c364ad740accde8e75d4ba198868fc2a714333b61de50d86f4cb4e3a45"
+    },
+    {
+      "path": "kronos_tuning/sd_prices__validation_selected__detections.csv.gz",
+      "bytes": 15390,
+      "sha256": "82128bbe3281efe4b0a74d8f20131ec6be0f583df137ff0ca28b530a5149e3a9"
+    },
+    {
+      "path": "kronos_tuning/sd_stock__joint_unsupervised__detections.csv.gz",
+      "bytes": 21765,
+      "sha256": "88729cfc224c5bf3a9959b6b971b7286718ba1e63ee0696138f6ecaa5c3c0df2"
+    },
+    {
+      "path": "kronos_tuning/sd_stock__score_inputs.npz",
+      "bytes": 22632,
+      "sha256": "8246c9209f8b5ea306719d306b0e1a3fcdf94d4667f67ebdcf0fa9b474e91581"
+    },
+    {
+      "path": "kronos_tuning/sd_stock__validation_selected__detections.csv.gz",
+      "bytes": 22018,
+      "sha256": "2fdb1886e19ed7a513de8e267ad179e82f220f0cc660e0637208490edf609b6a"
+    },
+    {
+      "path": "kronos_tuning/sd_synthetic__joint_unsupervised__detections.csv.gz",
+      "bytes": 29707,
+      "sha256": "c82e6552ce9733f764d43518034dc82da6d7717f6f650b4cd66cd6b7a7722864"
+    },
+    {
+      "path": "kronos_tuning/sd_synthetic__score_inputs.npz",
+      "bytes": 30100,
+      "sha256": "af7e69bdc6f6f59e2f2bf784d6e9ff9094126eb126c778ea6fc059fede769338"
+    },
+    {
+      "path": "kronos_tuning/sd_synthetic__validation_selected__detections.csv.gz",
+      "bytes": 29939,
+      "sha256": "f821440c74354a7eb930c307f3d3c9d024bcb44915c4b3ece77c07ac19eb6f38"
+    },
+    {
+      "path": "kronos_tuning/ulb_creditcard__joint_unsupervised__detections.csv.gz",
+      "bytes": 26886,
+      "sha256": "d532c287f29cb7391b7fd1c7ac343e72e3fe4e2797814317e2377ef3ad19bf5e"
+    },
+    {
+      "path": "kronos_tuning/ulb_creditcard__score_inputs.npz",
+      "bytes": 688467,
+      "sha256": "088bf2929c1e15c731a5b87c7fc387a29f959c80ef59b97170f076a02029c082"
+    },
+    {
+      "path": "kronos_tuning/ulb_creditcard__validation_selected__detections.csv.gz",
+      "bytes": 26887,
+      "sha256": "bb789fda6436860ec803d98050e71290a9bf29eba14cab08602b3adca06566ad"
+    },
+    {
+      "path": "kronos_tuning/validation_search.csv",
+      "bytes": 168908,
+      "sha256": "41e52b388032fc771b68c786338e98e798b67b2553e31d0133177d1b8167575c"
     }
   ]
 }
