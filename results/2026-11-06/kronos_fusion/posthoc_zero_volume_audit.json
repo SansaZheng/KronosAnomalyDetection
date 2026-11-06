@@ -1,0 +1,9 @@
+{
+ "zero_volume_bars": 333,
+ "test_bars": 1152,
+ "original_alarms_on_zero_volume": 14,
+ "original_price_only_alarms_on_zero_volume": 14,
+ "fusion_alarms_on_zero_volume": 0,
+ "fusion_alarms": 25,
+ "original_alarms": 54
+}

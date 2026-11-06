@@ -1,0 +1,10 @@
+{
+  "frozen_at_utc": "2026-11-06T13:52:15+00:00",
+  "base_commit": "33d8a37",
+  "sha256": {
+    "results/2026-11-06/kronos_fusion/frozen_config.json": "b508902925c53841c2d7f719e1b1d04e6b9f7d803fc4bbafedbf8f0d685380fd",
+    "kronos_ad/fusion.py": "04812890853ffce8bca1106824591cb068e822ad905d4e215040cf56ccbd12ab",
+    "kronos_ad/backend.py": "a5750d29e2e55666c778812211d5282e9907e7d16fa35e193e75743600165f82",
+    "scripts/fusion_data.py": "efc8ff1eb753bfb5bb656dcd47e09d564ad7fc66ef590ff6727122a3f1fad523"
+  }
+}

@@ -2,14 +2,28 @@
 from pathlib import Path
 import sys
 
+import numpy as np
 import pandas as pd
+
+
+def prescale_window(frame):
+    """Divide each column by its window std; return the frame and the factors.
+
+    The official predictor normalizes by (std + 1e-5). When a window's std is far
+    below 1e-5, as for BTC-quoted altcoins priced near 5e-5, the model sees a nearly
+    flat line and its output is rescaled by a factor unrelated to the market's real
+    volatility. Rescaling first keeps the constant negligible. Flat columns keep 1.
+    """
+    scale = frame.std(ddof=0).to_numpy(dtype=float)
+    scale = pd.Series(np.where(scale > 0, scale, 1.0), index=frame.columns)
+    return frame / scale, scale
 
 
 class KronosBackend:
     def __init__(self, repo, model="NeoQuasar/Kronos-small",
                  tokenizer="NeoQuasar/Kronos-Tokenizer-base", device="cpu",
                  max_context=512, sample_count=5, temperature=1.0, top_p=0.9,
-                 seed=42, model_revision=None, tokenizer_revision=None):
+                 seed=42, model_revision=None, tokenizer_revision=None, prescale=True):
         if sample_count < 1 or temperature <= 0 or not 0 < top_p <= 1:
             raise ValueError("Invalid sampling parameters")
         repo = Path(repo).resolve()
@@ -29,18 +43,24 @@ class KronosBackend:
         net.eval()
         self.predictor = KronosPredictor(net, tok, device=device, max_context=max_context)
         self.max_context = max_context
+        self.prescale = prescale
         self.kwargs = dict(sample_count=sample_count, T=temperature, top_p=top_p,
                            top_k=0, verbose=False)
         self.metadata = dict(model=model, tokenizer=tokenizer, device=device,
-                             max_context=max_context, seed=seed,
+                             max_context=max_context, seed=seed, prescale=prescale,
                              model_revision=model_revision, tokenizer_revision=tokenizer_revision,
                              **self.kwargs)
 
     def forecast(self, history, timestamp):
         import torch
+        frame = history.drop(columns="timestamps").copy()
+        scale = None
+        if self.prescale:
+            frame, scale = prescale_window(frame)
         with torch.inference_mode():
             result = self.predictor.predict(
-                df=history.drop(columns="timestamps").copy(),
+                df=frame,
                 x_timestamp=history.timestamps.reset_index(drop=True),
                 y_timestamp=pd.Series([timestamp]), pred_len=1, **self.kwargs)
-        return result.iloc[0]
+        row = result.iloc[0]
+        return row if scale is None else row * scale.reindex(row.index).fillna(1.0)

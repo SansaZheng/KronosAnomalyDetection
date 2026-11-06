@@ -48,5 +48,10 @@ def test_official_adapter_contract(tmp_path, monkeypatch):
     assert call["pred_len"] == 1 and call["sample_count"] == 7
     assert "timestamps" not in call["df"]
     assert list(call["y_timestamp"]) == [target]
-    assert result.close == 42
+    # The stub answers 42 in the scaled units the model saw; window std of close is 0.5.
+    assert result.close == 42 * 0.5
+    assert call["df"].close.std(ddof=0) == 1
     assert loaded[1][1] == {"revision": "pinned-model"}
+    backend.prescale = False
+    assert backend.forecast(history, target).close == 42
+    assert instances[0].call["df"].close.tolist() == [1, 2]

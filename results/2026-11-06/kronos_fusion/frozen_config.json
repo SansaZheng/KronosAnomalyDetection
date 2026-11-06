@@ -1,0 +1,23 @@
+{
+  "method": "Kronos evidence fusion",
+  "channels": ["forecast", "local", "global"],
+  "naive_forecasts": ["last", "median"],
+  "forecast_stack": "per-feature L1-optimal convex weights, grid step 0.05, fit partition",
+  "scale_terms": ["level", "step", "level_std", "step_std", "reference"],
+  "scale_quantile": 0.75,
+  "tail_quantile": 0.9,
+  "aggregate": "max",
+  "alpha": 0.01,
+  "online_threshold": {"gamma": 0.005, "window": 512},
+  "global_channel_off": ["sd_crypto", "sd_stock", "sd_prices", "sd_synthetic"],
+  "excluded_from_detection": ["hour_sin", "hour_cos", "minute_sin", "minute_cos", "symbol_reference_frequency"],
+  "partitions": "repo tuning split: fit = earlier half of calibration, validation = later half, groups kept whole",
+  "endpoints": {
+    "primary": ["average_precision", "recall_at_1pct_fpr"],
+    "primary_datasets_min_test_positives": 5,
+    "primary_comparisons": ["fusion vs published per-feature POT", "fusion vs published joint top3", "fusion vs same fusion without Kronos"],
+    "alarm_calibration": "realized alarm rate versus nominal 1%, fixed and online thresholds",
+    "bootstrap": "2000 paired resamples; whole groups, or 64-row moving blocks for a single stream; seed 20261106",
+    "secondary": ["counterfactual injection power by forecaster", "full-coverage naive pipeline versus published baselines", "native BRD/BTC alarm audit"]
+  }
+}
