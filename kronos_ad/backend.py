@@ -62,5 +62,7 @@ class KronosBackend:
                 df=frame,
                 x_timestamp=history.timestamps.reset_index(drop=True),
                 y_timestamp=pd.Series([timestamp]), pred_len=1, **self.kwargs)
-        row = result.iloc[0]
-        return row if scale is None else row * scale.reindex(row.index).fillna(1.0)
+        # Columns the official predictor synthesizes (zero volume, volume x mean
+        # price) are not observations and are dropped; the detector never scores them.
+        row = result.iloc[0].reindex(frame.columns)
+        return row if scale is None else row * scale

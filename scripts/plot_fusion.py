@@ -71,14 +71,13 @@ def native():
     axes[1].set_yscale('symlog', linthresh=1000)
     axes[2].plot(t, rows.score, color=BLUE, lw=1)
     axes[2].axhline(summary['threshold'], color=BLUE, lw=1, ls='--')
-    axes[2].text(t.iloc[2], summary['threshold'] * 1.3, 'frozen threshold (1% on held-out calibration)', color=BLUE, fontsize=7.5)
+    axes[2].text(t.iloc[2], summary['threshold'] + 0.3, 'frozen threshold (1% on held-out calibration)', color=BLUE, fontsize=7.5)
     alarms = rows[rows.fusion_alarm]
     axes[2].plot(alarms.timestamp, alarms.score, 'o', color=BLUE, ms=5, mec='white', mew=0.8, label=f'fusion alarm ({len(alarms)})')
     original = rows[rows.original_alarm]
-    axes[2].plot(original.timestamp, np.full(len(original), 0.35), '|', color=ORANGE, ms=9, mew=1.2,
+    axes[2].plot(original.timestamp, np.full(len(original), -0.6), '|', color=ORANGE, ms=9, mew=1.2,
                  label=f'published per-feature POT alarm ({len(original)})')
-    axes[2].set_yscale('log')
-    axes[2].set_ylabel('Fused score, 1 / min p')
+    axes[2].set_ylabel('Fused score, -log min p')
     axes[2].legend(loc='upper right', fontsize=8)
     pump = rows.timestamp[rows.weak_label == 1].iloc[0]
     for ax in axes:

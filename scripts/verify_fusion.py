@@ -14,8 +14,11 @@ FROZEN = json.loads((OUT / 'frozen_config.json').read_text())
 
 def main():
     manifest = json.loads((OUT / 'frozen_manifest.json').read_text())
-    for path, digest in manifest['sha256'].items():
+    current = manifest['revisions'][-1]['sha256'] if manifest.get('revisions') else manifest['sha256']
+    for path, digest in current.items():
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest, path
+    config = 'results/2026-11-06/kronos_fusion/frozen_config.json'
+    assert current[config] == manifest['sha256'][config], 'frozen configuration changed after the freeze'
     metrics = pd.read_csv(OUT / 'metrics.csv').set_index(['dataset', 'method'])
     checked = 0
     for name in [NATIVE] + PROXY_NAMES:

@@ -30,7 +30,7 @@ def test_official_adapter_contract(tmp_path, monkeypatch):
 
         def predict(self, **kwargs):
             self.call = kwargs
-            return pd.DataFrame({"close": [42.0]})
+            return pd.DataFrame({"close": [42.0], "volume": [0.0], "amount": [0.0]})
 
     torch = types.SimpleNamespace(manual_seed=lambda _: None,
                                   cuda=types.SimpleNamespace(is_available=lambda: False),
@@ -51,6 +51,7 @@ def test_official_adapter_contract(tmp_path, monkeypatch):
     # The stub answers 42 in the scaled units the model saw; window std of close is 0.5.
     assert result.close == 42 * 0.5
     assert call["df"].close.std(ddof=0) == 1
+    assert list(result.index) == ["open", "high", "low", "close"]
     assert loaded[1][1] == {"revision": "pinned-model"}
     backend.prescale = False
     assert backend.forecast(history, target).close == 42

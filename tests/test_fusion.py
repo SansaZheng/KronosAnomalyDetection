@@ -38,14 +38,20 @@ def test_pvalue_is_monotone_and_extends_past_one_over_n():
     calibration = np.random.default_rng(3).exponential(size=400)
     tail = TailPValue(calibration)
     grid = np.linspace(0, 50, 200)
-    p = tail(grid)
-    assert (np.diff(p) <= 1e-12).all() and p.min() > 0 and tail(np.array([30.0]))[0] < 1 / 401
+    log_p = tail(grid)
+    assert (np.diff(log_p) <= 1e-12).all() and (log_p <= 0).all() and tail(np.array([30.0]))[0] < np.log(1 / 401)
 
 
 def test_pvalues_are_close_to_uniform_on_exchangeable_rows():
     rng = np.random.default_rng(4)
     tail = TailPValue(rng.exponential(size=1000))
-    assert (tail(rng.exponential(size=20000)) <= 0.05).mean() == pytest.approx(0.05, abs=0.01)
+    assert (np.exp(tail(rng.exponential(size=20000))) <= 0.05).mean() == pytest.approx(0.05, abs=0.01)
+
+
+def test_extreme_scores_stay_finite_and_ordered():
+    tail = TailPValue(np.random.default_rng(8).exponential(size=300))
+    log_p = tail(np.array([1e3, 1e4, 1e6]))
+    assert np.isfinite(log_p).all() and log_p[0] > log_p[1] > log_p[2]
 
 
 def fitted(x, windows, reference=None, **kwargs):
@@ -119,3 +125,10 @@ def test_prescale_defeats_the_predictor_constant_on_tiny_prices():
 def test_prescale_keeps_a_flat_column_finite():
     scaled, factor = prescale_window(pd.DataFrame({"close": [2.0] * 8}))
     assert factor.close == 1.0 and (scaled.close == 2.0).all()
+
+
+def test_score_is_log_of_inverse_minimum_pvalue():
+    x, windows = stream()
+    model = fitted(x, windows)
+    log_p = model.log_pvalues(x[600:], windows[600:], {})[:, model.active_mask()]
+    np.testing.assert_allclose(model.score(x[600:], windows[600:], {}), -log_p.min(axis=1))

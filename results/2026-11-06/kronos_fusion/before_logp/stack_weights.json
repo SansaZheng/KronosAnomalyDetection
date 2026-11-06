@@ -1,0 +1,250 @@
+[
+ {
+  "dataset": "native_brdbtc",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.2375,
+   0.5625,
+   0.2
+  ],
+  "kronos_weight_by_feature": {
+   "log_return": 0.0,
+   "log_range": 0.0,
+   "log_volume": 0.4,
+   "log_amount": 0.4
+  },
+  "threshold": 97.65284415681936
+ },
+ {
+  "dataset": "ulb_creditcard",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.039655172413793106,
+   0.9086206896551723,
+   0.05172413793103449
+  ],
+  "kronos_weight_by_feature": {
+   "V1": 0.05,
+   "V2": 0.0,
+   "V3": 0.0,
+   "V4": 0.0,
+   "V5": 0.05,
+   "V6": 0.0,
+   "V7": 0.1,
+   "V8": 0.0,
+   "V9": 0.2,
+   "V10": 0.0,
+   "V11": 0.2,
+   "V12": 0.2,
+   "V13": 0.1,
+   "V14": 0.0,
+   "V15": 0.0,
+   "V16": 0.0,
+   "V17": 0.2,
+   "V18": 0.0,
+   "V19": 0.0,
+   "V20": 0.0,
+   "V21": 0.05,
+   "V22": 0.0,
+   "V23": 0.0,
+   "V24": 0.2,
+   "V25": 0.0,
+   "V26": 0.1,
+   "V27": 0.0,
+   "V28": 0.0,
+   "Amount": 0.05
+  },
+  "threshold": 19110.619641575337
+ },
+ {
+  "dataset": "banksim",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.16666666666666666,
+   0.8083333333333332,
+   0.025000000000000005
+  ],
+  "kronos_weight_by_feature": {
+   "customer_reference_frequency": 0.1,
+   "age_reference_frequency": 0.0,
+   "gender_reference_frequency": 0.0,
+   "merchant_reference_frequency": 0.0,
+   "category_reference_frequency": 0.0,
+   "amount": 0.05
+  },
+  "threshold": 257.0
+ },
+ {
+  "dataset": "s_ffsd",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.49000000000000005,
+   0.45000000000000007,
+   0.06000000000000001
+  ],
+  "kronos_weight_by_feature": {
+   "Source_reference_frequency": 0.2,
+   "Target_reference_frequency": 0.1,
+   "Amount": 0.0,
+   "Location_reference_frequency": 0.0,
+   "Type_reference_frequency": 0.0
+  },
+  "threshold": 9.999999999999999e+299
+ },
+ {
+  "dataset": "sapienza_5s",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.3875,
+   0.6125,
+   0.0
+  ],
+  "kronos_weight_by_feature": {
+   "std_rush_order": 0.0,
+   "avg_rush_order": 0.0,
+   "std_trades": 0.0,
+   "std_volume": 0.0,
+   "avg_volume": 0.0,
+   "std_price": 0.0,
+   "avg_price": 0.0,
+   "avg_price_max": 0.0
+  },
+  "threshold": 518892.3706340372
+ },
+ {
+  "dataset": "sapienza_15s",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.38125,
+   0.61875,
+   0.0
+  ],
+  "kronos_weight_by_feature": {
+   "std_rush_order": 0.0,
+   "avg_rush_order": 0.0,
+   "std_trades": 0.0,
+   "std_volume": 0.0,
+   "avg_volume": 0.0,
+   "std_price": 0.0,
+   "avg_price": 0.0,
+   "avg_price_max": 0.0
+  },
+  "threshold": 146272.2849120081
+ },
+ {
+  "dataset": "sapienza_25s",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.39375,
+   0.6,
+   0.00625
+  ],
+  "kronos_weight_by_feature": {
+   "std_rush_order": 0.0,
+   "avg_rush_order": 0.0,
+   "std_trades": 0.0,
+   "std_volume": 0.0,
+   "avg_volume": 0.05,
+   "std_price": 0.0,
+   "avg_price": 0.0,
+   "avg_price_max": 0.0
+  },
+  "threshold": 4115.129923612045
+ },
+ {
+  "dataset": "sd_crypto",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.9,
+   0.0,
+   0.1
+  ],
+  "kronos_weight_by_feature": {
+   "value": 0.1
+  },
+  "threshold": 147.88920990515106
+ },
+ {
+  "dataset": "sd_stock",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.5,
+   0.5,
+   0.0
+  ],
+  "kronos_weight_by_feature": {
+   "value": 0.0
+  },
+  "threshold": 51.520589595690964
+ },
+ {
+  "dataset": "sd_prices",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   1.0,
+   0.0,
+   0.0
+  ],
+  "kronos_weight_by_feature": {
+   "value": 0.0
+  },
+  "threshold": 2487.7253326977698
+ },
+ {
+  "dataset": "sd_synthetic",
+  "names": [
+   "last",
+   "median",
+   "kronos"
+  ],
+  "mean_weight": [
+   0.4,
+   0.4,
+   0.2
+  ],
+  "kronos_weight_by_feature": {
+   "value": 0.2
+  },
+  "threshold": 95.12449078283431
+ }
+]

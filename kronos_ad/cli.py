@@ -35,6 +35,9 @@ def main():
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--top-p", type=float, default=0.9)
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--no-prescale", action="store_true",
+                   help="Send raw windows to the official predictor; its (std + 1e-5) normalization "
+                        "flattens series whose window std is far below 1e-5")
     a = p.parse_args()
     c = Config(a.lookback, tuple(a.features), tuple(a.epsilon or [1e-5]*len(a.features)),
                a.quantile, a.risk, a.min_exceedances)
@@ -44,7 +47,7 @@ def main():
         p.error("Output directory already exists; select a new path")
     backend = KronosBackend(a.kronos_repo, a.model, a.tokenizer, a.device, a.max_context,
                             a.sample_count, a.temperature, a.top_p, a.seed,
-                            a.model_revision, a.tokenizer_revision)
+                            a.model_revision, a.tokenizer_revision, prescale=not a.no_prescale)
     detector = Detector(backend, c).fit(calibration, context=reference)
     result = detector.predict(test, context=pd.concat([reference, calibration], ignore_index=True))
     out.mkdir(parents=True)

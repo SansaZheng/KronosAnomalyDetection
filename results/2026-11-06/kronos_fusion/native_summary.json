@@ -17,7 +17,7 @@
  "pump_rank_original": 4,
  "pump_top_feature": "log_amount",
  "pump_top_channel": "global",
- "threshold": 97.65284415681936,
+ "threshold": 4.581418782928431,
  "weights": {
   "log_return": [
    0.0,

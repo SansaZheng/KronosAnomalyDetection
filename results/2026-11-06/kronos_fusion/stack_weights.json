@@ -17,7 +17,7 @@
    "log_volume": 0.4,
    "log_amount": 0.4
   },
-  "threshold": 97.65284415681936
+  "threshold": 4.581418782928431
  },
  {
   "dataset": "ulb_creditcard",
@@ -62,7 +62,7 @@
    "V28": 0.0,
    "Amount": 0.05
   },
-  "threshold": 19110.619641575337
+  "threshold": 9.8579994616995
  },
  {
   "dataset": "banksim",
@@ -84,7 +84,7 @@
    "category_reference_frequency": 0.0,
    "amount": 0.05
   },
-  "threshold": 257.0
+  "threshold": 5.54907608489522
  },
  {
   "dataset": "s_ffsd",
@@ -105,7 +105,7 @@
    "Location_reference_frequency": 0.0,
    "Type_reference_frequency": 0.0
   },
-  "threshold": 9.999999999999999e+299
+  "threshold": 7771.16613248903
  },
  {
   "dataset": "sapienza_5s",
@@ -129,7 +129,7 @@
    "avg_price": 0.0,
    "avg_price_max": 0.0
   },
-  "threshold": 518892.3706340372
+  "threshold": 13.159451762287706
  },
  {
   "dataset": "sapienza_15s",
@@ -153,7 +153,7 @@
    "avg_price": 0.0,
    "avg_price_max": 0.0
   },
-  "threshold": 146272.2849120081
+  "threshold": 11.893225128952862
  },
  {
   "dataset": "sapienza_25s",
@@ -177,7 +177,7 @@
    "avg_price": 0.0,
    "avg_price_max": 0.0
   },
-  "threshold": 4115.129923612045
+  "threshold": 8.322425685787
  },
  {
   "dataset": "sd_crypto",
@@ -194,7 +194,7 @@
   "kronos_weight_by_feature": {
    "value": 0.1
   },
-  "threshold": 147.88920990515106
+  "threshold": 4.996463411714958
  },
  {
   "dataset": "sd_stock",
@@ -211,7 +211,7 @@
   "kronos_weight_by_feature": {
    "value": 0.0
   },
-  "threshold": 51.520589595690964
+  "threshold": 3.941981525746357
  },
  {
   "dataset": "sd_prices",
@@ -228,7 +228,7 @@
   "kronos_weight_by_feature": {
    "value": 0.0
   },
-  "threshold": 2487.7253326977698
+  "threshold": 7.819124050939237
  },
  {
   "dataset": "sd_synthetic",
@@ -245,6 +245,6 @@
   "kronos_weight_by_feature": {
    "value": 0.2
   },
-  "threshold": 95.12449078283431
+  "threshold": 4.555186463030432
  }
 ]

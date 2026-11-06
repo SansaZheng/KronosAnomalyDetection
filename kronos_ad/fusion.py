@@ -11,8 +11,9 @@ Pipeline (each step is fitted on calibration rows only):
 3. Evidence channels: `forecast` (one-step onset), `local` (deviation from the window
    median, which persists through an interval) and `global` (deviation from the
    reference distribution, for stationary features only).
-4. Conformal p-values with a GPD tail, so ranks stay continuous past 1/n.
-5. Fusion: a row's score is its strongest evidence, 1 / min p over features and
+4. Conformal p-values with a GPD tail, so ranks stay continuous past 1/n. They are
+   kept as log p, so an extreme row cannot underflow to a tie at the floor.
+5. Fusion: a row's score is its strongest evidence, -log min p over features and
    channels. The harmonic mean is also available; on calibration data it was not better.
 6. One joint threshold from a held-out partition, so the alarm rate does not inflate
    with dimension as a per-feature OR does. It can also be tracked online.
@@ -23,6 +24,7 @@ from itertools import product
 
 import numpy as np
 from scipy.optimize import linprog
+from scipy.special import logsumexp
 
 MAD_TO_STD = 1.4826
 CHANNELS = ("forecast", "local", "global")
@@ -68,7 +70,7 @@ def fit_pinball(design, target, quantile=0.75):
 
 
 class TailPValue:
-    """Conformal p-value; beyond the initial quantile, a Hosking-Wallis GPD tail."""
+    """Conformal log p-value; beyond the initial quantile, a Hosking-Wallis GPD tail."""
 
     def __init__(self, scores, tail_quantile=0.9, shape_limits=(0.0, 0.75)):
         self.sorted_ = np.sort(np.asarray(scores, dtype=float))
@@ -86,15 +88,16 @@ class TailPValue:
             self.scale_ = float(a0 * (1 - self.shape_))
 
     def __call__(self, scores):
+        """Natural log of the p-value; finite for every finite score."""
         scores = np.asarray(scores, dtype=float)
         ge = self.n_ - np.searchsorted(self.sorted_, scores, side="left")
-        p = (1 + ge) / (self.n_ + 1)
+        log_p = np.log((1 + ge) / (self.n_ + 1))
         if self.scale_ > 0:
             tail = scores > self.u_
             z = (scores[tail] - self.u_) / self.scale_
-            sf = np.exp(-z) if self.shape_ < 1e-9 else (1 + self.shape_ * z) ** (-1 / self.shape_)
-            p[tail] = (self.n_tail_ + 1) / (self.n_ + 1) * sf
-        return np.clip(p, 1e-300, 1.0)
+            log_sf = -z if self.shape_ < 1e-9 else -np.log1p(self.shape_ * z) / self.shape_
+            log_p[tail] = np.log((self.n_tail_ + 1) / (self.n_ + 1)) + log_sf
+        return np.minimum(log_p, 0.0)
 
 
 @dataclass(frozen=True)
@@ -186,13 +189,13 @@ class EvidenceFusion:
                        for j in range(x.shape[1])]
         return self
 
-    def pvalues(self, x, windows, forecasts):
+    def log_pvalues(self, x, windows, forecasts):
         raw = self._raw(x, self._context(windows), forecasts)
-        p = np.empty_like(raw)
+        log_p = np.empty_like(raw)
         for j in range(raw.shape[1]):
             for k in range(raw.shape[2]):
-                p[:, j, k] = self.tails_[j][k](raw[:, j, k])
-        return p
+                log_p[:, j, k] = self.tails_[j][k](raw[:, j, k])
+        return log_p
 
     def active_mask(self):
         """Channel-feature pairs that vote; `global` skips nonstationary features."""
@@ -202,15 +205,18 @@ class EvidenceFusion:
         return mask
 
     def score(self, x, windows, forecasts):
-        p = self.pvalues(x, windows, forecasts)[:, self.active_mask()]
-        return (1 / p).mean(axis=1) if self.config.aggregate == "harmonic" else 1 / p.min(axis=1)
+        """-log min p (aggregate "max") or log mean 1/p (aggregate "harmonic")."""
+        log_p = self.log_pvalues(x, windows, forecasts)[:, self.active_mask()]
+        if self.config.aggregate == "harmonic":
+            return logsumexp(-log_p, axis=1) - np.log(log_p.shape[1])
+        return -log_p.min(axis=1)
 
     def explain(self, x, windows, forecasts):
         """Feature and channel index of each row's smallest active p-value."""
-        p = self.pvalues(x, windows, forecasts)
-        p = np.where(self.active_mask()[None], p, np.inf)
-        flat = p.reshape(len(p), -1).argmin(axis=1)
-        return np.unravel_index(flat, p.shape[1:])
+        log_p = self.log_pvalues(x, windows, forecasts)
+        log_p = np.where(self.active_mask()[None], log_p, np.inf)
+        flat = log_p.reshape(len(log_p), -1).argmin(axis=1)
+        return np.unravel_index(flat, log_p.shape[1:])
 
     def calibrate(self, x, windows, forecasts, alpha=None):
         alpha = self.config.alpha if alpha is None else alpha

@@ -75,6 +75,11 @@ def evaluate(labels, score, flags):
                 tp=tp, fp=fp, fn=fn, tn=tn)
 
 
+def resampling_units(groups, block):
+    labels = np.unique(groups)
+    return len(labels) if len(labels) > 1 else int(np.ceil(len(groups) / block))
+
+
 def resamples(groups, rng, block, count):
     """Index arrays: whole groups when grouped, else moving blocks of a single stream."""
     labels, inverse = np.unique(groups, return_inverse=True)
@@ -107,7 +112,7 @@ def bootstrap(labels, scores, groups, block, reference='fusion', count=2000):
     for k, v in samples.items():
         v = np.array(v)
         d = base - v
-        rows.append(dict(method=k, resamples=len(v), ap_lo=np.quantile(v[:, 0], .025), ap_hi=np.quantile(v[:, 0], .975),
+        rows.append(dict(method=k, resamples=len(v), units=resampling_units(g, block), ap_lo=np.quantile(v[:, 0], .025), ap_hi=np.quantile(v[:, 0], .975),
                          r1_lo=np.nanquantile(v[:, 1], .025), r1_hi=np.nanquantile(v[:, 1], .975),
                          ap_diff_lo=np.quantile(d[:, 0], .025), ap_diff_hi=np.quantile(d[:, 0], .975),
                          ap_diff_share_positive=float((d[:, 0] > 0).mean()),
@@ -124,6 +129,21 @@ def published(name, test_rows):
     np.testing.assert_array_equal(new.source_row.to_numpy(), test_rows)
     return dict(per_feature_pot=(old.max_score_ratio.to_numpy(), old.anomaly.to_numpy(bool)),
                 joint_top3=(new.score.to_numpy(), new.anomaly.to_numpy(bool)))
+
+
+def pot_same_features(b, index):
+    """Published per-feature POT recomputed on the detection features only (no calendar/symbol)."""
+    raw = b['raw']
+    keep = np.array([f not in NOT_DETECTION_TARGETS for f in raw['features']])
+    if keep.all():
+        return None
+    ref_std = raw['values'][raw['parts'] == 'reference'].std(axis=0)
+    ref_std = np.where(ref_std > 1e-10, ref_std, 1.0)
+    eps = np.maximum(ref_std * 1e-6, 1e-8)
+    scores = np.square((raw['x'] - raw['forecast']) / (raw['windows'].std(axis=1) + eps))[:, keep]
+    thresholds = np.array([fit_pot(scores[raw['calibration'], j], .9, .01, 30)['threshold'] for j in range(scores.shape[1])])
+    ratio = (scores[index] / thresholds).max(axis=1)
+    return ratio, ratio >= 1
 
 
 def level_baselines(name, targets_test, calibration_rows=None):
@@ -184,6 +204,9 @@ def section_labelled(bundles):
             methods['per_feature_pot'] = (old.max_score_ratio.to_numpy(), old.anomaly.to_numpy(bool))
         else:
             methods.update(published(name, b['raw']['targets'][test]))
+            same = pot_same_features(b, test)
+            if same is not None:
+                methods['per_feature_pot_same_features'] = same
             methods.update(level_baselines(name, b['raw']['targets'][test]))
         for method, (s, f) in methods.items():
             metrics.append(dict(dataset=name, method=method, **evaluate(y, s, f)))
@@ -276,15 +299,18 @@ def section_injection(bundles):
                     if b['name'] == NATIVE:
                         break
                 rows.append(dict(dataset=b['name'], method=label, delta=delta, power=float(np.mean(hits)), rows=len(test)))
-        original = original_power(b, test)
-        rows.extend(original)
+        rows.extend(original_power(b, test))
+        rows.extend(original_power(b, test, same_features=True))
         print('injection', b['name'], flush=True)
     return pd.DataFrame(rows)
 
 
-def original_power(b, test):
+def original_power(b, test, same_features=False):
     """The published per-feature POT score under the same counterfactuals."""
     out = []
+    if same_features and (b['name'] == NATIVE or all(f not in NOT_DETECTION_TARGETS for f in b['raw']['features'])):
+        return out
+    label = 'per_feature_pot_same_features' if same_features else 'per_feature_pot'
     if b['name'] == NATIVE:
         names = ['open', 'high', 'low', 'close', 'volume', 'amount']
         r = pd.read_csv(RESULTS / 'kronos/detections.csv.gz')
@@ -321,6 +347,8 @@ def original_power(b, test):
     scores = np.square((x - f) / std)
     valid, thresholds = [], []
     for j in range(x.shape[1]):
+        if same_features and not keep[j]:
+            continue
         try:
             thresholds.append(fit_pot(scores[calibration, j], .9, .01, 30)['threshold'])
             valid.append(j)
@@ -337,7 +365,7 @@ def original_power(b, test):
             shifted[:, position] += proxy_shift(b, test, delta, seed)
             s = np.square((shifted - f[test]) / std[test])
             hits.append(float(((s[:, valid] / thresholds).max(axis=1) > cut).mean()))
-        out.append(dict(dataset=b['name'], method='per_feature_pot', delta=delta, power=float(np.mean(hits)), rows=len(test)))
+        out.append(dict(dataset=b['name'], method=label, delta=delta, power=float(np.mean(hits)), rows=len(test)))
     return out
 
 
