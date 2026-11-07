@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info/
 .venv/
 vendor/
+!tests/vendor/
 weights/
 runs/
 

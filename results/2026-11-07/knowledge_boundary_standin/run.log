@@ -1,0 +1,31 @@
+sapienza_15s: features ['std_rush_order', 'avg_rush_order', 'std_trades', 'std_volume', 'avg_volume', 'std_price', 'avg_price', 'avg_price_max']; rows with history: reference 379643, calibration 99167, test 95127
+forecaster training windows 240075, calibration rows 12050, test rows 24040
+epoch 1: train nll 0.584  calibration last-step nll 5.408
+epoch 2: train nll -0.012  calibration last-step nll 5.079
+epoch 3: train nll -0.146  calibration last-step nll 5.206
+training took 410s; persistence+calibration-variance nll on calibration 5.584
+hidden states (5, 64); error boundary threshold (calibration 90th pct NLL) 4.150; pump positives pool 253, test 64
+  error: logistic probe balanced accuracy 0.6775 (1s)
+  error: mlp probe balanced accuracy 0.6699 (1s)
+  error: cnn probe balanced accuracy 0.6506 (38s)
+  error: knob set k=1 dims=[54] acc=0.6508 (full 0.6506; random-1 mean 0.6077, fraction >= top-k 0.08)
+  error: tau -1.00 dlogp normal -1.5306 (y0 -0.3388, y1 -2.7224) tangent -0.4020 random -0.3786
+  error: tau -0.50 dlogp normal -0.6403 (y0 -0.0625, y1 -1.2181) tangent -0.1415 random -0.0953
+  error: tau -0.25 dlogp normal -0.2793 (y0 -0.0031, y1 -0.5555) tangent -0.0501 random -0.0189
+  error: tau -0.10 dlogp normal -0.1025 (y0 +0.0056, y1 -0.2106) tangent -0.0149 random +0.0001
+  error: tau +0.10 dlogp normal +0.0921 (y0 -0.0147, y1 +0.1989) tangent +0.0080 random -0.0104
+  error: tau +0.25 dlogp normal +0.2155 (y0 -0.0534, y1 +0.4843) tangent +0.0079 random -0.0449
+  error: tau +0.50 dlogp normal +0.3960 (y0 -0.1619, y1 +0.9538) tangent -0.0228 random -0.1490
+  error: tau +1.00 dlogp normal +0.6804 (y0 -0.5392, y1 +1.8999) tangent -0.1665 random -0.4716
+  pump: logistic probe balanced accuracy 0.8203 (0s)
+  pump: mlp probe balanced accuracy 0.8125 (0s)
+  pump: cnn probe balanced accuracy 0.7656 (4s)
+  pump: knob set k=1 dims=[1] acc=0.7969 (full 0.7656; random-1 mean 0.7377, fraction >= top-k 0.14)
+  pump: tau -1.00 dlogp normal -4.3144 (y0 -0.0026, y1 -8.6263) tangent +0.2007 random -0.7069
+  pump: tau -0.50 dlogp normal -2.3061 (y0 +0.0054, y1 -4.6177) tangent +0.0738 random -0.4983
+  pump: tau -0.25 dlogp normal -1.1896 (y0 +0.0044, y1 -2.3836) tangent +0.0303 random -0.2852
+  pump: tau -0.10 dlogp normal -0.4846 (y0 +0.0022, y1 -0.9713) tangent +0.0105 random -0.1227
+  pump: tau +0.10 dlogp normal +0.4960 (y0 -0.0027, y1 +0.9947) tangent -0.0084 random +0.1342
+  pump: tau +0.25 dlogp normal +1.2613 (y0 -0.0077, y1 +2.5304) tangent -0.0171 random +0.3569
+  pump: tau +0.50 dlogp normal +2.5927 (y0 -0.0189, y1 +5.2043) tangent -0.0212 random +0.7849
+  pump: tau +1.00 dlogp normal +5.4585 (y0 -0.0513, y1 +10.9682) tangent +0.0096 random +1.8509

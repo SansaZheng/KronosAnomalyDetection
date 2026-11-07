@@ -13,6 +13,7 @@ dependencies = ["numpy>=1.24", "pandas>=2.0", "scipy>=1.10"]
 kronos = ["torch>=2.0", "einops>=0.8", "huggingface_hub>=0.33", "tqdm>=4.67", "safetensors>=0.6"]
 test = ["pytest>=8"]
 experiments = ["scikit-learn>=1.6,<1.7", "matplotlib>=3.9,<3.10"]
+boundary = ["torch>=2.0", "scikit-learn>=1.6,<1.7", "huggingface_hub>=0.33", "einops>=0.8", "tqdm>=4.67"]
 
 [project.scripts]
 kronos-ad = "kronos_ad.cli:main"

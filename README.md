@@ -2,6 +2,8 @@
 
 新增：[参数与评分方法调整实验](results/2026-11-06/kronos_tuning/README.md)，包含原方法、联合校准无监督方案及明确使用验证标签的选参方案，提供逐数据集前后对比、图片和复现脚本。原始实验保持独立；新比较属于已查看测试集上的回顾性实验，不承诺所有数据集均提升。
 
+新增：[知识边界分析](docs/knowledge_boundary.md)——把 Huang 等人 *Uncovering the Knowledge Boundaries and Mechanistic "Knob" of LLMs* 的由粗到细框架（隐状态探针 → 类条件差分图 → 嵌套 top-k knob 搜索 → 闭式蒸馏 → 定向干预）移植到 Kronos：`kronos_ad/boundary.py`（与模型无关的分析工具）、`kronos_ad/hidden.py`（官方 Kronos 的隐状态读取、补丁与 teacher-forced 似然）、`scripts/run_boundary_kronos.py`（真实权重上的冻结协议）、`scripts/boundary_standin.py`（无权重时在仓库自己的 K 线上训练替身 Transformer 的端到端演示，结果见 [results/2026-11-07/knowledge_boundary_standin](results/2026-11-07/knowledge_boundary_standin/README.md)）。
+
 新增：[证据融合第 2 轮](results/2026-11-07/kronos_fusion_r2/README.md)（`long` 因果长历史通道 + 多统计量校准聚合；在校准行上从 14 个配置中按预先写下的规则选出，再在与第 1 轮相同的测试行上评估一次）：相对第 1 轮，可靠的 AP 改进只有 SD-synthetic 一个且很小，S-FFSD 与 SD-stock 的改进只是提示性的（6–7 个重采样单元），SD-prices（拟合分区只有 1 个 case）可靠地退化；Kronos 仍无正向贡献，Robust MAD / Isolation Forest 在 4/5、3/5 个主要数据集上仍显著领先。各轮测试查看记录见 [results/ROUNDS.md](results/ROUNDS.md)。
 
 [证据融合第 1 轮](results/2026-11-06/kronos_fusion/README.md)（`kronos_ad/fusion.py`）。在冻结协议下复用已保存的真实 Kronos 预测，用预测堆叠、条件尺度、保形 p 值与单一联合阈值替代逐维 POT “或”规则：5 个主要数据集的 AP 全部高于已发布方法（配对 bootstrap 区间不含 0），但去掉 Kronos 后结果几乎不变，Kronos 预测本身在本仓库保存的设置下没有可测量的贡献；原生实验的价格预测被定位为官方预测器 1e-5 标准化常数造成的尺度塌缩，`backend.py` 已加入 `prescale` 修复但无权重未能重跑验证。
