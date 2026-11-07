@@ -3,7 +3,7 @@
 
 No Kronos weights are reachable from this environment, so the paper's pipeline is
 exercised end to end on a small causal transformer trained here on the repo's own
-5-minute bars (Sapienza pump data, sapienza_15s rows). Everything below the model
+15-second trade-chunk feature rows (Sapienza pump data, sapienza_15s). Everything below the model
 is the same code path a real Kronos run uses (kronos_ad.boundary); only the
 hidden-state adapter differs (StandinStates here, kronos_ad.hidden for Kronos).
 

@@ -44,7 +44,7 @@
 | `kronos_ad/hidden.py` | `KronosHiddenStates`：官方 `Kronos`/`KronosTokenizer` 的隐状态读取、补丁注入、teacher-forced 似然；`normalize_windows`（官方归一化规则，可选 `prescale`） |
 | `scripts/boundary_pipeline.py` | 五步流程的共享实现（探针 → 定位 → knob → 闭式 → 干预，含 Wilcoxon 检验与 y=0/y=1 分组效应） |
 | `scripts/run_boundary_kronos.py` | 真实 Kronos 权重上的运行脚本（协议已写在文件头，`--tiny` 用随机权重小模型做空跑） |
-| `scripts/boundary_standin.py` | 无权重时的替身实验：在仓库自己的 5 分钟 K 线上训练一个小的因果 Transformer，跑同一条流程 |
+| `scripts/boundary_standin.py` | 无权重时的替身实验：在仓库自己的 Sapienza 15 秒成交块特征行上训练一个小的因果 Transformer，跑同一条流程 |
 | `scripts/plot_boundary.py` | 差分图、能量曲线、knob 空间、干预曲线 |
 | `tests/test_boundary.py`、`tests/test_hidden.py` | 植入边界的合成隐状态上验证每一步；用固定版本的官方模型代码（`tests/vendor/`）实例化随机权重的微型 Kronos，验证 hook、补丁只作用于最后位置、似然计算与干预链路 |
 
