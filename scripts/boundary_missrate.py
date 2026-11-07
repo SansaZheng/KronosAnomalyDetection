@@ -232,7 +232,7 @@ def main(dataset=DATASET, standin=None, out=None):
     log(f'baseline B at 1% FPR: recall {detected_base[pumps].mean():.3f}; subtle pumps: relative {int(subtle_relative.sum())}, '
         f'intrinsic (below pump-median level magnitude {np.median(level[pumps]):.2f}) {int(subtle_intrinsic.sum())}')
 
-    rows, pairs = [], []
+    rows, detections = [], {}
     evaluations = [(arm, score, null_score, None) for arm, (score, null_score) in arms.items()]
     evaluations += [(arm, None, None, flags) for arm, flags in or_arms.items()]
     for arm, score, null_score, flags in evaluations:
@@ -257,12 +257,36 @@ def main(dataset=DATASET, standin=None, out=None):
                    pumps_gained_vs_B=only_arm, pumps_lost_vs_B=only_base,
                    p_mcnemar=float(binomtest(only_arm, only_arm + only_base).pvalue) if only_arm + only_base else 1.0)
         rows.append(row)
+        detections[arm] = det
         log(f'  {arm:34s} AP {row["ap"]:.3f}  R@1% {row["recall_1pct_fpr"]:.3f}  miss {row["miss_rate_1pct_fpr"]:.3f}  '
             f'subtle rel {row["recall_subtle_relative"]:.3f} intr {row["recall_subtle_intrinsic"]:.3f}  '
             f'vs B {row["recall_diff_vs_B"]:+.3f} [{lo:+.3f}, {hi:+.3f}] gained {only_arm} lost {only_base}  '
             f'deploy alarm {row["deploy_alarm_rate"]:.4f} recall {row["deploy_recall"]:.3f}')
     table = pd.DataFrame(rows)
     table.to_csv(OUT / 'missrate.csv', index=False)
+
+    # ---- increments: what does a hidden-state channel add on top of a given base, at equal FPR?
+    increments = []
+    for stat in ('tippett', 'fisher', 'or'):
+        def name(combo, m):
+            return f'{combo} [or@a/{m}]' if stat == 'or' else f'{combo} [{stat}]'
+        pairs = [('B_nll_surprise', name('B+K_label', 2)), ('B_nll_surprise', name('B+K_error', 2)),
+                 ('B_nll_surprise', name('B+P_logistic', 2)), ('L_level_magnitude', name('L+K_label', 2)),
+                 (name('B+L', 2), name('B+L+K_label', 3))]
+        for base, plus in pairs:
+            a, b = detections[base], detections[plus]
+            lo, hi, units = paired_bootstrap(a[pumps], b[pumps], pump_groups)
+            gained, lost = int((b & ~a)[pumps].sum()), int((a & ~b)[pumps].sum())
+            sub = subtle_intrinsic
+            slo, shi, sunits = paired_bootstrap(a[sub], b[sub], pump_groups[sub[pumps]]) if sub.sum() >= 2 else (np.nan, np.nan, 0)
+            increments.append(dict(stat=stat, base=base, plus=plus, recall_base=float(a[pumps].mean()), recall_plus=float(b[pumps].mean()),
+                                   diff=float(b[pumps].mean() - a[pumps].mean()), ci_low=lo, ci_high=hi, units=units, gained=gained, lost=lost,
+                                   p_mcnemar=float(binomtest(gained, gained + lost).pvalue) if gained + lost else 1.0,
+                                   subtle_recall_base=float(a[sub].mean()), subtle_recall_plus=float(b[sub].mean()),
+                                   subtle_diff=float(b[sub].mean() - a[sub].mean()), subtle_ci_low=slo, subtle_ci_high=shi, subtle_units=sunits))
+            log(f'  increment [{stat}] {base} -> {plus}: recall {a[pumps].mean():.3f} -> {b[pumps].mean():.3f} '
+                f'[{lo:+.3f}, {hi:+.3f}] gained {gained} lost {lost}; subtle {a[sub].mean():.3f} -> {b[sub].mean():.3f} [{slo:+.3f}, {shi:+.3f}]')
+    pd.DataFrame(increments).to_csv(OUT / 'increments.csv', index=False)
 
     # ---- complementarity: do hidden-state channels rank the pumps that B misses?
     comp = []

@@ -15,9 +15,11 @@ INK, MUTED, GRID = '#1f1f1e', '#6b6b66', '#e6e6e2'
 plt.rcParams.update({'font.size': 9, 'axes.edgecolor': MUTED, 'axes.labelcolor': INK, 'xtick.color': INK, 'ytick.color': INK,
                      'axes.spines.top': False, 'axes.spines.right': False, 'axes.titlesize': 9.5, 'legend.frameon': False})
 ARMS = ['B_nll_surprise', 'L_level_magnitude', 'K_label_knob', 'K_error_knob', 'P_label_logistic',
-        'B+K_label [tippett]', 'B+K_label [fisher]', 'B+K_error [fisher]', 'B+P_logistic [fisher]', 'B+L [fisher]', 'B+L+K_label [fisher]']
+        'B+K_label [tippett]', 'B+K_label [fisher]', 'B+K_label [or@a/2]', 'B+K_error [fisher]', 'B+P_logistic [fisher]', 'B+P_logistic [or@a/2]',
+        'B+L [fisher]', 'B+L [or@a/2]', 'B+L+K_label [fisher]', 'B+L+K_label [or@a/3]']
 LABELS = ['B: NLL surprise', 'L: level magnitude', 'K: label knob', 'K: error knob', 'P: logistic probe',
-          'B + K label (Tippett)', 'B + K label (Fisher)', 'B + K error (Fisher)', 'B + probe (Fisher)', 'B + L (Fisher)', 'B + L + K label (Fisher)']
+          'B + K label (Tippett)', 'B + K label (Fisher)', 'B or K label (budget split)', 'B + K error (Fisher)', 'B + probe (Fisher)', 'B or probe (budget split)',
+          'B + L (Fisher)', 'B or L (budget split)', 'B + L + K label (Fisher)', 'B or L or K label (budget split)']
 
 
 def main():
@@ -25,7 +27,7 @@ def main():
     header = json.loads((out / 'results.json').read_text())
     table = pd.read_csv(out / 'missrate.csv').set_index('arm')
     rows = pd.read_csv(out / 'scores_test.csv.gz')
-    fig, (left, right) = plt.subplots(1, 2, figsize=(12.5, 4.6), layout='constrained', gridspec_kw={'width_ratios': [1.25, 1]})
+    fig, (left, right) = plt.subplots(1, 2, figsize=(12.5, 5.6), layout='constrained', gridspec_kw={'width_ratios': [1.25, 1]})
     arms = [a for a in ARMS if a in table.index]
     labels = [l for a, l in zip(ARMS, LABELS) if a in table.index]
     miss = table.loc[arms, 'miss_rate_1pct_fpr'].to_numpy()
