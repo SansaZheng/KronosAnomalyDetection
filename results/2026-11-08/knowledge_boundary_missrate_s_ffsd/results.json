@@ -1,0 +1,31 @@
+{
+ "dataset": "s_ffsd",
+ "label_boundary": "fraud",
+ "test_rows": 15577,
+ "known_rows": 6159,
+ "positives": 2394,
+ "bootstrap_units": 50,
+ "error_threshold": 10.702094078063965,
+ "knob_dims": {
+  "error": [
+   1,
+   44,
+   45
+  ],
+  "fraud": [
+   17,
+   9
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 3880,
+  "thresholds": 3880
+ },
+ "baseline_B_threshold_1pct_fpr": 16.21881675720215,
+ "subtle_relative": 2393,
+ "subtle_intrinsic": 289,
+ "pump_level_median": 4.711854457855225
+}
