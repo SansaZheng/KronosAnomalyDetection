@@ -15,8 +15,13 @@ Two boundaries:
          calibration 90th percentile ("the model does not know this bar");
   pump   y = 1 on labelled pump bars.
 
-Outputs go to results/2026-11-07/knowledge_boundary_standin/.
+Outputs go to results/2026-11-07/knowledge_boundary_standin/ for the original sapienza_15s
+run; `--dataset <name>` trains a stand-in on another transaction dataset of the repository
+(banksim, s_ffsd, ulb_creditcard) with the same protocol and writes to
+results/2026-11-08/knowledge_boundary_standin_<name>/. The labelled boundary is called
+`pump` on the Sapienza data and `fraud` on the transaction-fraud datasets.
 """
+import argparse
 import time
 import warnings
 from pathlib import Path
@@ -35,6 +40,16 @@ from run_fusion import recall_at_fpr
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'results/2026-11-07/knowledge_boundary_standin'
 DATASET = 'sapienza_15s'
+
+
+def default_out(dataset):
+    return OUT if dataset == DATASET else ROOT / f'results/2026-11-08/knowledge_boundary_standin_{dataset}'
+
+
+def label_boundary(dataset):
+    return 'pump' if dataset.startswith('sapienza') else 'fraud'
+
+
 LOOKBACK = 32
 SEED = 20261107
 D_MODEL, N_LAYERS, N_HEADS = 64, 4, 4
@@ -207,9 +222,11 @@ def naive_nll(x_val, y_val):
     return float(np.mean(0.5 * (np.log(var) + residual ** 2 / var + np.log(2 * np.pi)).sum(axis=1)))
 
 
-def main():
+def main(dataset=DATASET, out=None):
     warnings.filterwarnings('ignore')
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = Path(out) if out else default_out(dataset)
+    out.mkdir(parents=True, exist_ok=True)
+    positive_name = label_boundary(dataset)
     lines = []
 
     def log(text):
@@ -217,7 +234,7 @@ def main():
         lines.append(text)
 
     torch.manual_seed(SEED)
-    data = load_rows(DATASET)
+    data = load_rows(dataset)
     values, parts, groups, labels = data['values'], data['parts'], data['groups'], data['labels']
     keep = np.array([f not in NOT_DETECTION_TARGETS for f in data['features']])
     features = [f for f, k in zip(data['features'], keep) if k]
@@ -225,7 +242,7 @@ def main():
     z = ((values[:, keep] - center) / scale).astype(np.float32)
     z = np.clip(z, -CLIP, CLIP)
     windows = group_windows(values, groups, parts, LOOKBACK)
-    log(f'{DATASET}: features {features}; rows with history: ' + ', '.join(f'{k} {len(v[0])}' for k, v in windows.items()))
+    log(f'{dataset}: features {features}; rows with history: ' + ', '.join(f'{k} {len(v[0])}' for k, v in windows.items()))
 
     def tensors(part, pick):
         """Windows for the given positions within a partition's eligible rows; every labelled positive is kept."""
@@ -245,7 +262,7 @@ def main():
     model, history = train_forecaster(x_ref, y_ref, x_cal, y_cal, log)
     persistence = naive_nll(x_cal, y_cal)
     log(f'training took {time.time() - t0:.0f}s; persistence+calibration-variance nll on calibration {persistence:.3f}')
-    torch.save(model.state_dict(), OUT / 'standin_forecaster.pt')
+    torch.save(model.state_dict(), out / 'standin_forecaster.pt')
     states = StandinStates(model)
 
     # labelled pools: probes train on reference+calibration rows, evaluate on test rows
@@ -261,15 +278,15 @@ def main():
     threshold = float(np.quantile(nll_pool[calibration_rows][labels[t_cal] != 1], 0.9))  # normal calibration rows only
     boundaries = {
         'error': ((nll_pool > threshold).astype(int), (nll_test > threshold).astype(int)),
-        'pump': (labels[t_pool].astype(int), labels[t_test].astype(int)),
+        positive_name: (labels[t_pool].astype(int), labels[t_test].astype(int)),
     }
     log(f'hidden states {H_pool.shape[1:]}; error boundary threshold (calibration 90th pct NLL) {threshold:.3f}; '
-        f'pump positives pool {int(boundaries["pump"][0].sum())}, test {int(boundaries["pump"][1].sum())}')
+        f'{positive_name} positives pool {int((boundaries[positive_name][0] == 1).sum())}, test {int((boundaries[positive_name][1] == 1).sum())}')
     results, detection = [], []
     for name, (y_pool_b, y_test_b) in boundaries.items():
         train_idx, _ = split_balanced(y_pool_b, test_fraction=0.0, seed=SEED)
         test_idx, _ = split_balanced(y_test_b, test_fraction=0.0, seed=SEED + 1)
-        if y_test_b.sum() < 10 or y_pool_b.sum() < 20:
+        if (y_test_b == 1).sum() < 10 or (y_pool_b == 1).sum() < 20:
             log(f'  {name}: too few positives for a balanced probe; skipped')
             continue
         x_rows, target_rows = x_test[test_idx], y_test[test_idx]
@@ -279,7 +296,7 @@ def main():
             return ll, (log_var, error)
 
         result, probes, predictor = analyse_boundary(name, H_pool[train_idx], y_pool_b[train_idx], H_test[test_idx], y_test_b[test_idx],
-                                                     loglik_test, OUT, log, k_max=K_MAX, random_trials=RANDOM_TRIALS, seed=SEED)
+                                                     loglik_test, out, log, k_max=K_MAX, random_trials=RANDOM_TRIALS, seed=SEED)
         results.append(result)
         # anomaly relevance on all sampled test rows: pump labels, scores from internal signals and the black-box NLL
         pump = labels[t_test].astype(int)
@@ -290,11 +307,15 @@ def main():
             detection.append(dict(boundary=name, score=key, test_rows=int(known.sum()), positives=int(pump[known].sum()),
                                   ap=float(average_precision_score(pump[known], s[known])), auroc=float(roc_auc_score(pump[known], s[known])),
                                   recall_1pct_fpr=recall_at_fpr(pump[known], s[known])))
-    header = dict(dataset=DATASET, features=features, model=dict(d_model=D_MODEL, n_layers=N_LAYERS, n_heads=N_HEADS, lookback=LOOKBACK, epochs=EPOCHS, training_windows=int(len(x_ref))),
+    header = dict(dataset=dataset, label_boundary=positive_name, features=features, model=dict(d_model=D_MODEL, n_layers=N_LAYERS, n_heads=N_HEADS, lookback=LOOKBACK, epochs=EPOCHS, training_windows=int(len(x_ref))),
                   training=history, persistence_nll=persistence, error_threshold=threshold)
-    save_results(OUT, header, results, detection)
-    (OUT / 'run.log').write_text('\n'.join(lines) + '\n')
+    save_results(out, header, results, detection)
+    (out / 'run.log').write_text('\n'.join(lines) + '\n')
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--dataset', default=DATASET)
+    parser.add_argument('--out')
+    args = parser.parse_args()
+    main(args.dataset, args.out)

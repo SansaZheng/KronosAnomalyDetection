@@ -1,0 +1,28 @@
+{
+ "dataset": "sapienza_15s",
+ "label_boundary": "pump",
+ "test_rows": 24040,
+ "known_rows": 24040,
+ "positives": 64,
+ "bootstrap_units": 64,
+ "error_threshold": 4.150389194488525,
+ "knob_dims": {
+  "error": [
+   54
+  ],
+  "pump": [
+   1
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 4740,
+  "thresholds": 4741
+ },
+ "baseline_B_threshold_1pct_fpr": 26.570114135742188,
+ "subtle_relative": 10,
+ "subtle_intrinsic": 32,
+ "pump_level_median": 19.925399780273438
+}
