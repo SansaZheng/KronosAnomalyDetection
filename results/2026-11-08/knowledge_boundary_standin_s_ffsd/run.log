@@ -1,0 +1,31 @@
+s_ffsd: features ['Source_reference_frequency', 'Target_reference_frequency', 'Amount', 'Location_reference_frequency', 'Type_reference_frequency']; rows with history: reference 46696, calibration 15576, test 15577
+forecaster training windows 46696, calibration rows 12197, test rows 15577
+epoch 1: train nll 8.650  calibration last-step nll 8.194
+epoch 2: train nll 8.329  calibration last-step nll 8.129
+epoch 3: train nll 8.279  calibration last-step nll 8.100
+training took 206s; persistence+calibration-variance nll on calibration 9.465
+hidden states (5, 64); error boundary threshold (calibration 90th pct NLL) 10.702; fraud positives pool 2862, test 2394
+  error: logistic probe balanced accuracy 0.5972 (1s)
+  error: mlp probe balanced accuracy 0.6012 (1s)
+  error: cnn probe balanced accuracy 0.5782 (447s)
+  error: knob set k=3 dims=[1, 44, 45] acc=0.5663 (full 0.5782; random-3 mean 0.5458, fraction >= top-k 0.26)
+  error: tau -1.00 dlogp normal -0.3791 (y0 -0.6544, y1 -0.1039) tangent -0.9958 random -1.1196
+  error: tau -0.50 dlogp normal -0.0129 (y0 -0.2095, y1 +0.1837) tangent -0.3124 random -0.3049
+  error: tau -0.25 dlogp normal +0.0587 (y0 -0.0526, y1 +0.1700) tangent -0.0886 random -0.0728
+  error: tau -0.10 dlogp normal +0.0423 (y0 -0.0057, y1 +0.0902) tangent -0.0170 random -0.0083
+  error: tau +0.10 dlogp normal -0.0716 (y0 -0.0179, y1 -0.1253) tangent -0.0086 random -0.0196
+  error: tau +0.25 dlogp normal -0.2419 (y0 -0.0933, y1 -0.3905) tangent -0.0673 random -0.0998
+  error: tau +0.50 dlogp normal -0.7189 (y0 -0.3458, y1 -1.0919) tangent -0.2708 random -0.3557
+  error: tau +1.00 dlogp normal -2.5472 (y0 -1.3173, y1 -3.7772) tangent -0.9270 random -1.1992
+  fraud: logistic probe balanced accuracy 0.7508 (1s)
+  fraud: mlp probe balanced accuracy 0.7657 (1s)
+  fraud: cnn probe balanced accuracy 0.7153 (502s)
+  fraud: knob set k=2 dims=[17, 9] acc=0.7331 (full 0.7153; random-2 mean 0.7182, fraction >= top-k 0.60)
+  fraud: tau -1.00 dlogp normal -1.1588 (y0 -0.2179, y1 -2.0997) tangent -1.2419 random -1.3465
+  fraud: tau -0.50 dlogp normal -0.5612 (y0 -0.0770, y1 -1.0454) tangent -0.4462 random -0.4769
+  fraud: tau -0.25 dlogp normal -0.2256 (y0 -0.0262, y1 -0.4249) tangent -0.1243 random -0.1342
+  fraud: tau -0.10 dlogp normal -0.0658 (y0 -0.0068, y1 -0.1247) tangent -0.0190 random -0.0225
+  fraud: tau +0.10 dlogp normal +0.0188 (y0 +0.0012, y1 +0.0365) tangent -0.0232 random -0.0216
+  fraud: tau +0.25 dlogp normal -0.0571 (y0 -0.0086, y1 -0.1057) tangent -0.1352 random -0.1320
+  fraud: tau +0.50 dlogp normal -0.4630 (y0 -0.0553, y1 -0.8706) tangent -0.4681 random -0.4733
+  fraud: tau +1.00 dlogp normal -1.8209 (y0 -0.2400, y1 -3.4018) tangent -1.2769 random -1.3377
