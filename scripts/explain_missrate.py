@@ -10,6 +10,8 @@ labelled anomalies, whether the row is the first of a run, and the context's mea
 
 Writes results/2026-11-08/subtle_anomalies.csv and prints the tables.
 """
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -20,7 +22,8 @@ LOOK = 32
 RUNS = {'sapienza_15s': 'results/2026-11-08/knowledge_boundary_missrate',
         'banksim': 'results/2026-11-08/knowledge_boundary_missrate_banksim',
         's_ffsd': 'results/2026-11-08/knowledge_boundary_missrate_s_ffsd',
-        'ulb_creditcard': 'results/2026-11-08/knowledge_boundary_missrate_ulb_creditcard'}
+        'ulb_creditcard': 'results/2026-11-08/knowledge_boundary_missrate_ulb_creditcard',
+        'xu_livshits_1h': 'results/2026-11-08/knowledge_boundary_missrate_xu_livshits_1h'}
 
 
 def context_stats(labels, groups):
@@ -39,9 +42,11 @@ def context_stats(labels, groups):
     return prev_frac, run_pos
 
 
-def main():
+def main(datasets=None):
     out = []
     for name, d in RUNS.items():
+        if datasets and name not in datasets:
+            continue
         data = load_rows(name)
         values, labels, groups, parts = data['values'], data['labels'], data['groups'], data['parts']
         keep = np.array([f not in NOT_DETECTION_TARGETS for f in data['features']])
@@ -66,6 +71,11 @@ def main():
         frame = pd.concat([s[['grp', 'B_nll_surprise', 'L_level_magnitude', 'K_label_knob', 'prev_frac', 'run_pos']], rowz, ctx], axis=1)
         if name == 'ulb_creditcard':   # 29 PCA dims: keep the row/context summary only
             frame = frame[[c for c in frame.columns if not c.startswith(('row_V', 'ctx_V'))]]
+        if 'bars' in data:             # candles: share of zero-volume hours in the context and the recent volume rise
+            bars, vol = data['bars'], z[:, feats.index('log_volume')]
+            frame['ctx_zero_volume_share'] = [float((bars[max(r - pos[r], r - LOOK):r, 4] == 0).mean()) if pos[r] else np.nan for r in s.row.to_numpy()]
+            frame['ctx_volume_rise_last8h'] = [float(vol[r - 8:r].mean() - vol[max(r - pos[r], r - LOOK):r - 8].mean()) if pos[r] >= LOOK else np.nan
+                                               for r in s.row.to_numpy()]
         summary = frame.groupby('grp').median(numeric_only=True)
         summary.insert(0, 'n', frame.groupby('grp').size())
         summary.insert(1, 'share_with_anomaly_in_context', frame.groupby('grp').prev_frac.apply(lambda v: float((v > 0).mean())))
@@ -74,8 +84,14 @@ def main():
         print(f'\n=== {name}  (B threshold {thr_b:.2f}, K threshold {thr_k:.2f})')
         print(summary.round(3).to_string())
         out.append(summary.reset_index())
-    pd.concat(out, ignore_index=True).to_csv('results/2026-11-08/subtle_anomalies.csv', index=False)
+    table = pd.concat(out, ignore_index=True)
+    path = 'results/2026-11-08/subtle_anomalies.csv'
+    if datasets and Path(path).exists():   # merge a partial run into the existing table
+        old = pd.read_csv(path)
+        table = pd.concat([old[~old.dataset.isin(datasets)], table], ignore_index=True)
+    table.to_csv(path, index=False)
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(sys.argv[1:] or None)
