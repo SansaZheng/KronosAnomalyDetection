@@ -47,7 +47,7 @@ def default_out(dataset):
 
 
 def label_boundary(dataset):
-    return 'pump' if dataset.startswith('sapienza') else 'fraud'
+    return 'pump' if dataset.startswith(('sapienza', 'xu_')) else 'fraud'
 
 
 LOOKBACK = 32

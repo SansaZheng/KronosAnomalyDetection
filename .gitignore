@@ -11,3 +11,4 @@ runs/
 # Downloader state and temporary files
 data/raw/.download.lock
 data/raw/**/*.part
+.local_data/

@@ -5,6 +5,8 @@ fit and calibration partitions are the ones the tuning experiment already used.
 """
 from pathlib import Path
 
+import json
+import os
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
@@ -28,8 +30,67 @@ SD_FILES = {'sd_crypto': ('cryptocurrency cases', 'test_data.npy', 'test_label.n
 NOT_DETECTION_TARGETS = {'hour_sin', 'hour_cos', 'minute_sin', 'minute_cos', 'symbol_reference_frequency'}
 
 
+OHLCVA = ['xu_livshits_1h']
+OHLCVA_DIR = Path(os.environ.get('KRONOS_OHLCVA_DIR', ROOT / '.local_data/ohlcva'))
+OHLCVA_SPLITS = ('2018-08-01', '2018-09-11')     # reference < first, calibration < second, test = rest
+OHLCVA_MIN_ROWS = 160                           # a series needs a history on each side of the splits
+OHLCVA_FEATURES = ['log_return', 'log_range', 'log_volume', 'log_amount']
+
+
+def ohlcva(name):
+    """Xu & Livshits hourly OHLCVA K-lines (BTC-quoted, May-Oct 2018) with pump-hour labels.
+
+    Built locally by prepare_ohlcva_klines.py of SansaZheng/Financial_unsuperviesdAD (branch
+    claude/ohlcva-kline-data); not committed.  Labels: the PumpOlymp signal hour of each series
+    (column `pump`), plus Binance announcements from the B0R0koko manifest that fall on a Binance
+    series hour in the candle window.  The CCCAGG aggregate series are dropped because an
+    exchange-specific pump would appear in them unlabelled.  Features follow the native bar
+    features: log return on the previous close, log high/low range, log1p volume and amount in
+    units of the series' median positive volume/amount over the reference period.
+    """
+    k = pd.read_csv(OHLCVA_DIR / 'xu_livshits/klines_1h.csv.gz', parse_dates=['timestamp'])
+    k = k[k.exchange != 'CCCAGG'].copy()
+    k['series'] = k.coin + ':' + k.exchange
+    extra = OHLCVA_DIR / 'binance_pumps_b0r0koko.json'
+    if extra.exists():
+        b = pd.DataFrame(json.loads(extra.read_text()))
+        b = b[b.exchange.str.upper().str.startswith('BINANCE')]
+        b['coin'] = b.symbol.str.split('-').str[0]
+        b['hour'] = pd.to_datetime(b.time, utc=True).dt.floor('h')
+        keys = set(zip(b.coin, b.hour))
+        extra_hit = np.array([(c, t) in keys for c, t in zip(k.coin, k.timestamp)]) & (k.exchange == 'Binance').to_numpy()
+        k['pump'] = np.maximum(k.pump.to_numpy(), extra_hit.astype(np.int8))
+        k.attrs['b0r0koko_hours_added'] = int((extra_hit & (k.pump.to_numpy() == extra_hit)).sum())
+    k = k.sort_values(['series', 'timestamp'], kind='stable').reset_index(drop=True)
+    counts = k.series.value_counts()
+    k = k[k.series.isin(counts[counts >= OHLCVA_MIN_ROWS].index)].reset_index(drop=True)
+    first, second = (pd.Timestamp(t, tz='UTC') for t in OHLCVA_SPLITS)
+    parts = np.where(k.timestamp < first, 'reference', np.where(k.timestamp < second, 'calibration', 'test'))
+    prev_close = k.groupby('series').close.shift(1).fillna(k.close).to_numpy()
+    bars = k[['open', 'high', 'low', 'close', 'volume', 'amount']].to_numpy(dtype=float)
+    ref = parts == 'reference'
+    units = {}
+    for col, key in ((4, 'volume'), (5, 'amount')):
+        positive = k[ref & (bars[:, col] > 0)]
+        per_series = positive.groupby('series')[key].median()
+        fallback = float(np.median(positive[key])) if len(positive) else 1.0
+        units[key] = k.series.map(per_series).fillna(fallback).to_numpy()
+    values = np.column_stack([np.log(bars[:, 3] / np.maximum(prev_close, 1e-12)),
+                              np.log(np.maximum(bars[:, 1], 1e-12) / np.maximum(bars[:, 2], 1e-12)),
+                              np.log1p(np.maximum(bars[:, 4], 0) / units['volume']),
+                              np.log1p(np.maximum(bars[:, 5], 0) / units['amount'])]).astype(float)
+    values = np.nan_to_num(values, nan=0.0, posinf=0.0, neginf=0.0)
+    ids = (k.series + ':' + k.timestamp.dt.strftime('%Y-%m-%dT%H')).to_numpy()
+    return dict(name=name, values=values, features=list(OHLCVA_FEATURES), labels=k.pump.to_numpy().astype(int), parts=parts,
+                groups=k.series.to_numpy(), ids=ids, protocol=dict(splits=OHLCVA_SPLITS, min_rows=OHLCVA_MIN_ROWS),
+                timestamps=k.timestamp.to_numpy(), bars=bars, exchange=k.exchange.to_numpy(),
+                b0r0koko_hours_added=k.attrs.get('b0r0koko_hours_added', 0))
+
+
 def load_rows(name):
     raw = ROOT / 'data/raw'
+    if name in OHLCVA:
+        return ohlcva(name)
     if name in TABULAR:
         bundle, grouped = tabular(raw, name), False
     elif name in PUMP:
