@@ -1,0 +1,34 @@
+{
+ "dataset": "xu_livshits_1h",
+ "label_boundary": "pump",
+ "test_rows": 24096,
+ "known_rows": 24096,
+ "positives": 96,
+ "bootstrap_units": 82,
+ "error_threshold": 4.463889122009277,
+ "knob_dims": {
+  "error": [
+   2,
+   15
+  ],
+  "pump": [
+   48,
+   30,
+   17,
+   35,
+   27,
+   0
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 4732,
+  "thresholds": 4733
+ },
+ "baseline_B_threshold_1pct_fpr": 30.856922149658203,
+ "subtle_relative": 41,
+ "subtle_intrinsic": 48,
+ "pump_level_median": 15.732894897460938
+}
