@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Does the knob lower the miss rate on subtle anomalies?  (stand-in transformer)
+"""Does the knob lower the miss rate on subtle anomalies?  (stand-in transformer, or the real Kronos-mini with --model kronos)
 
 The knowledge-boundary run (results/2026-11-07/knowledge_boundary_standin) treated the
 knob as an explanatory instrument.  This script tests the detection claim directly:
@@ -56,8 +56,8 @@ from scipy.stats import binomtest
 from sklearn.metrics import average_precision_score, roc_auc_score
 
 from boundary_pipeline import batched, thin
-from boundary_standin import (CLIP, DATASET, LOOKBACK, ROW_CAP, SEED, StandinForecaster, StandinStates, default_out,
-                              group_windows, label_boundary)
+from boundary_standin import (CAL_SEED, CLIP, DATASET, LOOKBACK, REF_SEED, ROW_CAP, SEED, TEST_SEED, StandinForecaster,
+                              StandinStates, default_out, group_windows, label_boundary)
 from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.boundary import CNNProbe, KnobPredictor, LogisticProbe, balanced_accuracy, split_balanced
 from kronos_ad.fusion import TailPValue, robust_reference
@@ -110,10 +110,17 @@ def paired_bootstrap(detected_a, detected_b, groups, resamples=RESAMPLES, seed=B
     return float(np.quantile(diffs, 0.025)), float(np.quantile(diffs, 0.975)), int(len(unique))
 
 
-def main(dataset=DATASET, standin=None, out=None):
+def main(dataset=DATASET, standin=None, out=None, model='standin'):
+    """`model`: 'standin' (the stand-in transformer of boundary_standin.py) or 'kronos' (the real
+    Kronos-mini: hidden states and NLLs cached by run_kronos_rows.py on the same rows, knob
+    dimensions from run_boundary_kronos_rows.py)."""
     warnings.filterwarnings('ignore')
-    STANDIN = Path(standin) if standin else default_out(dataset)
-    OUT = Path(out) if out else ROOT / ('results/2026-11-08/knowledge_boundary_missrate' + ('' if dataset == DATASET else f'_{dataset}'))
+    if model == 'kronos':
+        from run_boundary_kronos_rows import default_out as kronos_out
+        from run_kronos_rows import OUT as ROWS
+    STANDIN = Path(standin) if standin else (default_out(dataset) if model == 'standin' else kronos_out(dataset))
+    OUT = Path(out) if out else (ROOT / ('results/2026-11-08/knowledge_boundary_missrate' + ('' if dataset == DATASET else f'_{dataset}'))
+                                 if model == 'standin' else ROOT / f'results/2026-11-10/knowledge_boundary_missrate_kronos_{dataset}')
     OUT.mkdir(parents=True, exist_ok=True)
     positive_name = label_boundary(dataset)
     lines = []
@@ -144,15 +151,23 @@ def main(dataset=DATASET, standin=None, out=None):
     def sample(part, cap, seed):
         return thin(np.arange(len(windows[part][0])), cap, seed)
 
-    x_cal, y_cal, t_cal = tensors('calibration', sample('calibration', ROW_CAP // 2, 2))
-    x_test, y_test, t_test = tensors('test', sample('test', ROW_CAP, 3))
-    x_pool, y_pool, t_pool = tensors('reference', sample('reference', ROW_CAP // 2, 4))
+    x_cal, y_cal, t_cal = tensors('calibration', sample('calibration', ROW_CAP // 2, CAL_SEED))
+    x_test, y_test, t_test = tensors('test', sample('test', ROW_CAP, TEST_SEED))
+    x_pool, y_pool, t_pool = tensors('reference', sample('reference', ROW_CAP // 2, REF_SEED))
     x_pool, y_pool, t_pool = torch.cat([x_pool, x_cal]), torch.cat([y_pool, y_cal]), np.r_[t_pool, t_cal]
-    model = StandinForecaster(x_test.shape[2])
-    model.load_state_dict(torch.load(STANDIN / 'standin_forecaster.pt', map_location='cpu'))
-    states = StandinStates(model)
-    H_pool, H_test = batched(states.hidden_states, x_pool), batched(states.hidden_states, x_test)
-    nll_pool, nll_test = -batched(states.loglik, x_pool, y_pool), -batched(states.loglik, x_test, y_test)
+    if model == 'standin':
+        net = StandinForecaster(x_test.shape[2])
+        net.load_state_dict(torch.load(STANDIN / 'standin_forecaster.pt', map_location='cpu'))
+        states = StandinStates(net)
+        H_pool, H_test = batched(states.hidden_states, x_pool), batched(states.hidden_states, x_test)
+        nll_pool, nll_test = -batched(states.loglik, x_pool, y_pool), -batched(states.loglik, x_test, y_test)
+    else:
+        cache = {name: np.load(ROWS / dataset / f'{name}.npz') for name in ('ref', 'cal', 'test')}
+        assert np.array_equal(np.r_[cache['ref']['targets'], cache['cal']['targets']], t_pool) and np.array_equal(cache['test']['targets'], t_test)
+        H_pool = np.concatenate([cache['ref']['H'], cache['cal']['H']]).astype(np.float32)
+        H_test = cache['test']['H'].astype(np.float32)
+        nll_pool, nll_test = np.r_[cache['ref']['nll'], cache['cal']['nll']], cache['test']['nll']
+        log(f'real Kronos-mini hidden states and NLLs from {ROWS / dataset}')
     calibration_rows = np.arange(len(t_pool) - len(t_cal), len(t_pool))
     threshold = float(np.quantile(nll_pool[calibration_rows][labels[t_cal] != 1], 0.9))
     assert abs(threshold - recorded['error_threshold']) < 1e-6, (threshold, recorded['error_threshold'])
@@ -302,7 +317,7 @@ def main(dataset=DATASET, standin=None, out=None):
     per_row = pd.DataFrame({'row': t_test, 'group': groups[t_test], 'pump': pump_test, 'subtle_intrinsic': subtle_intrinsic.astype(int),
                             'missed_by_B': subtle_relative.astype(int), **{k: v for k, v in channels.items()}})
     per_row.to_csv(OUT / 'scores_test.csv.gz', index=False)
-    header = dict(dataset=dataset, label_boundary=positive_name, test_rows=int(len(t_test)), known_rows=int(known.sum()), positives=int(pumps.sum()),
+    header = dict(dataset=dataset, model=model, label_boundary=positive_name, test_rows=int(len(t_test)), known_rows=int(known.sum()), positives=int(pumps.sum()),
                   bootstrap_units=int(len(np.unique(pump_groups))),
                   error_threshold=threshold, knob_dims=knob_dims, alpha=ALPHA, resamples=RESAMPLES, boot_seed=BOOT_SEED,
                   null_rows=dict(pvalues=int(len(null_a)), thresholds=int(len(null_b))),
@@ -317,5 +332,6 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', default=DATASET)
     parser.add_argument('--standin', help='directory of the stand-in run (default: that dataset\'s boundary_standin output)')
     parser.add_argument('--out')
+    parser.add_argument('--model', default='standin', choices=('standin', 'kronos'))
     args = parser.parse_args()
-    main(args.dataset, args.standin, args.out)
+    main(args.dataset, args.standin, args.out, args.model)

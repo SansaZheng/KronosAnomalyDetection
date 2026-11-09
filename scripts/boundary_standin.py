@@ -58,6 +58,7 @@ EPOCHS, BATCH, TRAIN_CAP = 3, 256, 240000
 LOG_VAR_RANGE = (-4.0, 4.0)
 CLIP = 5.0
 ROW_CAP = 24000
+CAL_SEED, TEST_SEED, REF_SEED = 2, 3, 4      # thinning seeds of the calibration, test and reference-pool row sets
 K_MAX = 10
 RANDOM_TRIALS = 50
 
@@ -256,8 +257,8 @@ def main(dataset=DATASET, out=None, reuse=False):
         return thin(np.arange(len(windows[part][0])), cap, seed)
 
     x_ref, y_ref, _ = tensors('reference', sample('reference', TRAIN_CAP, 1))
-    x_cal, y_cal, t_cal = tensors('calibration', sample('calibration', ROW_CAP // 2, 2))
-    x_test, y_test, t_test = tensors('test', sample('test', ROW_CAP, 3))
+    x_cal, y_cal, t_cal = tensors('calibration', sample('calibration', ROW_CAP // 2, CAL_SEED))
+    x_test, y_test, t_test = tensors('test', sample('test', ROW_CAP, TEST_SEED))
     log(f'forecaster training windows {len(x_ref)}, calibration rows {len(x_cal)}, test rows {len(x_test)}')
     t0 = time.time()
     saved = out / 'standin_forecaster.pt'
@@ -278,7 +279,7 @@ def main(dataset=DATASET, out=None, reuse=False):
     states = StandinStates(model)
 
     # labelled pools: probes train on reference+calibration rows, evaluate on test rows
-    x_pool, y_pool, t_pool = tensors('reference', sample('reference', ROW_CAP // 2, 4))
+    x_pool, y_pool, t_pool = tensors('reference', sample('reference', ROW_CAP // 2, REF_SEED))
     x_pool = torch.cat([x_pool, x_cal])
     y_pool = torch.cat([y_pool, y_cal])
     t_pool = np.r_[t_pool, t_cal]

@@ -27,10 +27,12 @@ def thin(index, cap, seed=0):
 
 
 def analyse_boundary(name, H_train, y_train, H_test, y_test, loglik_test, out, log, k_max=10, random_trials=50,
-                     seed=0, delta=DELTA, taus=TAUS, cnn_epochs=80):
+                     seed=0, delta=DELTA, taus=TAUS, cnn_epochs=80, intervention_index=None):
     """Probe, localise, search knobs, distil, intervene. `loglik_test(patch, parts)` scores
     the balanced test rows; with parts=True it also returns (log-variance, error) terms
-    or None when the model has no such decomposition."""
+    or None when the model has no such decomposition.  `intervention_index` restricts the
+    intervention to a subset of the balanced test rows (the caller's `loglik_test` must
+    score exactly those rows); the probes still use every balanced test row."""
     result = dict(boundary=name, train_rows=int(len(H_train)), test_rows=int(len(H_test)),
                   train_positives=int(np.sum(y_train)), test_positives=int(np.sum(y_test)))
     probes = {'logistic': LogisticProbe(), 'mlp': MLPProbe(), 'cnn': CNNProbe(epochs=cnn_epochs)}
@@ -66,11 +68,14 @@ def analyse_boundary(name, H_train, y_train, H_test, y_test, loglik_test, out, l
     np.savez(out / f'{name}_knob_space.npz', z=predictor.pooled(H_test), y=y_test, score=predictor.score(H_test))
     base = loglik_test(None, True)
     base_ll, base_parts = base[0], base[1]
+    H_int = H_test if intervention_index is None else H_test[intervention_index]
+    y_int = np.asarray(y_test) if intervention_index is None else np.asarray(y_test)[intervention_index]
+    result['intervention_rows'] = int(len(H_int))
     rows = []
     for tau in taus:
         effects, readout = {}, {}
         for direction in ('normal', 'tangent', 'random'):
-            patch = hidden_patch(predictor, H_test, tau, direction, seed=seed)
+            patch = hidden_patch(predictor, H_int, tau, direction, seed=seed)
             ll, parts = loglik_test(patch, True)
             effects[direction] = ll - base_ll
             if parts is not None:
@@ -79,8 +84,8 @@ def analyse_boundary(name, H_train, y_train, H_test, y_test, loglik_test, out, l
         row = dict(boundary=name, tau=tau, mean_normal=float(normal.mean()), median_normal=float(np.median(normal)),
                    improved_normal=float((normal > 0).mean()), mean_tangent=float(effects['tangent'].mean()),
                    mean_random=float(effects['random'].mean()),
-                   mean_normal_y0=float(normal[np.asarray(y_test) == 0].mean()),
-                   mean_normal_y1=float(normal[np.asarray(y_test) == 1].mean()),
+                   mean_normal_y0=float(normal[y_int == 0].mean()),
+                   mean_normal_y1=float(normal[y_int == 1].mean()),
                    p_normal_vs_zero=float(wilcoxon(normal, alternative='two-sided').pvalue),
                    p_normal_vs_tangent=float(wilcoxon(normal, effects['tangent'], alternative='two-sided').pvalue),
                    p_normal_vs_random=float(wilcoxon(normal, effects['random'], alternative='two-sided').pvalue))

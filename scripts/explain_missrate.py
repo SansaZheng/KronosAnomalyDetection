@@ -8,7 +8,8 @@ group by (i) the row itself (level magnitude, per-feature |z| against the refere
 (ii) its context, the 32 rows the hidden state is computed from: how many of them are
 labelled anomalies, whether the row is the first of a run, and the context's mean |z|.
 
-Writes results/2026-11-08/subtle_anomalies.csv and prints the tables.
+Writes results/2026-11-08/subtle_anomalies.csv (stand-ins) or, with `--model kronos`,
+results/2026-11-10/subtle_anomalies_kronos.csv (real Kronos-mini), and prints the tables.
 """
 from pathlib import Path
 
@@ -19,11 +20,14 @@ from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.fusion import robust_reference
 
 LOOK = 32
-RUNS = {'sapienza_15s': 'results/2026-11-08/knowledge_boundary_missrate',
-        'banksim': 'results/2026-11-08/knowledge_boundary_missrate_banksim',
-        's_ffsd': 'results/2026-11-08/knowledge_boundary_missrate_s_ffsd',
-        'ulb_creditcard': 'results/2026-11-08/knowledge_boundary_missrate_ulb_creditcard',
-        'xu_livshits_1h': 'results/2026-11-08/knowledge_boundary_missrate_xu_livshits_1h'}
+DATASETS = ['sapienza_15s', 'banksim', 's_ffsd', 'ulb_creditcard', 'xu_livshits_1h']
+RUNS = {'standin': {'sapienza_15s': 'results/2026-11-08/knowledge_boundary_missrate',
+                    'banksim': 'results/2026-11-08/knowledge_boundary_missrate_banksim',
+                    's_ffsd': 'results/2026-11-08/knowledge_boundary_missrate_s_ffsd',
+                    'ulb_creditcard': 'results/2026-11-08/knowledge_boundary_missrate_ulb_creditcard',
+                    'xu_livshits_1h': 'results/2026-11-08/knowledge_boundary_missrate_xu_livshits_1h'},
+        'kronos': {d: f'results/2026-11-10/knowledge_boundary_missrate_kronos_{d}' for d in DATASETS}}
+TABLES = {'standin': 'results/2026-11-08/subtle_anomalies.csv', 'kronos': 'results/2026-11-10/subtle_anomalies_kronos.csv'}
 
 
 def context_stats(labels, groups):
@@ -42,10 +46,13 @@ def context_stats(labels, groups):
     return prev_frac, run_pos
 
 
-def main(datasets=None):
+def main(datasets=None, model='standin'):
     out = []
-    for name, d in RUNS.items():
+    for name, d in RUNS[model].items():
         if datasets and name not in datasets:
+            continue
+        if not Path(f'{d}/scores_test.csv.gz').exists():
+            print(f'{name}: no {model} run at {d}; skipped')
             continue
         data = load_rows(name)
         values, labels, groups, parts = data['values'], data['labels'], data['groups'], data['parts']
@@ -85,8 +92,9 @@ def main(datasets=None):
         print(summary.round(3).to_string())
         out.append(summary.reset_index())
     table = pd.concat(out, ignore_index=True)
-    path = 'results/2026-11-08/subtle_anomalies.csv'
-    if datasets and Path(path).exists():   # merge a partial run into the existing table
+    path = TABLES[model]
+    if Path(path).exists() and (datasets or len(out) < len(RUNS[model])):   # merge a partial run into the existing table
+        datasets = datasets or list(table.dataset.unique())
         old = pd.read_csv(path)
         table = pd.concat([old[~old.dataset.isin(datasets)], table], ignore_index=True)
     table.to_csv(path, index=False)
@@ -94,4 +102,7 @@ def main(datasets=None):
 
 if __name__ == '__main__':
     import sys
-    main(sys.argv[1:] or None)
+    args = sys.argv[1:]
+    model = 'kronos' if '--model' in args and args[args.index('--model') + 1] == 'kronos' else 'standin'
+    names = [x for i, x in enumerate(args) if x != '--model' and (i == 0 or args[i - 1] != '--model')]
+    main(names or None, model)

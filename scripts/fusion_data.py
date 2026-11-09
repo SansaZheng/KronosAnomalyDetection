@@ -83,7 +83,7 @@ def ohlcva(name):
     ids = (k.series + ':' + k.timestamp.dt.strftime('%Y-%m-%dT%H')).to_numpy()
     return dict(name=name, values=values, features=list(OHLCVA_FEATURES), labels=k.pump.to_numpy().astype(int), parts=parts,
                 groups=k.series.to_numpy(), ids=ids, protocol=dict(splits=OHLCVA_SPLITS, min_rows=OHLCVA_MIN_ROWS),
-                timestamps=k.timestamp.to_numpy(), bars=bars, exchange=k.exchange.to_numpy(),
+                timestamps=k.timestamp.to_numpy(), bars=bars, exchange=k.exchange.to_numpy(), units=units,
                 b0r0koko_hours_added=k.attrs.get('b0r0koko_hours_added', 0))
 
 

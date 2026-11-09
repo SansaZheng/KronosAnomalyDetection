@@ -31,10 +31,12 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def pinned_inputs():
+def pinned_inputs(skip_market=False):
     manifest = json.loads((RESULTS / 'input_manifest.json').read_text())
     missing = []
     for record in manifest['files']:
+        if skip_market and record['path'].startswith('runs/market/'):
+            continue
         path = ROOT / record['path']
         if not path.exists():
             missing.append(record)
@@ -59,6 +61,19 @@ def load_bars(path=ROOT / 'runs/market/BRDBTC-5m-2018-12.zip'):
     frame = raw.iloc[:, [0, 1, 2, 3, 4, 5, 7]].copy()
     frame.columns = ['timestamps', *NAMES]
     frame.timestamps = pd.to_datetime(frame.timestamps, unit='ms')
+    if frame.timestamps.duplicated().any() or not frame.timestamps.diff().dropna().eq(pd.Timedelta(minutes=5)).all():
+        raise ValueError('Missing, duplicate or irregular market bars')
+    if not np.isfinite(frame[NAMES]).all().all():
+        raise ValueError('Nonfinite market observations')
+    return frame
+
+
+def load_bars_csv(path):
+    """Fallback when the Binance archive is not on disk: the same bars as saved by the published
+    native run (results/2026-11-06/kronos/detections.csv.gz), which start at 2018-12-22 00:00, so the
+    first `lookback` bars can only serve as history and are not scored (a deviation from the frozen
+    protocol, recorded in the output)."""
+    frame = pd.read_csv(path, parse_dates=['timestamps'])[['timestamps', *NAMES]].copy()
     if frame.timestamps.duplicated().any() or not frame.timestamps.diff().dropna().eq(pd.Timedelta(minutes=5)).all():
         raise ValueError('Missing, duplicate or irregular market bars')
     if not np.isfinite(frame[NAMES]).all().all():
@@ -159,6 +174,8 @@ def skill_table(frame, selected, draws_by_arm, lookback):
     rows = []
     calibration = (frame.timestamps.iloc[selected] < pd.Timestamp('2018-12-28')).to_numpy()
     old = pd.read_csv(RESULTS / 'kronos/detections.csv.gz')
+    if len(old) == len(frame):            # bars loaded from the published run: align its predictions with the scored bars
+        old = old.iloc[selected].reset_index(drop=True)
     arms = {name: draws.mean(axis=1) for name, draws in draws_by_arm.items()}
     arms['published_s3'] = old[['prediction_' + n for n in NAMES]].to_numpy()
     for arm, mean in arms.items():
@@ -216,20 +233,25 @@ def main():
     p.add_argument('--lookback', type=int, default=64)
     p.add_argument('--sample-count', type=int, default=20)
     p.add_argument('--score-only', action='store_true', help='replay cached draws without Torch')
+    p.add_argument('--bars-csv', help='bars from the published native run instead of the Binance archive (see load_bars_csv)')
     a = p.parse_args()
     warnings.filterwarnings('ignore')
     OUT.mkdir(parents=True, exist_ok=True)
     frozen = json.loads((OUT / 'frozen_config.json').read_text())
     if (a.lookback, a.sample_count) != (frozen['lookback'], frozen['sample_count']):
         raise SystemExit('Arguments differ from the frozen configuration')
-    manifest = pinned_inputs()
-    frame = load_bars()
-    selected = np.flatnonzero(frame.timestamps >= pd.Timestamp('2018-12-22'))
+    manifest = pinned_inputs(skip_market=bool(a.bars_csv))
+    frame = load_bars_csv(a.bars_csv) if a.bars_csv else load_bars()
+    selected = np.flatnonzero((frame.timestamps >= pd.Timestamp('2018-12-22')).to_numpy() & (np.arange(len(frame)) >= a.lookback))
+    if a.bars_csv:
+        (OUT / 'DEVIATIONS.md').write_text('Bars loaded from the published run (`--bars-csv`), not the pinned Binance archive: the first '
+                                            f'{a.lookback} bars of 2018-12-22 are history only, so {len(selected)} bars are scored instead of 2,880.\n')
     weights = {r['path']: r['sha256'] for r in manifest['files'] if r['path'].startswith('weights/')}
     draws_by_arm = {}
     for name, prescale in ARMS.items():
         spec = dict(arm=name, prescale=prescale, lookback=a.lookback, sample_count=a.sample_count, seed=42, T=1.0, top_p=0.9,
-                    top_k=0, first_scored='2018-12-22', device=a.device, batch_size=a.batch_size, weights=weights)
+                    top_k=0, first_scored=str(frame.timestamps.iloc[selected[0]]), device=a.device, batch_size=a.batch_size, weights=weights,
+                    bars_source=a.bars_csv or 'runs/market/BRDBTC-5m-2018-12.zip')
         if a.score_only:
             with np.load(OUT / f'draws_{name}.npz', allow_pickle=False) as z:
                 draws_by_arm[name] = z['draws']
