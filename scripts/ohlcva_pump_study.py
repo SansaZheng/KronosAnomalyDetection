@@ -59,9 +59,19 @@ def standin_forecasts(model, z, histories, center, scale, batch=1024):
     return mean * scale + center, mean, log_var
 
 
-def published_pot(x, forecast, windows, calibration, test, eps):
+def published_pot(x, forecast, windows, calibration, test, eps, log=print):
+    """The published per-feature POT rule.  On these candles most hours have zero volume, so a feature's
+    error score ties at zero on more than 99% of calibration rows and the GPD tail cannot be fitted at
+    risk 1%; such a feature falls back to the empirical 99% quantile of its calibration scores."""
     scores = np.square((x - forecast) / (windows.std(axis=1) + eps))
-    thresholds = np.array([fit_pot(scores[calibration, j], .9, .01, 30)['threshold'] for j in range(x.shape[1])])
+    thresholds = []
+    for j in range(x.shape[1]):
+        try:
+            thresholds.append(fit_pot(scores[calibration, j], .9, .01, 30)['threshold'])
+        except ValueError as error:
+            thresholds.append(float(np.quantile(scores[calibration, j], 0.99)))
+            log(f'    POT feature {j}: {error}; empirical 99% quantile used')
+    thresholds = np.maximum(np.array(thresholds), 1e-12)
     ratio = (scores[test] / thresholds).max(axis=1)
     return ratio, ratio >= 1
 
@@ -131,8 +141,8 @@ def main():
     eps = np.maximum(values[parts == 'reference'].std(axis=0) * 1e-6, 1e-8)
     cal_rows = np.arange(len(t_cal))
     last = win[:, -1, :]
-    scores['published_pot_standin'], flags['published_pot_standin'] = published_pot(x, forecasts['kronos'], win, cal_rows, test, eps)
-    scores['published_pot_last'], flags['published_pot_last'] = published_pot(x, last, win, cal_rows, test, eps)
+    scores['published_pot_standin'], flags['published_pot_standin'] = published_pot(x, forecasts['kronos'], win, cal_rows, test, eps, log)
+    scores['published_pot_last'], flags['published_pot_last'] = published_pot(x, last, win, cal_rows, test, eps, log)
     scores['standin_nll_surprise'] = nll_test
     flags['standin_nll_surprise'] = nll_test > np.quantile(nll_test, 0.99)   # no calibration threshold: alarm rate fixed at 1% by construction
     ref = values[parts == 'reference']
