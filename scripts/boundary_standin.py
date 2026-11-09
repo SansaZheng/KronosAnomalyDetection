@@ -273,6 +273,7 @@ def main(dataset=DATASET, out=None, reuse=False):
         (out / 'training.json').write_text(json.dumps(history, indent=1) + '\n')
     persistence = naive_nll(x_cal, y_cal)
     log(f'training took {time.time() - t0:.0f}s; persistence+calibration-variance nll on calibration {persistence:.3f}')
+    training_windows = int(len(x_ref))
     del x_ref, y_ref
     states = StandinStates(model)
 
@@ -318,7 +319,7 @@ def main(dataset=DATASET, out=None, reuse=False):
             detection.append(dict(boundary=name, score=key, test_rows=int(known.sum()), positives=int(pump[known].sum()),
                                   ap=float(average_precision_score(pump[known], s[known])), auroc=float(roc_auc_score(pump[known], s[known])),
                                   recall_1pct_fpr=recall_at_fpr(pump[known], s[known])))
-    header = dict(dataset=dataset, label_boundary=positive_name, features=features, model=dict(d_model=D_MODEL, n_layers=N_LAYERS, n_heads=N_HEADS, lookback=LOOKBACK, epochs=EPOCHS, training_windows=int(len(x_ref))),
+    header = dict(dataset=dataset, label_boundary=positive_name, features=features, model=dict(d_model=D_MODEL, n_layers=N_LAYERS, n_heads=N_HEADS, lookback=LOOKBACK, epochs=EPOCHS, training_windows=training_windows),
                   training=history, persistence_nll=persistence, error_threshold=threshold)
     save_results(out, header, results, detection)
     (out / 'run.log').write_text('\n'.join(lines) + '\n')
