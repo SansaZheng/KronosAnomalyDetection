@@ -1,0 +1,7 @@
+xu_livshits_1h: features ['log_return', 'log_range', 'log_volume', 'log_amount']; rows with history: reference 1673457, calibration 906264, test 1076649
+forecaster training windows 240040, calibration rows 12056, test rows 24096
+epoch 1: train nll 2.533  calibration last-step nll 3.143
+epoch 2: train nll 2.358  calibration last-step nll 3.110
+epoch 3: train nll 2.326  calibration last-step nll 3.131
+training took 376s; persistence+calibration-variance nll on calibration 4.892
+Killed

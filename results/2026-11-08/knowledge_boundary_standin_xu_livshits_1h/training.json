@@ -1,0 +1,20 @@
+[
+ {
+  "epoch": 1,
+  "train_nll": 2.533,
+  "val_last_step_nll": 3.143
+ },
+ {
+  "epoch": 2,
+  "train_nll": 2.358,
+  "val_last_step_nll": 3.11
+ },
+ {
+  "epoch": 3,
+  "train_nll": 2.326,
+  "val_last_step_nll": 3.131
+ },
+ {
+  "selected_epoch": 2
+ }
+]

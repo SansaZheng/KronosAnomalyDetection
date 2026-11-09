@@ -1,0 +1,29 @@
+xu_livshits_1h: features ['log_return', 'log_range', 'log_volume', 'log_amount']; rows with history: reference 1673457, calibration 906264, test 1076649
+forecaster training windows 240040, calibration rows 12056, test rows 24096
+reused the saved forecaster /home/claude/work/KronosAnomalyDetection/results/2026-11-08/knowledge_boundary_standin_xu_livshits_1h/standin_forecaster.pt (training history kept)
+training took 0s; persistence+calibration-variance nll on calibration 4.892
+hidden states (5, 64); error boundary threshold (calibration 90th pct NLL) 4.464; pump positives pool 104, test 96
+  error: logistic probe balanced accuracy 0.7127 (1s)
+  error: mlp probe balanced accuracy 0.7129 (1s)
+  error: cnn probe balanced accuracy 0.7052 (41s)
+  error: knob set k=2 dims=[2, 15] acc=0.7017 (full 0.7052; random-2 mean 0.6786, fraction >= top-k 0.12)
+  error: tau -1.00 dlogp normal -0.4292 (y0 +0.0149, y1 -0.8733) tangent +0.0392 random +0.0083
+  error: tau -0.50 dlogp normal -0.1983 (y0 +0.0297, y1 -0.4263) tangent +0.0141 random +0.0087
+  error: tau -0.25 dlogp normal -0.0950 (y0 +0.0208, y1 -0.2108) tangent +0.0057 random +0.0056
+  error: tau -0.10 dlogp normal -0.0370 (y0 +0.0097, y1 -0.0838) tangent +0.0019 random +0.0025
+  error: tau +0.10 dlogp normal +0.0358 (y0 -0.0117, y1 +0.0833) tangent -0.0015 random -0.0029
+  error: tau +0.25 dlogp normal +0.0873 (y0 -0.0330, y1 +0.2077) tangent -0.0028 random -0.0080
+  error: tau +0.50 dlogp normal +0.1673 (y0 -0.0784, y1 +0.4130) tangent -0.0029 random -0.0184
+  error: tau +1.00 dlogp normal +0.3062 (y0 -0.2060, y1 +0.8184) tangent +0.0057 random -0.0472
+  pump: logistic probe balanced accuracy 0.6771 (0s)
+  pump: mlp probe balanced accuracy 0.6615 (0s)
+  pump: cnn probe balanced accuracy 0.7083 (2s)
+  pump: knob set k=6 dims=[48, 30, 17, 35, 27, 0] acc=0.6979 (full 0.7083; random-6 mean 0.6568, fraction >= top-k 0.02)
+  pump: tau -1.00 dlogp normal -0.2250 (y0 +0.0381, y1 -0.4881) tangent +0.5439 random +0.0838
+  pump: tau -0.50 dlogp normal -0.1654 (y0 +0.0211, y1 -0.3519) tangent +0.2343 random -0.0002
+  pump: tau -0.25 dlogp normal -0.1012 (y0 +0.0111, y1 -0.2134) tangent +0.1071 random -0.0100
+  pump: tau -0.10 dlogp normal -0.0458 (y0 +0.0046, y1 -0.0961) tangent +0.0405 random -0.0066
+  pump: tau +0.10 dlogp normal +0.0486 (y0 -0.0048, y1 +0.1019) tangent -0.0373 random +0.0099
+  pump: tau +0.25 dlogp normal +0.1263 (y0 -0.0123, y1 +0.2648) tangent -0.0862 random +0.0317
+  pump: tau +0.50 dlogp normal +0.2692 (y0 -0.0256, y1 +0.5641) tangent -0.1385 random +0.0854
+  pump: tau +1.00 dlogp normal +0.5919 (y0 -0.0554, y1 +1.2392) tangent -0.1740 random +0.2472
