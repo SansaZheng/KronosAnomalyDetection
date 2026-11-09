@@ -22,6 +22,7 @@ results/2026-11-08/knowledge_boundary_standin_<name>/. The labelled boundary is 
 `pump` on the Sapienza data and `fraud` on the transaction-fraud datasets.
 """
 import argparse
+import json
 import time
 import warnings
 from pathlib import Path
@@ -222,7 +223,7 @@ def naive_nll(x_val, y_val):
     return float(np.mean(0.5 * (np.log(var) + residual ** 2 / var + np.log(2 * np.pi)).sum(axis=1)))
 
 
-def main(dataset=DATASET, out=None):
+def main(dataset=DATASET, out=None, reuse=False):
     warnings.filterwarnings('ignore')
     out = Path(out) if out else default_out(dataset)
     out.mkdir(parents=True, exist_ok=True)
@@ -259,10 +260,20 @@ def main(dataset=DATASET, out=None):
     x_test, y_test, t_test = tensors('test', sample('test', ROW_CAP, 3))
     log(f'forecaster training windows {len(x_ref)}, calibration rows {len(x_cal)}, test rows {len(x_test)}')
     t0 = time.time()
-    model, history = train_forecaster(x_ref, y_ref, x_cal, y_cal, log)
+    saved = out / 'standin_forecaster.pt'
+    if reuse and saved.exists():
+        model = StandinForecaster(x_ref.shape[2])
+        model.load_state_dict(torch.load(saved, map_location='cpu'))
+        model.eval()
+        history = json.loads((out / 'training.json').read_text()) if (out / 'training.json').exists() else []
+        log(f'reused the saved forecaster {saved} (training history {"kept" if history else "not available"})')
+    else:
+        model, history = train_forecaster(x_ref, y_ref, x_cal, y_cal, log)
+        torch.save(model.state_dict(), saved)
+        (out / 'training.json').write_text(json.dumps(history, indent=1) + '\n')
     persistence = naive_nll(x_cal, y_cal)
     log(f'training took {time.time() - t0:.0f}s; persistence+calibration-variance nll on calibration {persistence:.3f}')
-    torch.save(model.state_dict(), out / 'standin_forecaster.pt')
+    del x_ref, y_ref
     states = StandinStates(model)
 
     # labelled pools: probes train on reference+calibration rows, evaluate on test rows
@@ -317,5 +328,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--dataset', default=DATASET)
     parser.add_argument('--out')
+    parser.add_argument('--reuse', action='store_true', help='load an existing standin_forecaster.pt instead of training')
     args = parser.parse_args()
-    main(args.dataset, args.out)
+    main(args.dataset, args.out, args.reuse)
