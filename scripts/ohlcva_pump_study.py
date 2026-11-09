@@ -53,8 +53,8 @@ def standin_forecasts(model, z, histories, center, scale, batch=1024):
     with torch.no_grad():
         for start in range(0, len(histories), batch):
             x = torch.tensor(z[histories[start:start + batch]])
-            m, lv = model(x)
-            means.append(m.numpy()), log_vars.append(lv.numpy())
+            m, lv = model(x)                       # per-position heads; the last position forecasts the next row
+            means.append(m[:, -1].numpy()), log_vars.append(lv[:, -1].numpy())
     mean, log_var = np.concatenate(means), np.concatenate(log_vars)
     return mean * scale + center, mean, log_var
 
