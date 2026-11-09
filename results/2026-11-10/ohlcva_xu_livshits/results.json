@@ -1,0 +1,22 @@
+{
+ "dataset": "xu_livshits_1h",
+ "rows": 3685842,
+ "series": 921,
+ "pump_hours": 200,
+ "b0r0koko_hours_added": 18,
+ "splits": {
+  "splits": [
+   "2018-08-01",
+   "2018-09-11"
+  ],
+  "min_rows": 160
+ },
+ "calibration_rows": 24057,
+ "test_rows": 200081,
+ "test_pumps": 96,
+ "test_series_with_pumps": 82,
+ "reference_rows": 60047,
+ "standin": "/home/claude/work/KronosAnomalyDetection/results/2026-11-08/knowledge_boundary_standin_xu_livshits_1h",
+ "seed": 20261110,
+ "kronos_weights": "unreachable (Hugging Face blocked); stand-in used"
+}

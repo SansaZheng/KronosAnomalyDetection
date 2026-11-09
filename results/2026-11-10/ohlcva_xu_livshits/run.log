@@ -1,0 +1,35 @@
+rows 3685842, series 921, pump hours 200 (68s)
+calibration rows 24057 (pumps 57), test rows 200081 (pumps 96, series with pumps 82), reference rows 60047
+stand-in forecasts computed (105s)
+fit rows 12003 (pumps 34), validation rows 12028 (pumps 23); long-context rows without history: 0
+  fusion_r1: threshold 6.233, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.15, 0.85, 0.0], [0.15, 0.85, 0.0]] (8s)
+  fusion_r1_no_forecaster: threshold 6.233, stack weights [[0.0, 1.0], [0.0, 1.0], [0.15, 0.85], [0.15, 0.85]] (8s)
+  fusion_r2: threshold 5.421, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.15, 0.85, 0.0], [0.15, 0.85, 0.0]] (10s)
+  fusion_r2_no_forecaster: threshold 5.421, stack weights [[0.0, 1.0], [0.0, 1.0], [0.15, 0.85], [0.15, 0.85]] (10s)
+    POT feature 2: risk must be below the empirical exceedance fraction; empirical 99% quantile used
+    POT feature 3: risk must be below the empirical exceedance fraction; empirical 99% quantile used
+  fusion_r1                    AP 0.036  AUROC 0.933  R@1% 0.729  alarm 0.0087  recall@thr 0.719  precision@thr 0.040
+  fusion_r1_no_forecaster      AP 0.036  AUROC 0.933  R@1% 0.729  alarm 0.0087  recall@thr 0.719  precision@thr 0.040
+  fusion_r2                    AP 0.072  AUROC 0.935  R@1% 0.740  alarm 0.0089  recall@thr 0.740  precision@thr 0.040
+  fusion_r2_no_forecaster      AP 0.072  AUROC 0.935  R@1% 0.740  alarm 0.0089  recall@thr 0.740  precision@thr 0.040
+  published_pot_standin        AP 0.009  AUROC 0.663  R@1% 0.052  alarm 0.2847  recall@thr 0.094  precision@thr 0.000
+  published_pot_last           AP 0.030  AUROC 0.926  R@1% 0.625  alarm 0.0060  recall@thr 0.396  precision@thr 0.032
+  standin_nll_surprise         AP 0.035  AUROC 0.910  R@1% 0.573  alarm 0.0100  recall@thr 0.573  precision@thr 0.027
+  isolation_forest             AP 0.292  AUROC 0.940  R@1% 0.771  alarm 0.0111  recall@thr 0.781  precision@thr 0.034
+  robust_mad                   AP 0.088  AUROC 0.938  R@1% 0.760  alarm 0.0114  recall@thr 0.760  precision@thr 0.032
+  fusion_r1_no_forecaster      - fusion_r1     : AP [+0.000, +0.000]  R@1% [+0.000, +0.000]
+  fusion_r2                    - fusion_r1     : AP [+0.013, +0.105]  R@1% [-0.042, +0.055]
+  fusion_r2_no_forecaster      - fusion_r1     : AP [+0.013, +0.105]  R@1% [-0.042, +0.055]
+  published_pot_standin        - fusion_r1     : AP [-0.044, -0.004]  R@1% [-0.785, -0.580]
+  published_pot_last           - fusion_r1     : AP [-0.021, +0.018]  R@1% [-0.220, +0.010]
+  standin_nll_surprise         - fusion_r1     : AP [-0.019, +0.013]  R@1% [-0.271, -0.053]
+  isolation_forest             - fusion_r1     : AP [+0.167, +0.354]  R@1% [+0.000, +0.081]
+  robust_mad                   - fusion_r1     : AP [+0.018, +0.147]  R@1% [-0.041, +0.088]
+  fusion_r1                    - robust_mad    : AP [-0.147, -0.018]  R@1% [-0.088, +0.041]
+  fusion_r1_no_forecaster      - robust_mad    : AP [-0.147, -0.018]  R@1% [-0.088, +0.041]
+  fusion_r2                    - robust_mad    : AP [-0.066, +0.010]  R@1% [-0.077, +0.038]
+  fusion_r2_no_forecaster      - robust_mad    : AP [-0.066, +0.010]  R@1% [-0.077, +0.038]
+  published_pot_standin        - robust_mad    : AP [-0.184, -0.028]  R@1% [-0.810, -0.597]
+  published_pot_last           - robust_mad    : AP [-0.164, -0.010]  R@1% [-0.248, -0.011]
+  standin_nll_surprise         - robust_mad    : AP [-0.159, -0.011]  R@1% [-0.297, -0.066]
+  isolation_forest             - robust_mad    : AP [+0.101, +0.300]  R@1% [-0.032, +0.061]
