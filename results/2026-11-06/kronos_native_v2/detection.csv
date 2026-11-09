@@ -1,0 +1,7 @@
+arm,variant,test_bars,alarms,alarm_rate,online_alarms,alarms_on_zero_volume,pump_alarm,pump_rank,kronos_weight_mean,kronos_weights,spread_coefficient_forecast,threshold,power_delta3,power_delta6,power_delta12
+prescale,fusion_kronos_spread,1152,16,0.013888888888888888,12,0,True,3,0.23750000000000002,"{""log_return"": 0.0, ""log_range"": 0.25, ""log_volume"": 0.3, ""log_amount"": 0.4}","[1.436, 0.7259, 0.0, 0.0373]",5.284374868511229,0.1796875,0.9210069444444444,1.0
+prescale,fusion_kronos_mean,1152,24,0.020833333333333332,11,0,True,2,0.23750000000000002,"{""log_return"": 0.0, ""log_range"": 0.25, ""log_volume"": 0.3, ""log_amount"": 0.4}",,4.616841758129217,0.17274305555555555,0.9461805555555556,1.0
+prescale,fusion_no_kronos,1152,26,0.022569444444444444,11,0,True,2,0.0,,,4.592273922839573,0.1857638888888889,0.9513888888888888,1.0
+raw,fusion_kronos_spread,1152,8,0.006944444444444444,12,0,True,4,0.3625,"{""log_return"": 0.0, ""log_range"": 0.0, ""log_volume"": 0.7, ""log_amount"": 0.75}","[0.1549, 0.1121, 0.5156, 0.5239]",6.366536658964898,0.2126736111111111,0.7942708333333334,1.0
+raw,fusion_kronos_mean,1152,25,0.021701388888888888,11,0,True,2,0.3625,"{""log_return"": 0.0, ""log_range"": 0.0, ""log_volume"": 0.7, ""log_amount"": 0.75}",,4.592273922839573,0.16493055555555555,0.9470486111111112,1.0
+raw,fusion_no_kronos,1152,26,0.022569444444444444,11,0,True,2,0.0,,,4.592273922839573,0.1857638888888889,0.9513888888888888,1.0

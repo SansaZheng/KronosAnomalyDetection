@@ -1,0 +1,20 @@
+{
+  "arm": "prescale",
+  "prescale": true,
+  "lookback": 64,
+  "sample_count": 20,
+  "seed": 42,
+  "T": 1.0,
+  "top_p": 0.9,
+  "top_k": 0,
+  "first_scored": "2018-12-22 05:20:00",
+  "device": "cpu",
+  "batch_size": 32,
+  "weights": {
+    "weights/Kronos-mini/config.json": "70daca2cb11e3a979dd6b8ac12ee08e2aace877acf28f5b8dfb4fe5609736201",
+    "weights/Kronos-mini/model.safetensors": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+    "weights/Kronos-Tokenizer-2k/config.json": "0b30a443affb03e05a876a083857de9164f899feb7b4d261da02c485c9a3e3b6",
+    "weights/Kronos-Tokenizer-2k/model.safetensors": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717"
+  },
+  "bars_source": "results/2026-11-06/kronos/detections.csv.gz"
+}
