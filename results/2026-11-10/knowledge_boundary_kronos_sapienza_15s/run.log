@@ -1,0 +1,28 @@
+sapienza_15s: Kronos-mini (proxy, prescale True), features ['std_rush_order', 'avg_rush_order', 'std_trades', 'std_volume', 'avg_volume', 'std_price', 'avg_price', 'avg_price_max']; pool rows 24237 (reference 12187 + calibration 12050), test rows 24040; hidden states (5, 256)
+teacher-forced NLL: calibration median 29.163, error threshold (90th pct, normal rows) 62.006; pump positives pool 253, test 64
+  error: logistic probe balanced accuracy 0.6092 (3s)
+  error: mlp probe balanced accuracy 0.6127 (3s)
+  error: cnn probe balanced accuracy 0.5813 (133s)
+  error: knob set k=1 dims=[214] acc=0.6147 (full 0.5813; random-1 mean 0.5692, fraction >= top-k 0.02)
+  error: tau -1.00 dlogp normal -0.2080 (y0 +0.0258, y1 -0.4418) tangent +0.0147 random +0.0079
+  error: tau -0.50 dlogp normal -0.1070 (y0 +0.0161, y1 -0.2302) tangent +0.0063 random +0.0014
+  error: tau -0.25 dlogp normal -0.0542 (y0 +0.0089, y1 -0.1173) tangent +0.0029 random +0.0001
+  error: tau -0.10 dlogp normal -0.0218 (y0 +0.0037, y1 -0.0474) tangent +0.0011 random -0.0001
+  error: tau +0.10 dlogp normal +0.0220 (y0 -0.0040, y1 +0.0481) tangent -0.0010 random +0.0003
+  error: tau +0.25 dlogp normal +0.0555 (y0 -0.0105, y1 +0.1214) tangent -0.0024 random +0.0012
+  error: tau +0.50 dlogp normal +0.1120 (y0 -0.0227, y1 +0.2468) tangent -0.0042 random +0.0036
+  error: tau +1.00 dlogp normal +0.2280 (y0 -0.0521, y1 +0.5081) tangent -0.0061 random +0.0121
+  error: done in 8.0 min (interventions on 600 balanced rows)
+  pump: logistic probe balanced accuracy 0.7734 (0s)
+  pump: mlp probe balanced accuracy 0.7812 (0s)
+  pump: cnn probe balanced accuracy 0.7500 (12s)
+  pump: knob set k=2 dims=[63, 74] acc=0.7500 (full 0.7500; random-2 mean 0.6883, fraction >= top-k 0.08)
+  pump: tau -1.00 dlogp normal -0.1979 (y0 +0.0046, y1 -0.4005) tangent +0.0452 random +0.0062
+  pump: tau -0.50 dlogp normal -0.0991 (y0 +0.0031, y1 -0.2014) tangent +0.0188 random +0.0016
+  pump: tau -0.25 dlogp normal -0.0497 (y0 +0.0016, y1 -0.1010) tangent +0.0085 random +0.0004
+  pump: tau -0.10 dlogp normal -0.0199 (y0 +0.0007, y1 -0.0405) tangent +0.0032 random +0.0001
+  pump: tau +0.10 dlogp normal +0.0200 (y0 -0.0006, y1 +0.0406) tangent -0.0029 random +0.0000
+  pump: tau +0.25 dlogp normal +0.0500 (y0 -0.0015, y1 +0.1016) tangent -0.0067 random +0.0004
+  pump: tau +0.50 dlogp normal +0.1006 (y0 -0.0026, y1 +0.2039) tangent -0.0116 random +0.0015
+  pump: tau +1.00 dlogp normal +0.2042 (y0 -0.0022, y1 +0.4105) tangent -0.0166 random +0.0064
+  pump: done in 1.6 min (interventions on 128 balanced rows)
