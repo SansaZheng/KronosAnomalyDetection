@@ -1,0 +1,30 @@
+banksim: Kronos-mini (proxy, prescale True), features ['customer_reference_frequency', 'age_reference_frequency', 'gender_reference_frequency', 'merchant_reference_frequency', 'category_reference_frequency', 'amount']; pool rows 29449 (reference 16149 + calibration 13300), test rows 25169; hidden states (5, 256)
+Loading weights from local directory
+Loading weights from local directory
+teacher-forced NLL: calibration median 34.411, error threshold (90th pct, normal rows) 52.762; fraud positives pool 5760, test 1440
+  error: logistic probe balanced accuracy 0.5606 (8s)
+  error: mlp probe balanced accuracy 0.5594 (4s)
+  error: cnn probe balanced accuracy 0.5355 (253s)
+  error: knob set k=1 dims=[147] acc=0.5574 (full 0.5355; random-1 mean 0.5206, fraction >= top-k 0.00)
+  error: tau -1.00 dlogp normal +0.3001 (y0 -0.0282, y1 +0.6284) tangent +0.0299 random +0.0151
+  error: tau -0.50 dlogp normal +0.1441 (y0 +0.0048, y1 +0.2834) tangent +0.0103 random +0.0004
+  error: tau -0.25 dlogp normal +0.0703 (y0 +0.0070, y1 +0.1336) tangent +0.0039 random -0.0017
+  error: tau -0.10 dlogp normal +0.0277 (y0 +0.0039, y1 +0.0515) tangent +0.0013 random -0.0011
+  error: tau +0.10 dlogp normal -0.0271 (y0 -0.0053, y1 -0.0488) tangent -0.0009 random +0.0017
+  error: tau +0.25 dlogp normal -0.0665 (y0 -0.0160, y1 -0.1170) tangent -0.0015 random +0.0055
+  error: tau +0.50 dlogp normal -0.1290 (y0 -0.0407, y1 -0.2173) tangent -0.0006 random +0.0147
+  error: tau +1.00 dlogp normal -0.2413 (y0 -0.1150, y1 -0.3676) tangent +0.0081 random +0.0438
+  error: done in 9.1 min (interventions on 600 balanced rows)
+  fraud: logistic probe balanced accuracy 0.6354 (8s)
+  fraud: mlp probe balanced accuracy 0.6698 (5s)
+  fraud: cnn probe balanced accuracy 0.6354 (282s)
+  fraud: knob set k=1 dims=[34] acc=0.6528 (full 0.6354; random-1 mean 0.6150, fraction >= top-k 0.18)
+  fraud: tau -1.00 dlogp normal -0.1042 (y0 -0.0522, y1 -0.1561) tangent -0.0143 random -0.0316
+  fraud: tau -0.50 dlogp normal -0.0414 (y0 -0.0204, y1 -0.0624) tangent -0.0030 random -0.0055
+  fraud: tau -0.25 dlogp normal -0.0183 (y0 -0.0088, y1 -0.0279) tangent -0.0005 random -0.0005
+  fraud: tau -0.10 dlogp normal -0.0068 (y0 -0.0032, y1 -0.0105) tangent +0.0000 random +0.0003
+  fraud: tau +0.10 dlogp normal +0.0062 (y0 +0.0027, y1 +0.0097) tangent -0.0004 random -0.0009
+  fraud: tau +0.25 dlogp normal +0.0145 (y0 +0.0060, y1 +0.0230) tangent -0.0016 random -0.0034
+  fraud: tau +0.50 dlogp normal +0.0255 (y0 +0.0092, y1 +0.0418) tangent -0.0059 random -0.0104
+  fraud: tau +1.00 dlogp normal +0.0363 (y0 +0.0071, y1 +0.0656) tangent -0.0246 random -0.0363
+  fraud: done in 9.4 min (interventions on 600 balanced rows)
