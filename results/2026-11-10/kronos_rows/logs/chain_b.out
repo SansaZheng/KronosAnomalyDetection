@@ -1,0 +1,2 @@
+results/2026-11-10/kronos_rows/chain_rows.sh: line 4:  1440 Killed                  python scripts/run_kronos_rows.py --dataset $d >> results/2026-11-10/kronos_rows/logs/$d.log 2>&1
+results/2026-11-10/kronos_rows/chain_rows.sh: line 4:  2011 Killed                  python scripts/run_kronos_rows.py --dataset $d >> results/2026-11-10/kronos_rows/logs/$d.log 2>&1
