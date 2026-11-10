@@ -1,0 +1,53 @@
+{
+ "dataset": "ulb_creditcard",
+ "representation": "proxy",
+ "features": [
+  "V1",
+  "V2",
+  "V3",
+  "V4",
+  "V5",
+  "V6",
+  "V7",
+  "V8",
+  "V9",
+  "V10",
+  "V11",
+  "V12",
+  "V13",
+  "V14",
+  "V15",
+  "V16",
+  "V17",
+  "V18",
+  "V19",
+  "V20",
+  "V21",
+  "V22",
+  "V23",
+  "V24",
+  "V25",
+  "V26",
+  "V27",
+  "V28",
+  "Amount"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": false,
+ "layers": 5,
+ "d_model": 256,
+ "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+ "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+ "rows_per_batch": 35,
+ "sets": {
+  "test": {
+   "rows": 24041,
+   "positives": 77,
+   "seconds": 5736.9,
+   "draws": 5,
+   "hidden_states": true
+  }
+ }
+}
