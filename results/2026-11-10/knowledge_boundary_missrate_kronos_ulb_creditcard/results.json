@@ -1,0 +1,31 @@
+{
+ "dataset": "ulb_creditcard",
+ "model": "kronos",
+ "label_boundary": "fraud",
+ "test_rows": 24041,
+ "known_rows": 24041,
+ "positives": 77,
+ "bootstrap_units": 39,
+ "error_threshold": 253.02122192382814,
+ "knob_dims": {
+  "error": [
+   52
+  ],
+  "fraud": [
+   201,
+   147,
+   196
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 4562,
+  "thresholds": 4563
+ },
+ "baseline_B_threshold_1pct_fpr": 320.74637939453123,
+ "subtle_relative": 39,
+ "subtle_intrinsic": 38,
+ "pump_level_median": 13.328876495361328
+}

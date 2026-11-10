@@ -1,0 +1,106 @@
+2026-11-10 08:37:25 boundary xu_livshits_1h start
+2026-11-10 08:42:09 boundary xu_livshits_1h exit 137
+2026-11-10 08:42:09 missrate xu_livshits_1h start
+2026-11-10 08:42:13 missrate xu_livshits_1h exit 1
+2026-11-10 08:42:15 study xu_livshits_1h start
+2026-11-10 08:43:13 boundary xu_livshits_1h start
+2026-11-10 08:44:10 boundary xu_livshits_1h exit 0
+2026-11-10 08:44:10 missrate xu_livshits_1h start
+2026-11-10 08:45:23 missrate xu_livshits_1h exit 137
+2026-11-10 08:45:24 study xu_livshits_1h start
+2026-11-10 08:49:28 study xu_livshits_1h exit 0
+2026-11-10 08:49:28 rows banksim start
+2026-11-10 08:49:41 missrate xu_livshits_1h start
+2026-11-10 08:51:06 missrate xu_livshits_1h exit 0
+2026-11-10 08:51:09 explain xu_livshits_1h start
+2026-11-10 08:51:33 explain xu_livshits_1h exit 0
+2026-11-10 08:51:33 rows banksim start
+2026-11-10 08:54:16 explain xu_livshits_1h start
+2026-11-10 08:54:32 explain xu_livshits_1h start
+2026-11-10 08:54:59 explain xu_livshits_1h exit 0
+2026-11-10 08:54:59 rows banksim start
+2026-11-10 09:01:52 rows banksim exit 0
+2026-11-10 09:01:52 rows s_ffsd start
+2026-11-10 09:29:38 explain xu_livshits_1h start
+2026-11-10 09:30:09 explain xu_livshits_1h exit 0
+2026-11-10 09:30:09 rows s_ffsd start
+2026-11-10 09:38:04 rows s_ffsd exit 0
+2026-11-10 09:38:04 boundary banksim start
+2026-11-10 09:56:47 boundary banksim exit 0
+2026-11-10 09:56:47 missrate banksim start
+2026-11-10 10:06:51 missrate banksim exit 0
+2026-11-10 10:06:55 explain banksim start
+2026-11-10 10:06:58 explain banksim exit 0
+2026-11-10 10:06:58 study banksim start
+2026-11-10 10:08:21 study banksim exit 0
+2026-11-10 10:08:21 boundary s_ffsd start
+2026-11-10 10:20:21 boundary s_ffsd exit 0
+2026-11-10 10:20:21 missrate s_ffsd start
+2026-11-10 10:25:25 missrate s_ffsd exit 0
+2026-11-10 10:25:27 explain s_ffsd start
+2026-11-10 10:25:29 explain s_ffsd exit 0
+2026-11-10 10:25:29 study s_ffsd start
+2026-11-10 10:26:22 study s_ffsd exit 0
+2026-11-10 10:26:22 rows sapienza_15s start
+2026-11-10 11:29:48 explain xu_livshits_1h start
+2026-11-10 11:30:09 explain xu_livshits_1h exit 0
+2026-11-10 11:30:09 explain banksim start
+2026-11-10 11:30:11 explain banksim exit 0
+2026-11-10 11:30:11 explain s_ffsd start
+2026-11-10 11:30:13 explain s_ffsd exit 0
+2026-11-10 11:30:13 rows sapienza_15s start
+2026-11-10 11:43:44 explain xu_livshits_1h start
+2026-11-10 11:44:21 explain xu_livshits_1h exit 0
+2026-11-10 11:44:21 explain banksim start
+2026-11-10 11:44:25 explain banksim exit 0
+2026-11-10 11:44:25 explain s_ffsd start
+2026-11-10 11:44:27 explain s_ffsd exit 0
+2026-11-10 11:44:27 rows sapienza_15s start
+2026-11-10 11:51:28 rows sapienza_15s exit 0
+2026-11-10 11:51:28 boundary sapienza_15s start
+2026-11-10 12:01:13 boundary sapienza_15s exit 0
+2026-11-10 12:01:13 missrate sapienza_15s start
+2026-11-10 12:01:53 missrate sapienza_15s exit 0
+2026-11-10 12:01:57 explain sapienza_15s start
+2026-11-10 12:02:01 explain sapienza_15s exit 0
+2026-11-10 12:02:01 study sapienza_15s start
+2026-11-10 12:02:57 study sapienza_15s exit 0
+2026-11-10 12:02:57 rows ulb_creditcard start
+2026-11-10 13:43:54 explain xu_livshits_1h start
+2026-11-10 13:44:21 explain xu_livshits_1h exit 0
+2026-11-10 13:44:21 explain banksim start
+2026-11-10 13:44:25 explain banksim exit 0
+2026-11-10 13:44:25 explain s_ffsd start
+2026-11-10 13:44:26 explain s_ffsd exit 0
+2026-11-10 13:44:26 explain sapienza_15s start
+2026-11-10 13:44:30 explain sapienza_15s exit 0
+2026-11-10 13:44:30 rows ulb_creditcard start
+2026-11-10 15:44:04 explain xu_livshits_1h start
+2026-11-10 15:44:33 explain xu_livshits_1h exit 0
+2026-11-10 15:44:33 explain banksim start
+2026-11-10 15:44:37 explain banksim exit 0
+2026-11-10 15:44:37 explain s_ffsd start
+2026-11-10 15:44:38 explain s_ffsd exit 0
+2026-11-10 15:44:38 explain sapienza_15s start
+2026-11-10 15:44:42 explain sapienza_15s exit 0
+2026-11-10 15:44:42 rows ulb_creditcard start
+2026-11-10 17:20:25 rows ulb_creditcard exit 0
+2026-11-10 17:20:25 boundary ulb_creditcard start
+2026-11-10 17:44:17 explain xu_livshits_1h start
+2026-11-10 17:44:45 explain xu_livshits_1h exit 0
+2026-11-10 17:44:45 explain banksim start
+2026-11-10 17:44:49 explain banksim exit 0
+2026-11-10 17:44:49 explain s_ffsd start
+2026-11-10 17:44:50 explain s_ffsd exit 0
+2026-11-10 17:44:50 explain sapienza_15s start
+2026-11-10 17:44:54 explain sapienza_15s exit 0
+2026-11-10 17:44:54 boundary ulb_creditcard start
+2026-11-10 17:50:51 boundary ulb_creditcard exit 0
+2026-11-10 17:50:51 missrate ulb_creditcard start
+2026-11-10 17:51:50 missrate ulb_creditcard exit 0
+2026-11-10 17:51:52 explain ulb_creditcard start
+2026-11-10 17:51:55 explain ulb_creditcard exit 0
+2026-11-10 17:51:55 study ulb_creditcard start
+2026-11-10 18:05:17 study ulb_creditcard exit 0
+2026-11-10 18:05:18 summary exit 0
+2026-11-10 18:05:18 QUEUE_DONE
