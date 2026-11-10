@@ -1,0 +1,30 @@
+{
+ "dataset": "banksim",
+ "representation": "proxy",
+ "features": [
+  "customer_reference_frequency",
+  "age_reference_frequency",
+  "gender_reference_frequency",
+  "merchant_reference_frequency",
+  "category_reference_frequency",
+  "amount"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": false,
+ "layers": 5,
+ "d_model": 256,
+ "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+ "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+ "rows_per_batch": 170,
+ "sets": {
+  "test": {
+   "rows": 25169,
+   "positives": 1440,
+   "seconds": 347.4,
+   "draws": 5,
+   "hidden_states": true
+  }
+ }
+}

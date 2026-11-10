@@ -1,0 +1,38 @@
+Loading weights from local directory
+Loading weights from local directory
+banksim: 594643 rows, 6 features, proxy; 170 rows per batch (2s to load)
+  ref: 170/16149 rows, 27.3 rows/s, eta 9.8 min
+  ref: 3570/16149 rows, 26.3 rows/s, eta 8.0 min
+  ref: 6970/16149 rows, 26.6 rows/s, eta 5.8 min
+  ref: 10370/16149 rows, 26.6 rows/s, eta 3.6 min
+  ref: 13770/16149 rows, 26.7 rows/s, eta 1.5 min
+  ref: 16149 rows done in 10.1 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/ref.npz
+  cal: 170/13300 rows, 6.8 rows/s, eta 32.0 min
+  cal: 3570/13300 rows, 6.9 rows/s, eta 23.4 min
+  cal: 6970/13300 rows, 6.9 rows/s, eta 15.3 min
+  cal: 10370/13300 rows, 6.9 rows/s, eta 7.1 min
+  cal: 13300 rows done in 32.0 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/cal.npz
+  test: 170/25169 rows, 7.1 rows/s, eta 58.7 min
+  test: 3570/25169 rows, 7.0 rows/s, eta 51.2 min
+  test: 6970/25169 rows, 7.0 rows/s, eta 43.3 min
+  test: 10370/25169 rows, 7.0 rows/s, eta 35.2 min
+  test: 13770/25169 rows, 7.0 rows/s, eta 27.1 min
+  test: 17170/25169 rows, 7.0 rows/s, eta 18.9 min
+  test: 20570/25169 rows, 7.0 rows/s, eta 10.9 min
+Loading weights from local directory
+Loading weights from local directory
+banksim: 594643 rows, 6 features, proxy; 170 rows per batch (2s to load)
+  ref: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/ref.npz exists, skipped
+  cal: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/cal.npz exists, skipped
+  test: resuming from row 20400 (/home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/test.partial.npz)
+  test: 20570/25169 rows, 14.8 rows/s, eta 5.2 min
+Loading weights from local directory
+Loading weights from local directory
+banksim: 594643 rows, 6 features, proxy; 170 rows per batch (7s to load)
+  ref: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/ref.npz exists, skipped
+  cal: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/cal.npz exists, skipped
+  test: resuming from row 20400 (/home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/test.partial.npz)
+  test: 20570/25169 rows, 13.6 rows/s, eta 5.7 min
+  test: 23970/25169 rows, 13.8 rows/s, eta 1.4 min
+  test: 25169 rows done in 5.8 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/banksim/test.npz
+total 5.9 min
