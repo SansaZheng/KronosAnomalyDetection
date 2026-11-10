@@ -1,0 +1,29 @@
+{
+ "dataset": "s_ffsd",
+ "model": "kronos",
+ "label_boundary": "fraud",
+ "test_rows": 15577,
+ "known_rows": 6159,
+ "positives": 2394,
+ "bootstrap_units": 50,
+ "error_threshold": 45.226303863525395,
+ "knob_dims": {
+  "error": [
+   144
+  ],
+  "fraud": [
+   220
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 3921,
+  "thresholds": 3922
+ },
+ "baseline_B_threshold_1pct_fpr": 67.01533691406254,
+ "subtle_relative": 2391,
+ "subtle_intrinsic": 289,
+ "pump_level_median": 4.711854457855225
+}
