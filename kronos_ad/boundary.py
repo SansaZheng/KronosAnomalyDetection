@@ -166,6 +166,28 @@ class CNNProbe:
         logits = self.logits(H)
         return logits[:, 1] - logits[:, 0]
 
+    # the network class is local to _build, so pickle the weights and rebuild on load
+    def __getstate__(self):
+        state = {k: v for k, v in self.__dict__.items() if k != 'net_'}
+        if hasattr(self, 'net_'):
+            state['net_state_'] = {k: v.cpu().numpy() for k, v in self.net_.state_dict().items()}
+            state['net_shape_'] = (self.net_.norm.normalized_shape[0], [tuple(b.kernel_size) for b in self.net_.branches])
+        return state
+
+    def __setstate__(self, state):
+        net_state, shape = state.pop('net_state_', None), state.pop('net_shape_', None)
+        self.__dict__.update(state)
+        if net_state is not None:
+            torch = _torch()
+            d, kernels = shape
+            L = max(k[0] for k in kernels)
+            saved = self.kernels
+            self.kernels = kernels            # already shrunk to the fitted shape
+            self.net_ = self._build(L, d)
+            self.kernels = saved
+            self.net_.load_state_dict({k: torch.tensor(v) for k, v in net_state.items()})
+            self.net_.eval()
+
     def predict(self, H):
         return (self.score(H) > 0).astype(int)
 

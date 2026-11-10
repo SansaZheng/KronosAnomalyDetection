@@ -16,6 +16,7 @@ effect is the change of the summed log-likelihood) on a balanced subset of at mo
 """
 import argparse
 import json
+import pickle
 import time
 import warnings
 from pathlib import Path
@@ -118,10 +119,20 @@ def main(dataset, out=None, intervention_cap=None, cnn_epochs=80):
             return np.concatenate(ll), None
 
         t = time.time()
-        result, probes, predictor = analyse_boundary(name, H_pool[train_idx], y_pool_b[train_idx], H_test[test_idx], y_test_b[test_idx],
-                                                     loglik_test, out, log, k_max=K_MAX, random_trials=RANDOM_TRIALS, seed=SEED,
-                                                     cnn_epochs=cnn_epochs, intervention_index=sub)
-        log(f'  {name}: done in {(time.time() - t) / 60:.1f} min (interventions on {len(sub)} balanced rows)')
+        state = out / f'{name}_state.pkl'          # per-boundary checkpoint: a killed run resumes at the next boundary
+        if state.exists():
+            with open(state, 'rb') as fh:
+                result, probes, predictor, saved_lines = pickle.load(fh)
+            lines.extend(saved_lines)
+            log(f'  {name}: loaded from {state.name} (previous run)')
+        else:
+            start = len(lines)
+            result, probes, predictor = analyse_boundary(name, H_pool[train_idx], y_pool_b[train_idx], H_test[test_idx], y_test_b[test_idx],
+                                                         loglik_test, out, log, k_max=K_MAX, random_trials=RANDOM_TRIALS, seed=SEED,
+                                                         cnn_epochs=cnn_epochs, intervention_index=sub)
+            log(f'  {name}: done in {(time.time() - t) / 60:.1f} min (interventions on {len(sub)} balanced rows)')
+            with open(state, 'wb') as fh:
+                pickle.dump((result, probes, predictor, lines[start:]), fh)
         results.append(result)
         pump = labels[t_test].astype(int)
         known = np.isin(pump, [0, 1])
