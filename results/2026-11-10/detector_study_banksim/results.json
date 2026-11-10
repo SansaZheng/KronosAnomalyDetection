@@ -1,0 +1,206 @@
+{
+ "dataset": "banksim",
+ "rows": 594643,
+ "representation": "proxy",
+ "draws": 5,
+ "prescale": true,
+ "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+ "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+ "calibration_rows": 13300,
+ "test_rows": 25169,
+ "test_positives": 1440,
+ "bootstrap_units": 394,
+ "reference_rows": 60000,
+ "standin": "/home/claude/work/KronosAnomalyDetection/results/2026-11-08/knowledge_boundary_standin_banksim",
+ "seed": 20261110,
+ "stack_weights": {
+  "fusion_r1_kronos": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.25,
+    0.75,
+    0.0
+   ]
+  ],
+  "fusion_r1_standin": [
+   [
+    0.05,
+    0.6,
+    0.35
+   ],
+   [
+    0.15,
+    0.25,
+    0.6
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.2,
+    0.05,
+    0.75
+   ]
+  ],
+  "fusion_r1_no_forecaster": [
+   [
+    0.05,
+    0.95
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.25,
+    0.75
+   ]
+  ],
+  "fusion_r2_kronos": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.25,
+    0.75,
+    0.0
+   ]
+  ],
+  "fusion_r2_standin": [
+   [
+    0.05,
+    0.6,
+    0.35
+   ],
+   [
+    0.15,
+    0.25,
+    0.6
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    0.2,
+    0.05,
+    0.75
+   ]
+  ],
+  "fusion_r2_no_forecaster": [
+   [
+    0.05,
+    0.95
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.25,
+    0.75
+   ]
+  ]
+ },
+ "features": [
+  "customer_reference_frequency",
+  "age_reference_frequency",
+  "gender_reference_frequency",
+  "merchant_reference_frequency",
+  "category_reference_frequency",
+  "amount"
+ ]
+}
