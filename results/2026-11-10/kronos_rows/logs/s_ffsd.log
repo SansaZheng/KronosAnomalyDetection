@@ -1,0 +1,31 @@
+Loading weights from local directory
+Loading weights from local directory
+s_ffsd: 77881 rows, 5 features, proxy; 204 rows per batch (1s to load)
+  ref: 204/13572 rows, 34.9 rows/s, eta 6.4 min
+  ref: 4284/13572 rows, 32.3 rows/s, eta 4.8 min
+  ref: 8364/13572 rows, 32.2 rows/s, eta 2.7 min
+  ref: 12444/13572 rows, 32.0 rows/s, eta 0.6 min
+  ref: 13572 rows done in 7.1 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/ref.npz
+  cal: 204/12197 rows, 8.1 rows/s, eta 24.8 min
+Loading weights from local directory
+Loading weights from local directory
+s_ffsd: 77881 rows, 5 features, proxy; 204 rows per batch (0s to load)
+  ref: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/ref.npz exists, skipped
+  cal: 204/12197 rows, 15.7 rows/s, eta 12.8 min
+  cal: 4284/12197 rows, 16.2 rows/s, eta 8.1 min
+  cal: 8364/12197 rows, 16.2 rows/s, eta 3.9 min
+  cal: 12197 rows done in 12.5 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/cal.npz
+  test: 204/15577 rows, 17.3 rows/s, eta 14.8 min
+  test: 4284/15577 rows, 17.1 rows/s, eta 11.0 min
+  test: 8364/15577 rows, 17.1 rows/s, eta 7.0 min
+  test: 12444/15577 rows, 17.1 rows/s, eta 3.1 min
+Loading weights from local directory
+Loading weights from local directory
+s_ffsd: 77881 rows, 5 features, proxy; 204 rows per batch (4s to load)
+  ref: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/ref.npz exists, skipped
+  cal: /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/cal.npz exists, skipped
+  test: resuming from row 8160 (/home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/test.partial.npz)
+  test: 8364/15577 rows, 17.6 rows/s, eta 6.8 min
+  test: 12444/15577 rows, 17.4 rows/s, eta 3.0 min
+  test: 15577 rows done in 7.2 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-10/kronos_rows/s_ffsd/test.npz
+total 7.2 min
