@@ -37,6 +37,7 @@ import run_fusion
 from boundary_pipeline import thin
 from boundary_standin import CLIP, StandinForecaster, default_out as standin_out
 from fusion_data import NOT_DETECTION_TARGETS, load_rows, long_context, split_calibration
+from kronos_ad.fast_bootstrap import paired_bootstrap
 from kronos_ad.fusion import robust_reference
 from kronos_ad.pot import fit_pot
 from ohlcva_pump_study import published_pot, standin_forecasts
@@ -188,15 +189,11 @@ def main(dataset, out=None):
     # ---- paired bootstrap
     rng = np.random.default_rng(SEED)
     known = np.isin(y_test, [0, 1])
-    stats = {k: [] for k in scores}
-    for idx in resamples(g_test, rng, 64, 2000):
-        idx = idx[known[idx]]
-        yy = y_test[idx]
-        if not 0 < yy.sum() < len(yy):
-            continue
-        for k, v in scores.items():
-            stats[k].append((average_precision_score(yy, v[idx]), recall_at_fpr(yy, v[idx])))
-    stats = {k: np.array(v) for k, v in stats.items()}
+    t = time.time()
+    # sklearn AP and recall_at_fpr on every resample, computed from one sort per score (kronos_ad.fast_bootstrap)
+    stats = paired_bootstrap(y_test[known], {k: v[known] for k, v in scores.items()},
+                             resamples(g_test[known], rng, 64, 2000))
+    log(f'paired bootstrap: {len(next(iter(stats.values())))} resamples with both classes ({time.time() - t:.0f}s)')
     boot = []
     units = len(np.unique(g_test)) if len(np.unique(g_test)) > 1 else int(np.ceil(len(g_test) / 64))
     for ref_name in ('fusion_r1_kronos', 'fusion_r1_no_forecaster', 'fusion_r1_standin', 'fusion_r2_kronos', 'robust_mad', 'published_pot_last'):
