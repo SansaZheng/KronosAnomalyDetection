@@ -1,0 +1,58 @@
+sapienza_15s: rows 584104, features ['std_rush_order', 'avg_rush_order', 'std_trades', 'std_volume', 'avg_volume', 'std_price', 'avg_price', 'avg_price_max'], groups 327, positives 317 (2s)
+calibration rows 12050 (positives 63), test rows 24040 (positives 64), reference rows 60000; Kronos draws 5, prescale True
+forecasts ready (8s)
+forecast MAE on test rows (kronos / standin / last / median):
+       feature  mae_kronos  mae_standin  mae_last  mae_median
+std_rush_order     0.00333      0.00293   0.00341     0.00265
+avg_rush_order     0.00265      0.00218   0.00282     0.00205
+    std_trades     0.00599      0.00542   0.00602     0.00497
+    std_volume     0.01069      0.00971   0.01056     0.00842
+    avg_volume     0.00322      0.00274   0.00346     0.00260
+     std_price     0.00028      0.00036   0.00024     0.00070
+     avg_price     0.00054      0.00055   0.00046     0.00105
+ avg_price_max     0.00061      0.00061   0.00053     0.00109
+fit rows 5473 (positives 35), validation rows 5837 (positives 25)
+  fusion_r1_kronos: threshold 7.090, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [0.0, 1.0, 0.0], [0.05, 0.9, 0.05], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0]] (4s)
+  fusion_r1_standin: threshold 6.481, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0]] (3s)
+  fusion_r1_no_forecaster: threshold 7.077, stack weights [[0.0, 1.0], [0.0, 1.0], [0.05, 0.95], [0.0, 1.0], [0.05, 0.95], [1.0, 0.0], [1.0, 0.0], [1.0, 0.0]] (3s)
+  fusion_r2_kronos: threshold 5.249, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [0.0, 1.0, 0.0], [0.05, 0.9, 0.05], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0]] (6s)
+  fusion_r2_standin: threshold 5.060, stack weights [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [0.0, 1.0, 0.0], [0.05, 0.95, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0]] (5s)
+  fusion_r2_no_forecaster: threshold 5.213, stack weights [[0.0, 1.0], [0.0, 1.0], [0.05, 0.95], [0.0, 1.0], [0.05, 0.95], [1.0, 0.0], [1.0, 0.0], [1.0, 0.0]] (5s)
+  fusion_r1_kronos             AP 0.427  AUROC 0.995  R@1% 0.828  alarm 0.0059  recall@thr 0.781  precision@thr 0.352
+  fusion_r1_standin            AP 0.436  AUROC 0.997  R@1% 0.938  alarm 0.0082  recall@thr 0.906  precision@thr 0.294
+  fusion_r1_no_forecaster      AP 0.422  AUROC 0.996  R@1% 0.875  alarm 0.0067  recall@thr 0.812  precision@thr 0.321
+  fusion_r2_kronos             AP 0.532  AUROC 0.998  R@1% 0.922  alarm 0.0079  recall@thr 0.922  precision@thr 0.309
+  fusion_r2_standin            AP 0.506  AUROC 0.998  R@1% 0.953  alarm 0.0091  recall@thr 0.922  precision@thr 0.269
+  fusion_r2_no_forecaster      AP 0.494  AUROC 0.998  R@1% 0.938  alarm 0.0086  recall@thr 0.938  precision@thr 0.291
+  published_pot_kronos         AP 0.079  AUROC 0.968  R@1% 0.109  alarm 0.0223  recall@thr 0.734  precision@thr 0.088
+  published_pot_standin        AP 0.018  AUROC 0.799  R@1% 0.031  alarm 0.0618  recall@thr 0.516  precision@thr 0.022
+  published_pot_last           AP 0.073  AUROC 0.960  R@1% 0.109  alarm 0.0219  recall@thr 0.703  precision@thr 0.086
+  kronos_nll_surprise          AP 0.308  AUROC 0.961  R@1% 0.594  alarm 0.0111  recall@thr 0.594  precision@thr 0.142
+  standin_nll_surprise         AP 0.597  AUROC 0.995  R@1% 0.844  alarm 0.0114  recall@thr 0.797  precision@thr 0.185
+  isolation_forest             AP 0.919  AUROC 0.999  R@1% 1.000  alarm 0.0114  recall@thr 0.984  precision@thr 0.230
+  robust_mad                   AP 0.828  AUROC 0.999  R@1% 0.969  alarm 0.0082  recall@thr 0.969  precision@thr 0.316
+paired bootstrap: 2000 resamples with both classes (13s)
+  fusion_r1_standin            - fusion_r1_kronos        : AP [-0.015, +0.030]  R@1% [+0.031, +0.188]
+  fusion_r1_no_forecaster      - fusion_r1_kronos        : AP [-0.090, +0.036]  R@1% [-0.047, +0.109]
+  fusion_r2_kronos             - fusion_r1_kronos        : AP [+0.071, +0.151]  R@1% [+0.016, +0.188]
+  fusion_r2_standin            - fusion_r1_kronos        : AP [+0.048, +0.123]  R@1% [+0.047, +0.219]
+  fusion_r2_no_forecaster      - fusion_r1_kronos        : AP [-0.004, +0.118]  R@1% [+0.016, +0.203]
+  published_pot_kronos         - fusion_r1_kronos        : AP [-0.547, -0.246]  R@1% [-0.844, -0.609]
+  published_pot_standin        - fusion_r1_kronos        : AP [-0.619, -0.321]  R@1% [-0.891, -0.656]
+  published_pot_last           - fusion_r1_kronos        : AP [-0.555, -0.254]  R@1% [-0.844, -0.609]
+  kronos_nll_surprise          - fusion_r1_kronos        : AP [-0.328, +0.025]  R@1% [-0.359, -0.141]
+  standin_nll_surprise         - fusion_r1_kronos        : AP [-0.049, +0.287]  R@1% [-0.109, +0.109]
+  isolation_forest             - fusion_r1_kronos        : AP [+0.285, +0.573]  R@1% [+0.062, +0.266]
+  robust_mad                   - fusion_r1_kronos        : AP [+0.249, +0.472]  R@1% [+0.047, +0.234]
+  fusion_r1_kronos             - fusion_r1_no_forecaster : AP [-0.036, +0.090]  R@1% [-0.109, +0.047]
+  fusion_r1_standin            - fusion_r1_no_forecaster : AP [-0.024, +0.086]  R@1% [+0.000, +0.172]
+  fusion_r2_kronos             - fusion_r1_no_forecaster : AP [+0.054, +0.212]  R@1% [-0.031, +0.156]
+  fusion_r2_standin            - fusion_r1_no_forecaster : AP [+0.035, +0.179]  R@1% [+0.016, +0.188]
+  fusion_r2_no_forecaster      - fusion_r1_no_forecaster : AP [+0.043, +0.116]  R@1% [-0.016, +0.172]
+  published_pot_kronos         - fusion_r1_no_forecaster : AP [-0.487, -0.257]  R@1% [-0.875, -0.641]
+  published_pot_standin        - fusion_r1_no_forecaster : AP [-0.549, -0.332]  R@1% [-0.938, -0.688]
+  published_pot_last           - fusion_r1_no_forecaster : AP [-0.492, -0.266]  R@1% [-0.875, -0.641]
+  kronos_nll_surprise          - fusion_r1_no_forecaster : AP [-0.267, +0.018]  R@1% [-0.406, -0.141]
+  standin_nll_surprise         - fusion_r1_no_forecaster : AP [+0.011, +0.282]  R@1% [-0.141, +0.078]
+  isolation_forest             - fusion_r1_no_forecaster : AP [+0.354, +0.566]  R@1% [+0.031, +0.234]
+  robust_mad                   - fusion_r1_no_forecaster : AP [+0.308, +0.465]  R@1% [+0.016, +0.219]
