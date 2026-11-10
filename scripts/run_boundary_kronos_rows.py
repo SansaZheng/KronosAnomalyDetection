@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from boundary_pipeline import analyse_boundary, save_results
+from boundary_pipeline import analyse_boundary, batched, save_results
 from boundary_standin import K_MAX, LOOKBACK, RANDOM_TRIALS, SEED, label_boundary
 from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.boundary import split_balanced
@@ -136,8 +136,9 @@ def main(dataset, out=None, intervention_cap=None, cnn_epochs=80):
         results.append(result)
         pump = labels[t_test].astype(int)
         known = np.isin(pump, [0, 1])
-        scores = {'nll_surprise': nll_test, 'cnn_probe': probes['cnn'].score(H_test), 'logistic_probe': probes['logistic'].score(H_test),
-                  'knob_closed_form': predictor.score(H_test)}
+        # scored in batches: the CNN's activation maps on all test rows at once need several GB
+        scores = {'nll_surprise': nll_test, 'cnn_probe': batched(probes['cnn'].score, H_test, size=1024),
+                  'logistic_probe': probes['logistic'].score(H_test), 'knob_closed_form': predictor.score(H_test)}
         for key, s in scores.items():
             detection.append(dict(boundary=name, score=key, test_rows=int(known.sum()), positives=int(pump[known].sum()),
                                   ap=float(average_precision_score(pump[known], s[known])), auroc=float(roc_auc_score(pump[known], s[known])),
