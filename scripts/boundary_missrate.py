@@ -200,7 +200,7 @@ def main(dataset=DATASET, standin=None, out=None, model='standin'):
                 t = time.time()
                 probe.fit(H_pool[train_idx], y_pool_b[train_idx])
                 log(f'  {name}: {key} probe balanced accuracy {balanced_accuracy(probe, H_test[test_idx], y_test_b[test_idx]):.4f} ({time.time() - t:.0f}s)')
-                channels[f'P_label_{key}'] = probe.score(H_test)
+                channels[f'P_label_{key}'] = batched(probe.score, H_test, size=1024)   # the CNN's maps on all rows at once need GBs
 
     # ---- null rows: calibration normal rows that trained nothing, split into two halves
     null_rows = calibration_rows[(labels[t_cal] != 1) & ~trained[calibration_rows]]
@@ -217,7 +217,7 @@ def main(dataset=DATASET, standin=None, out=None, model='standin'):
         if name == positive_name:
             for key, probe in (('logistic', LogisticProbe()), ('cnn', CNNProbe(epochs=80))):
                 probe.fit(H_pool[train_idx], boundaries[name][0][train_idx])
-                pool_scores[f'P_label_{key}'] = probe.score(H_pool)
+                pool_scores[f'P_label_{key}'] = batched(probe.score, H_pool, size=1024)
     logp_test = {k: conformal_logp(v, pool_scores[k][null_a]) for k, v in channels.items()}
     logp_null_b = {k: conformal_logp(pool_scores[k][null_b], pool_scores[k][null_a]) for k in channels}
 
