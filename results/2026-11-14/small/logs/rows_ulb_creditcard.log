@@ -1,0 +1,20 @@
+Loading weights from local directory
+Loading weights from local directory
+ulb_creditcard: 284807 rows, 29 features, proxy; 35 rows per batch (6s to load)
+  ref: 35/2300 rows, 3.9 rows/s, eta 9.8 min
+  ref: 735/2300 rows, 4.1 rows/s, eta 6.4 min
+  ref: 1435/2300 rows, 4.0 rows/s, eta 3.6 min
+  ref: 2135/2300 rows, 4.0 rows/s, eta 0.7 min
+  ref: 2300 rows done in 9.4 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/ulb_creditcard/ref.npz
+  cal: 35/2051 rows, 1.5 rows/s, eta 22.2 min
+  cal: 735/2051 rows, 1.6 rows/s, eta 13.9 min
+  cal: 1435/2051 rows, 1.6 rows/s, eta 6.3 min
+  cal: 2051 rows done in 20.5 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/ulb_creditcard/cal.npz
+  test: 35/4059 rows, 1.7 rows/s, eta 39.0 min
+  test: 735/4059 rows, 1.7 rows/s, eta 32.4 min
+  test: 1435/4059 rows, 1.7 rows/s, eta 26.1 min
+  test: 2135/4059 rows, 1.7 rows/s, eta 19.1 min
+  test: 2835/4059 rows, 1.7 rows/s, eta 12.3 min
+  test: 3535/4059 rows, 1.7 rows/s, eta 5.2 min
+  test: 4059 rows done in 40.5 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/ulb_creditcard/test.npz
+total 70.6 min

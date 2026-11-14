@@ -194,9 +194,12 @@ class CNNProbe:
     def activation_maps(self, H, branch=0):
         """Channel-averaged pre-pooling activations A(x) in R^{L x d} of one branch."""
         torch = _torch()
+        out = []                                   # batched: all channels of all rows at once exhausts memory
         with torch.no_grad():
-            maps = self.net_.activations(torch.tensor(self.scaler_(H), dtype=torch.float32))[branch]
-        return maps.mean(dim=1).numpy()
+            for i in range(0, len(H), 512):
+                x = torch.tensor(self.scaler_(H[i:i + 512]), dtype=torch.float32)
+                out.append(self.net_.activations(x)[branch].mean(dim=1).numpy())
+        return np.concatenate(out)
 
 
 def balanced_accuracy(probe, H, y):
@@ -208,8 +211,8 @@ def balanced_accuracy(probe, H, y):
 
 def difference_map(A, y):
     """Class-conditional mean difference, mean(A | y=1) - mean(A | y=0), shape (L, d)."""
-    A, y = np.asarray(A, dtype=float), np.asarray(y).astype(int)
-    return A[y == 1].mean(axis=0) - A[y == 0].mean(axis=0)
+    A, y = np.asarray(A), np.asarray(y).astype(int)
+    return A[y == 1].mean(axis=0, dtype=float) - A[y == 0].mean(axis=0, dtype=float)
 
 
 def _corr(a, b):
