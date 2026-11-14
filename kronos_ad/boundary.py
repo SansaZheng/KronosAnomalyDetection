@@ -159,8 +159,9 @@ class CNNProbe:
 
     def logits(self, H):
         torch = _torch()
-        with torch.no_grad():
-            return self.net_(torch.tensor(self.scaler_(H), dtype=torch.float32)).numpy()
+        with torch.no_grad():                      # batched: the branch activations of every row at once exhaust memory
+            return np.concatenate([self.net_(torch.tensor(self.scaler_(H[i:i + 512]), dtype=torch.float32)).numpy()
+                                   for i in range(0, len(H), 512)])
 
     def score(self, H):
         logits = self.logits(H)

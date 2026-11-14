@@ -1,0 +1,27 @@
+/home/claude/work/KronosAnomalyDetection/scripts/fusion_data.py:78: RuntimeWarning: divide by zero encountered in log
+  values = np.column_stack([np.log(bars[:, 3] / np.maximum(prev_close, 1e-12)),
+Loading weights from local directory
+Loading weights from local directory
+xu_livshits_1h: 3685842 rows, 4 features, native bars; 256 rows per batch (57s to load)
+  ref: 256/4030 rows, 34.2 rows/s, eta 1.8 min
+  ref: 4030 rows done in 1.9 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/xu_livshits_1h/ref.npz
+  cal: 256/4040 rows, 25.5 rows/s, eta 2.5 min
+  cal: 4040 rows done in 2.6 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/xu_livshits_1h/cal.npz
+  test: 256/8063 rows, 26.2 rows/s, eta 5.0 min
+  test: 5376/8063 rows, 27.3 rows/s, eta 1.6 min
+  test: 8063 rows done in 5.0 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/xu_livshits_1h/test.npz
+total 10.4 min
+/home/claude/work/KronosAnomalyDetection/scripts/fusion_data.py:78: RuntimeWarning: divide by zero encountered in log
+  values = np.column_stack([np.log(bars[:, 3] / np.maximum(prev_close, 1e-12)),
+Loading weights from local directory
+Loading weights from local directory
+xu_livshits_1h: 3685842 rows, 4 features, native bars; 256 rows per batch (56s to load)
+  study_cal: 256/6045 rows, 23.2 rows/s, eta 4.2 min
+  study_cal: 5376/6045 rows, 24.2 rows/s, eta 0.5 min
+  study_cal: 6045 rows done in 4.1 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/xu_livshits_1h/study_cal.npz
+  study_test: 256/20083 rows, 23.9 rows/s, eta 13.9 min
+  study_test: 5376/20083 rows, 26.0 rows/s, eta 9.4 min
+  study_test: 10496/20083 rows, 26.0 rows/s, eta 6.2 min
+  study_test: 15616/20083 rows, 26.3 rows/s, eta 2.8 min
+  study_test: 20083 rows done in 12.6 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/xu_livshits_1h/study_test.npz
+total 17.7 min
