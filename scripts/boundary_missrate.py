@@ -163,11 +163,13 @@ def main(dataset=DATASET, standin=None, out=None, model='standin'):
         nll_pool, nll_test = -batched(states.loglik, x_pool, y_pool), -batched(states.loglik, x_test, y_test)
     else:
         cache = {name: np.load(ROWS / dataset / f'{name}.npz') for name in ('ref', 'cal', 'test')}
-        assert np.array_equal(np.r_[cache['ref']['targets'], cache['cal']['targets']], t_pool) and np.array_equal(cache['test']['targets'], t_test)
+        # the cache defines the rows (the mini rerun used the stand-in protocol's rows; the size study a subset of them)
+        t_cal, t_test = cache['cal']['targets'], cache['test']['targets']
+        t_pool = np.r_[cache['ref']['targets'], t_cal]
         H_pool = np.concatenate([cache['ref']['H'], cache['cal']['H']]).astype(np.float32)
         H_test = cache['test']['H'].astype(np.float32)
         nll_pool, nll_test = np.r_[cache['ref']['nll'], cache['cal']['nll']], cache['test']['nll']
-        log(f'real Kronos-mini hidden states and NLLs from {ROWS / dataset}')
+        log(f'real Kronos hidden states and NLLs from {ROWS / dataset}')
     calibration_rows = np.arange(len(t_pool) - len(t_cal), len(t_pool))
     threshold = float(np.quantile(nll_pool[calibration_rows][labels[t_cal] != 1], 0.9))
     assert abs(threshold - recorded['error_threshold']) < 1e-6, (threshold, recorded['error_threshold'])
