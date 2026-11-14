@@ -1,0 +1,41 @@
+{
+ "dataset": "sapienza_15s",
+ "representation": "proxy",
+ "features": [
+  "std_rush_order",
+  "avg_rush_order",
+  "std_trades",
+  "std_volume",
+  "avg_volume",
+  "std_price",
+  "avg_price",
+  "avg_price_max"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": false,
+ "layers": 5,
+ "d_model": 256,
+ "model_sha256": "a7d5f37e2e9fbd9891f7d7d4f72574512dd1f704fee14223e0a8cd0fbf54197c",
+ "tokenizer_sha256": "b97ec46b3b72160509e289183eaf7bdf5f0dac5bb9b49522f6d46638a99a8717",
+ "rows_per_batch": 128,
+ "sets": {
+  "test": {
+   "rows": 8037,
+   "positives": 64,
+   "seconds": 361.2,
+   "draws": 5,
+   "hidden_states": true
+  },
+  "ref": {
+   "rows": 4126,
+   "positives": 190
+  },
+  "cal": {
+   "rows": 4042,
+   "positives": 63
+  }
+ },
+ "subset_of": "results/2026-11-10/kronos_rows/sapienza_15s"
+}
