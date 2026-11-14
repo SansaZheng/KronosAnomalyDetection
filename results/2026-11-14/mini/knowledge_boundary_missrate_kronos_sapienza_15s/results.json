@@ -1,0 +1,34 @@
+{
+ "dataset": "sapienza_15s",
+ "model": "kronos",
+ "label_boundary": "pump",
+ "test_rows": 8037,
+ "known_rows": 8037,
+ "positives": 64,
+ "bootstrap_units": 64,
+ "error_threshold": 61.691944885253925,
+ "knob_dims": {
+  "error": [
+   177,
+   206
+  ],
+  "pump": [
+   91,
+   200,
+   19,
+   123,
+   74
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 1497,
+  "thresholds": 1497
+ },
+ "baseline_B_threshold_1pct_fpr": 111.13129760742183,
+ "subtle_relative": 26,
+ "subtle_intrinsic": 32,
+ "pump_level_median": 19.925399780273438
+}

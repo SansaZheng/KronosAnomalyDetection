@@ -1,0 +1,30 @@
+{
+ "dataset": "xu_livshits_1h",
+ "model": "kronos",
+ "label_boundary": "pump",
+ "test_rows": 8063,
+ "known_rows": 8063,
+ "positives": 96,
+ "bootstrap_units": 82,
+ "error_threshold": 11.801134109497072,
+ "knob_dims": {
+  "error": [
+   324
+  ],
+  "pump": [
+   312,
+   307
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 1557,
+  "thresholds": 1558
+ },
+ "baseline_B_threshold_1pct_fpr": 24.040039596557637,
+ "subtle_relative": 67,
+ "subtle_intrinsic": 48,
+ "pump_level_median": 15.732894897460938
+}

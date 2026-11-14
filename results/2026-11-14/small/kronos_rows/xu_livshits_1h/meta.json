@@ -1,0 +1,35 @@
+{
+ "dataset": "xu_livshits_1h",
+ "representation": "native",
+ "features": [
+  "log_return",
+  "log_range",
+  "log_volume",
+  "log_amount"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": true,
+ "layers": 9,
+ "d_model": 512,
+ "model_sha256": "b082dfcbd8e8c142a725c8bbb99781802f38fec81210e13479effb32b3c3e020",
+ "tokenizer_sha256": "59d85f6af76a2c3b8240ea06cb21db4213b4eeca053f246b23e29cf832fc6bee",
+ "rows_per_batch": 256,
+ "sets": {
+  "study_cal": {
+   "rows": 6045,
+   "positives": 57,
+   "seconds": 107.9,
+   "draws": 5,
+   "hidden_states": false
+  },
+  "study_test": {
+   "rows": 20083,
+   "positives": 96,
+   "seconds": 330.8,
+   "draws": 5,
+   "hidden_states": false
+  }
+ }
+}

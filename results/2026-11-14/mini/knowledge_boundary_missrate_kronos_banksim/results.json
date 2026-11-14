@@ -1,0 +1,29 @@
+{
+ "dataset": "banksim",
+ "model": "kronos",
+ "label_boundary": "fraud",
+ "test_rows": 8998,
+ "known_rows": 8998,
+ "positives": 1440,
+ "bootstrap_units": 50,
+ "error_threshold": 53.42716827392578,
+ "knob_dims": {
+  "error": [
+   178
+  ],
+  "fraud": [
+   39
+  ]
+ },
+ "alpha": 0.01,
+ "resamples": 2000,
+ "boot_seed": 20261108,
+ "null_rows": {
+  "pvalues": 111,
+  "thresholds": 112
+ },
+ "baseline_B_threshold_1pct_fpr": 85.55362167358402,
+ "subtle_relative": 1274,
+ "subtle_intrinsic": 686,
+ "pump_level_median": 15.699087142944336
+}

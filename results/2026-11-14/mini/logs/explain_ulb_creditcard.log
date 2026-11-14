@@ -1,0 +1,7 @@
+
+=== ulb_creditcard  (B threshold 319.33, K threshold 1.44)
+                       dataset     n  share_with_anomaly_in_context  share_first_in_run  B_nll_surprise  L_level_magnitude  K_label_knob  prev_frac  run_pos  row_Amount  ctx_Amount
+grp                                                                                                                                                                                 
+caught_by_B     ulb_creditcard    38                          0.079               1.000         352.527             16.766        -0.477        0.0      1.0       0.700       2.060
+missed_by_both  ulb_creditcard    39                          0.154               0.974         280.475              9.672        -0.259        0.0      1.0       0.700       1.806
+normal          ulb_creditcard  3982                          0.031               0.000         217.404              2.953        -0.230        0.0      0.0       0.659       2.173
