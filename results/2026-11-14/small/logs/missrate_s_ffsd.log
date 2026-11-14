@@ -1,0 +1,51 @@
+knob dimensions from the frozen run: {'error': [168, 67, 77, 398, 312, 125, 184, 508, 481], 'fraud': [493, 294, 205, 359, 230, 168, 83, 172]}
+real Kronos hidden states and NLLs from /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/s_ffsd
+test rows 9164 (4309 with known label): 2394 fraud rows in 50 bootstrap units; error threshold 39.470 reproduced
+  error: knob k=9 dims=[168, 67, 77, 398, 312, 125, 184, 508, 481] balanced accuracy 0.5203 (frozen run 0.5203; 1s)
+  fraud: knob k=8 dims=[493, 294, 205, 359, 230, 168, 83, 172] balanced accuracy 0.6478 (frozen run 0.6478; 1s)
+  fraud: logistic probe balanced accuracy 0.4728 (31s)
+  fraud: cnn probe balanced accuracy 0.5650 (413s)
+null rows for calibration: 921 (p-values) + 922 (combined thresholds)
+baseline B at 1% FPR: recall 0.003; subtle pumps: relative 2387, intrinsic (below pump-median level magnitude 4.71) 289
+  B_nll_surprise                     AP 0.437  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.0470 recall 0.008
+  L_level_magnitude                  AP 0.792  R@1% 0.000  miss 1.000  subtle rel 0.000 intr 0.000  vs B -0.003 [-0.006, -0.001] gained 0 lost 7  deploy alarm 0.0225 recall 0.002
+  K_error_knob                       AP 0.572  R@1% 0.003  miss 0.997  subtle rel 0.003 intr 0.021  vs B +0.000 [-0.003, +0.004] gained 7 lost 7  deploy alarm 0.0266 recall 0.005
+  K_label_knob                       AP 0.628  R@1% 0.009  miss 0.991  subtle rel 0.009 intr 0.000  vs B +0.006 [-0.002, +0.016] gained 22 lost 7  deploy alarm 0.0836 recall 0.054
+  P_label_logistic                   AP 0.534  R@1% 0.032  miss 0.968  subtle rel 0.032 intr 0.010  vs B +0.029 [+0.006, +0.068] gained 77 lost 7  deploy alarm 0.0136 recall 0.033
+  P_label_cnn                        AP 0.623  R@1% 0.012  miss 0.988  subtle rel 0.012 intr 0.024  vs B +0.009 [+0.001, +0.021] gained 29 lost 7  deploy alarm 0.0198 recall 0.030
+  B+K_label [tippett]                AP 0.584  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.1232 recall 0.062
+  B+K_label [fisher]                 AP 0.560  R@1% 0.002  miss 0.998  subtle rel 0.000 intr 0.007  vs B -0.001 [-0.002, +0.000] gained 0 lost 2  deploy alarm 0.0950 recall 0.025
+  B+K_error [tippett]                AP 0.529  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.0684 recall 0.013
+  B+K_error [fisher]                 AP 0.506  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B -0.000 [-0.003, +0.001] gained 1 lost 2  deploy alarm 0.0512 recall 0.010
+  B+P_logistic [tippett]             AP 0.478  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.001] gained 1 lost 0  deploy alarm 0.0543 recall 0.038
+  B+P_logistic [fisher]              AP 0.465  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.010  vs B +0.000 [-0.001, +0.001] gained 1 lost 1  deploy alarm 0.0376 recall 0.018
+  B+P_cnn [tippett]                  AP 0.558  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.0642 recall 0.037
+  B+P_cnn [fisher]                   AP 0.531  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.0439 recall 0.013
+  L+K_label [tippett]                AP 0.607  R@1% 0.009  miss 0.991  subtle rel 0.009 intr 0.000  vs B +0.006 [-0.002, +0.016] gained 22 lost 7  deploy alarm 0.0893 recall 0.043
+  L+K_label [fisher]                 AP 0.657  R@1% 0.009  miss 0.991  subtle rel 0.009 intr 0.000  vs B +0.006 [-0.002, +0.016] gained 22 lost 7  deploy alarm 0.0611 recall 0.019
+  B+L [tippett]                      AP 0.728  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.0601 recall 0.009
+  B+L [fisher]                       AP 0.579  R@1% 0.002  miss 0.998  subtle rel 0.000 intr 0.003  vs B -0.001 [-0.003, +0.000] gained 0 lost 3  deploy alarm 0.0486 recall 0.008
+  B+L+K_label [tippett]              AP 0.573  R@1% 0.003  miss 0.997  subtle rel 0.000 intr 0.014  vs B +0.000 [+0.000, +0.000] gained 0 lost 0  deploy alarm 0.1243 recall 0.051
+  B+L+K_label [fisher]               AP 0.597  R@1% 0.002  miss 0.998  subtle rel 0.000 intr 0.007  vs B -0.001 [-0.002, +0.000] gained 0 lost 2  deploy alarm 0.0527 recall 0.019
+  B+K_label [or@a/2]                 AP nan  R@1% 0.008  miss 0.992  subtle rel 0.008 intr 0.003  vs B +0.005 [-0.001, +0.013] gained 18 lost 6  deploy alarm 0.0104 recall 0.008
+  B+K_error [or@a/2]                 AP nan  R@1% 0.002  miss 0.998  subtle rel 0.002 intr 0.014  vs B -0.001 [-0.004, +0.002] gained 4 lost 6  deploy alarm 0.0104 recall 0.002
+  B+P_logistic [or@a/2]              AP nan  R@1% 0.025  miss 0.975  subtle rel 0.025 intr 0.010  vs B +0.023 [+0.004, +0.053] gained 60 lost 6  deploy alarm 0.0099 recall 0.025
+  B+P_cnn [or@a/2]                   AP nan  R@1% 0.009  miss 0.991  subtle rel 0.008 intr 0.014  vs B +0.006 [-0.001, +0.016] gained 20 lost 6  deploy alarm 0.0104 recall 0.009
+  L+K_label [or@a/2]                 AP nan  R@1% 0.008  miss 0.992  subtle rel 0.008 intr 0.000  vs B +0.005 [-0.002, +0.013] gained 18 lost 7  deploy alarm 0.0099 recall 0.008
+  B+L [or@a/2]                       AP nan  R@1% 0.000  miss 1.000  subtle rel 0.000 intr 0.003  vs B -0.003 [-0.005, -0.000] gained 0 lost 6  deploy alarm 0.0099 recall 0.000
+  B+L+K_label [or@a/3]               AP nan  R@1% 0.008  miss 0.992  subtle rel 0.007 intr 0.003  vs B +0.005 [-0.001, +0.012] gained 17 lost 6  deploy alarm 0.0110 recall 0.008
+  increment [tippett] B_nll_surprise -> B+K_label [tippett]: recall 0.003 -> 0.003 [+0.000, +0.000] gained 0 lost 0; subtle 0.014 -> 0.014 [+0.000, +0.000]
+  increment [tippett] B_nll_surprise -> B+K_error [tippett]: recall 0.003 -> 0.003 [+0.000, +0.000] gained 0 lost 0; subtle 0.014 -> 0.014 [+0.000, +0.000]
+  increment [tippett] B_nll_surprise -> B+P_logistic [tippett]: recall 0.003 -> 0.003 [+0.000, +0.001] gained 1 lost 0; subtle 0.014 -> 0.014 [+0.000, +0.000]
+  increment [tippett] L_level_magnitude -> L+K_label [tippett]: recall 0.000 -> 0.009 [+0.002, +0.018] gained 22 lost 0; subtle 0.000 -> 0.000 [+0.000, +0.000]
+  increment [tippett] B+L [tippett] -> B+L+K_label [tippett]: recall 0.003 -> 0.003 [+0.000, +0.000] gained 0 lost 0; subtle 0.014 -> 0.014 [+0.000, +0.000]
+  increment [fisher] B_nll_surprise -> B+K_label [fisher]: recall 0.003 -> 0.002 [-0.002, +0.000] gained 0 lost 2; subtle 0.014 -> 0.007 [-0.019, +0.000]
+  increment [fisher] B_nll_surprise -> B+K_error [fisher]: recall 0.003 -> 0.003 [-0.003, +0.001] gained 1 lost 2; subtle 0.014 -> 0.014 [-0.013, +0.009]
+  increment [fisher] B_nll_surprise -> B+P_logistic [fisher]: recall 0.003 -> 0.003 [-0.001, +0.001] gained 1 lost 1; subtle 0.014 -> 0.010 [-0.014, +0.000]
+  increment [fisher] L_level_magnitude -> L+K_label [fisher]: recall 0.000 -> 0.009 [+0.002, +0.018] gained 22 lost 0; subtle 0.000 -> 0.000 [+0.000, +0.000]
+  increment [fisher] B+L [fisher] -> B+L+K_label [fisher]: recall 0.002 -> 0.002 [+0.000, +0.001] gained 1 lost 0; subtle 0.003 -> 0.007 [+0.000, +0.011]
+  increment [or] B_nll_surprise -> B+K_label [or@a/2]: recall 0.003 -> 0.008 [-0.001, +0.013] gained 18 lost 6; subtle 0.014 -> 0.003 [-0.022, -0.003]
+  increment [or] B_nll_surprise -> B+K_error [or@a/2]: recall 0.003 -> 0.002 [-0.004, +0.002] gained 4 lost 6; subtle 0.014 -> 0.014 [-0.016, +0.012]
+  increment [or] B_nll_surprise -> B+P_logistic [or@a/2]: recall 0.003 -> 0.025 [+0.004, +0.053] gained 60 lost 6; subtle 0.014 -> 0.010 [-0.017, +0.008]
+  increment [or] L_level_magnitude -> L+K_label [or@a/2]: recall 0.000 -> 0.008 [+0.002, +0.015] gained 18 lost 0; subtle 0.000 -> 0.000 [+0.000, +0.000]
+  increment [or] B+L [or@a/2] -> B+L+K_label [or@a/3]: recall 0.000 -> 0.008 [+0.002, +0.014] gained 17 lost 0; subtle 0.003 -> 0.003 [+0.000, +0.000]

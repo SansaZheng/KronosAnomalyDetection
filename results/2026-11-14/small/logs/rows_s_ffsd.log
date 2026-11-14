@@ -1,0 +1,14 @@
+Loading weights from local directory
+Loading weights from local directory
+s_ffsd: 77881 rows, 5 features, proxy; 204 rows per batch (1s to load)
+  ref: 204/5473 rows, 22.7 rows/s, eta 3.9 min
+  ref: 4284/5473 rows, 22.8 rows/s, eta 0.9 min
+  ref: 5473 rows done in 4.0 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/s_ffsd/ref.npz
+  cal: 204/4534 rows, 8.2 rows/s, eta 8.8 min
+  cal: 4284/4534 rows, 9.2 rows/s, eta 0.5 min
+  cal: 4534 rows done in 8.2 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/s_ffsd/cal.npz
+  test: 204/9164 rows, 9.7 rows/s, eta 15.4 min
+  test: 4284/9164 rows, 9.4 rows/s, eta 8.7 min
+  test: 8364/9164 rows, 9.1 rows/s, eta 1.5 min
+  test: 9164 rows done in 16.7 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/small/kronos_rows/s_ffsd/test.npz
+total 28.9 min
