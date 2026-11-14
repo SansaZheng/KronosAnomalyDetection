@@ -1,0 +1,32 @@
+name: Mirror Kronos weights
+# Downloads the public Kronos-base / Kronos-small weights and their tokenizer from Hugging Face
+# and attaches them to the release `weights-v1` of this repository.
+on:
+  workflow_dispatch:
+  push:
+    branches: [fusion-v2]
+    paths: ['.github/workflows/mirror-kronos-weights.yml']
+permissions:
+  contents: write
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download from Hugging Face and pack
+        run: |
+          pip install -U huggingface_hub
+          for m in Kronos-base Kronos-small Kronos-Tokenizer-base; do
+            python -c "from huggingface_hub import snapshot_download; snapshot_download('NeoQuasar/$m', local_dir='$m')"
+            tar -czf $m.tar.gz --exclude='.cache' $m
+          done
+          sha256sum *.tar.gz > SHA256SUMS
+          ls -la *.tar.gz && cat SHA256SUMS
+      - name: Publish as release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view weights-v1 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create weights-v1 --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+              --title "Kronos base/small weights" \
+              --notes "Mirror of NeoQuasar/Kronos-base, Kronos-small and Kronos-Tokenizer-base from Hugging Face (MIT licence)."
+          gh release upload weights-v1 *.tar.gz SHA256SUMS --repo "$GITHUB_REPOSITORY" --clobber
