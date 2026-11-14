@@ -39,9 +39,21 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 KRONOS_SRC = ROOT / 'vendor/Kronos'
-MODEL_DIR = ROOT / 'weights/Kronos-mini'
-TOKENIZER_DIR = ROOT / 'weights/Kronos-Tokenizer-2k'
+# Model size: KRONOS_MODEL in {mini, small, base}; mini pairs with Tokenizer-2k, small and base with Tokenizer-base.
+KRONOS_MODEL = os.environ.get('KRONOS_MODEL', 'mini')
+MODEL_DIR = ROOT / f'weights/Kronos-{KRONOS_MODEL}'
+TOKENIZER_DIR = ROOT / ('weights/Kronos-Tokenizer-2k' if KRONOS_MODEL == 'mini' else 'weights/Kronos-Tokenizer-base')
+# Where the real-Kronos result directories live (the mini rerun: results/2026-11-10; the size study: results/2026-11-14/<model>).
+RESULTS = Path(os.environ['KRONOS_RESULTS']).resolve() if os.environ.get('KRONOS_RESULTS') else ROOT / 'results/2026-11-10'
 EPS = 1e-5
+
+
+def subset_positions(labels, cap, seed):
+    """Positions of a row subset: `cap` rows drawn without replacement plus every labelled anomaly (size study)."""
+    n = len(labels)
+    pick = np.arange(n) if n <= cap else np.sort(np.random.default_rng(seed).choice(n, cap, replace=False))
+    return np.union1d(pick, np.flatnonzero(np.asarray(labels) == 1))
+
 CLIP = 5.0
 COLUMNS = ['open', 'high', 'low', 'close', 'volume', 'amount']
 PRICE_SLOTS = [0, 1, 2, 3]

@@ -11,6 +11,7 @@ labelled anomalies, whether the row is the first of a run, and the context's mea
 Writes results/2026-11-08/subtle_anomalies.csv (stand-ins) or, with `--model kronos`,
 results/2026-11-10/subtle_anomalies_kronos.csv (real Kronos-mini), and prints the tables.
 """
+import os
 from pathlib import Path
 
 import numpy as np
@@ -20,14 +21,15 @@ from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.fusion import robust_reference
 
 LOOK = 32
+KRONOS_RESULTS = Path(os.environ.get('KRONOS_RESULTS', 'results/2026-11-10'))
 DATASETS = ['sapienza_15s', 'banksim', 's_ffsd', 'ulb_creditcard', 'xu_livshits_1h']
 RUNS = {'standin': {'sapienza_15s': 'results/2026-11-08/knowledge_boundary_missrate',
                     'banksim': 'results/2026-11-08/knowledge_boundary_missrate_banksim',
                     's_ffsd': 'results/2026-11-08/knowledge_boundary_missrate_s_ffsd',
                     'ulb_creditcard': 'results/2026-11-08/knowledge_boundary_missrate_ulb_creditcard',
                     'xu_livshits_1h': 'results/2026-11-08/knowledge_boundary_missrate_xu_livshits_1h'},
-        'kronos': {d: f'results/2026-11-10/knowledge_boundary_missrate_kronos_{d}' for d in DATASETS}}
-TABLES = {'standin': 'results/2026-11-08/subtle_anomalies.csv', 'kronos': 'results/2026-11-10/subtle_anomalies_kronos.csv'}
+        'kronos': {d: str(KRONOS_RESULTS / f'knowledge_boundary_missrate_kronos_{d}') for d in DATASETS}}
+TABLES = {'standin': 'results/2026-11-08/subtle_anomalies.csv', 'kronos': str(KRONOS_RESULTS / 'subtle_anomalies_kronos.csv')}
 
 
 def context_stats(labels, groups):

@@ -30,11 +30,11 @@ from boundary_pipeline import thin
 from boundary_standin import CAL_SEED, LOOKBACK, REF_SEED, ROW_CAP, TEST_SEED, group_windows
 from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.fusion import robust_reference
-from kronos_states import (COLUMNS, MODEL_DIR, TOKENIZER_DIR, KronosStates, denormalize, load_kronos, native_sequences,
+from kronos_states import (COLUMNS, MODEL_DIR, RESULTS, TOKENIZER_DIR, subset_positions, KronosStates, denormalize, load_kronos, native_sequences,
                            proxy_pool, proxy_sequences, self_test)
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'results/2026-11-10/kronos_rows'
+OUT = RESULTS / 'kronos_rows'
 DRAWS, STUDY_DRAWS = 5, 10
 STUDY_CAL_CAP, STUDY_TEST_CAP = 24000, 200000
 SEQUENCES_PER_BATCH = 1024
@@ -64,6 +64,8 @@ def main():
     p.add_argument('--no-prescale', action='store_true')
     p.add_argument('--force', action='store_true')
     p.add_argument('--limit', type=int, help='debug: rows per set')
+    p.add_argument('--rows-from', help='size study: take the row sets from this cache directory (another model\'s run) ...')
+    p.add_argument('--caps', default='4000,4000,8000', help='with --rows-from: rows kept per set (ref,cal,test or study_cal,study_test), plus every anomaly')
     a = p.parse_args()
     out = OUT / a.dataset
     out.mkdir(parents=True, exist_ok=True)
@@ -90,7 +92,15 @@ def main():
                 rows_per_batch=rows_per_batch, sets={})
     print(f'{a.dataset}: {len(values)} rows, {F} features, {"native bars" if native else "proxy"}; {rows_per_batch} rows per batch '
           f'({time.time() - t0:.0f}s to load)', flush=True)
-    for name, targets, histories in row_sets(windows, labels, a.study):
+    sets = row_sets(windows, labels, a.study)
+    if a.rows_from:                                 # subset of another run's rows, so the models are compared on identical rows
+        caps = [int(c) for c in a.caps.split(',')]
+        sets = []
+        for i, name in enumerate(('study_cal', 'study_test') if a.study else ('ref', 'cal', 'test')):
+            with np.load(Path(a.rows_from) / f'{name}.npz') as src:
+                keep_rows = subset_positions(src['labels'], caps[i], 100 + i)
+                sets.append((name, src['targets'][keep_rows], src['histories'][keep_rows]))
+    for name, targets, histories in sets:
         path = out / f'{name}.npz'
         if path.exists() and not a.force:
             print(f'  {name}: {path} exists, skipped', flush=True)

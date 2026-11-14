@@ -30,7 +30,7 @@ from boundary_standin import K_MAX, LOOKBACK, RANDOM_TRIALS, SEED, label_boundar
 from fusion_data import NOT_DETECTION_TARGETS, load_rows
 from kronos_ad.boundary import split_balanced
 from kronos_ad.fusion import robust_reference
-from kronos_states import KronosStates, load_kronos, native_sequences, proxy_sequences
+from kronos_states import KRONOS_MODEL, RESULTS, KronosStates, load_kronos, native_sequences, proxy_sequences
 from run_fusion import recall_at_fpr
 from run_kronos_rows import OUT as ROWS
 
@@ -38,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def default_out(dataset):
-    return ROOT / f'results/2026-11-10/knowledge_boundary_kronos_{dataset}'
+    return RESULTS / f'knowledge_boundary_kronos_{dataset}'
 
 
 def balanced_subset(y, cap, seed):
@@ -82,7 +82,7 @@ def main(dataset, out=None, intervention_cap=None, cnn_epochs=80):
     nll_pool = np.r_[cache['ref']['nll'], cache['cal']['nll']]
     nll_test = cache['test']['nll']
     cap = intervention_cap if intervention_cap is not None else (2000 if native else 600)
-    log(f'{dataset}: Kronos-mini ({meta["representation"]}, prescale {meta["prescale"]}), features {features}; '
+    log(f'{dataset}: Kronos-{KRONOS_MODEL} ({meta["representation"]}, prescale {meta["prescale"]}), features {features}; '
         f'pool rows {len(t_pool)} (reference {len(cache["ref"]["targets"])} + calibration {len(t_cal)}), test rows {len(t_test)}; '
         f'hidden states {H_pool.shape[1:]}')
     model, tokenizer, official = load_kronos()
@@ -144,7 +144,7 @@ def main(dataset, out=None, intervention_cap=None, cnn_epochs=80):
                                   ap=float(average_precision_score(pump[known], s[known])), auroc=float(roc_auc_score(pump[known], s[known])),
                                   recall_1pct_fpr=recall_at_fpr(pump[known], s[known])))
     header = dict(dataset=dataset, label_boundary=positive_name, features=features,
-                  model=dict(name='Kronos-mini + Kronos-Tokenizer-2k (official weights, offline)', d_model=meta['d_model'], layers=meta['layers'],
+                  model=dict(name=f'Kronos-{KRONOS_MODEL} (official weights, offline)', d_model=meta['d_model'], layers=meta['layers'],
                              lookback=LOOKBACK, representation=meta['representation'], prescale=meta['prescale'],
                              model_sha256=meta['model_sha256'], tokenizer_sha256=meta['tokenizer_sha256']),
                   rows=dict(pool=int(len(t_pool)), test=int(len(t_test))), error_threshold=threshold, intervention_cap=cap)

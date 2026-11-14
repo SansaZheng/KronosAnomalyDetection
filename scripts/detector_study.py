@@ -69,7 +69,7 @@ def bar_spread_to_features(mean, spread, unit_v, unit_a):
 
 
 def main(dataset, out=None):
-    out = Path(out) if out else ROOT / f'results/2026-11-10/detector_study_{dataset}'
+    out = Path(out) if out else ROWS.parent / f'detector_study_{dataset}'
     out.mkdir(parents=True, exist_ok=True)
     lines = []
 

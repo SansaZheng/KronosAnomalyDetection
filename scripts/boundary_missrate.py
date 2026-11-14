@@ -120,7 +120,7 @@ def main(dataset=DATASET, standin=None, out=None, model='standin'):
         from run_kronos_rows import OUT as ROWS
     STANDIN = Path(standin) if standin else (default_out(dataset) if model == 'standin' else kronos_out(dataset))
     OUT = Path(out) if out else (ROOT / ('results/2026-11-08/knowledge_boundary_missrate' + ('' if dataset == DATASET else f'_{dataset}'))
-                                 if model == 'standin' else ROOT / f'results/2026-11-10/knowledge_boundary_missrate_kronos_{dataset}')
+                                 if model == 'standin' else kronos_out(dataset).parent / f'knowledge_boundary_missrate_kronos_{dataset}')
     OUT.mkdir(parents=True, exist_ok=True)
     positive_name = label_boundary(dataset)
     lines = []
