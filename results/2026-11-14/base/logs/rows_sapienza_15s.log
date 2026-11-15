@@ -1,0 +1,26 @@
+Loading weights from local directory
+Loading weights from local directory
+sapienza_15s: 584104 rows, 8 features, proxy; 128 rows per batch (4s to load)
+  ref: 128/4126 rows, 3.5 rows/s, eta 19.1 min
+Loading weights from local directory
+Loading weights from local directory
+sapienza_15s: 584104 rows, 8 features, proxy; 128 rows per batch (4s to load)
+  ref: 128/4126 rows, 3.3 rows/s, eta 20.0 min
+  ref: 2688/4126 rows, 3.5 rows/s, eta 6.9 min
+  ref: 4126 rows done in 19.5 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/ref.npz
+  cal: 128/4042 rows, 2.4 rows/s, eta 27.0 min
+  cal: 2688/4042 rows, 2.5 rows/s, eta 9.1 min
+  cal: 4042 rows done in 27.2 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/cal.npz
+  test: 128/8037 rows, 2.5 rows/s, eta 53.8 min
+  test: 2688/8037 rows, 2.5 rows/s, eta 36.0 min
+  test: 5248/8037 rows, 2.5 rows/s, eta 18.8 min
+Loading weights from local directory
+Loading weights from local directory
+sapienza_15s: 584104 rows, 8 features, proxy; 128 rows per batch (4s to load)
+  ref: /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/ref.npz exists, skipped
+  cal: /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/cal.npz exists, skipped
+  test: resuming from row 5120 (/home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/test.partial.npz)
+  test: 5248/8037 rows, 2.5 rows/s, eta 18.8 min
+  test: 7808/8037 rows, 2.5 rows/s, eta 1.5 min
+  test: 8037 rows done in 19.7 min -> /home/claude/work/KronosAnomalyDetection/results/2026-11-14/base/kronos_rows/sapienza_15s/test.npz
+total 19.7 min

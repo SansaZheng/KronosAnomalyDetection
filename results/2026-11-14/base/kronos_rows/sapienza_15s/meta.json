@@ -1,0 +1,32 @@
+{
+ "dataset": "sapienza_15s",
+ "representation": "proxy",
+ "features": [
+  "std_rush_order",
+  "avg_rush_order",
+  "std_trades",
+  "std_volume",
+  "avg_volume",
+  "std_price",
+  "avg_price",
+  "avg_price_max"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": false,
+ "layers": 13,
+ "d_model": 832,
+ "model_sha256": "abff193acab6db1a0368e9773e75799d11403b6d054ee6d5f0a11aeabc5f4b83",
+ "tokenizer_sha256": "59d85f6af76a2c3b8240ea06cb21db4213b4eeca053f246b23e29cf832fc6bee",
+ "rows_per_batch": 128,
+ "sets": {
+  "test": {
+   "rows": 8037,
+   "positives": 64,
+   "seconds": 1180.8,
+   "draws": 5,
+   "hidden_states": true
+  }
+ }
+}

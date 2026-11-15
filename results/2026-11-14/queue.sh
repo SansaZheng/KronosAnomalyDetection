@@ -6,8 +6,9 @@ cd /home/claude/work/KronosAnomalyDetection && source /home/claude/work/venv/bin
 export HF_HUB_OFFLINE=1 PYTHONPATH=.:scripts MALLOC_ARENA_MAX=2 OMP_NUM_THREADS=2
 S=results/2026-11-14; ALL=999999,999999,999999
 log() { echo "$(date '+%F %T') $*" >> $S/queue.log; }
-chk() { if [ $SECONDS -gt 6000 ]; then log "QUEUE_PAUSE (time budget of this launch used; re-launch to continue)"; exit 0; fi; }
-chk() { if [ $SECONDS -gt 6000 ]; then log "QUEUE_PAUSE (time budget of this launch used; re-launch to continue)"; exit 0; fi; }
+chk() { if [ $SECONDS -gt 6500 ]; then log "QUEUE_PAUSE (time budget of this launch used; re-launch to continue)"; exit 0; fi; }
+chk() { if [ $SECONDS -gt 6500 ]; then log "QUEUE_PAUSE (time budget of this launch used; re-launch to continue)"; exit 0; fi; }
+py() { timeout $((6800 - SECONDS)) python "$@"; local rc=$?; if [ $rc = 124 ]; then log "QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)"; exit 0; fi; return $rc; }
 icap() { case $1 in xu_livshits_1h) echo 600;; ulb_creditcard) echo 100;; *) echo 200;; esac; }
 
 run() {                                    # run <model> <dataset>
@@ -15,20 +16,20 @@ run() {                                    # run <model> <dataset>
   export KRONOS_MODEL=$m KRONOS_RESULTS=$S/$m
   local R=$S/$m L=$S/$m/logs; mkdir -p $L
   if [ ! -f $R/kronos_rows/$d/test.npz ]; then
-    chk; log "$m rows $d start"; python scripts/run_kronos_rows.py --dataset $d --rows-from $S/mini/kronos_rows/$d --caps $ALL >> $L/rows_$d.log 2>&1; log "$m rows $d exit $?"
+    chk; log "$m rows $d start"; py scripts/run_kronos_rows.py --dataset $d --rows-from $S/mini/kronos_rows/$d --caps $ALL >> $L/rows_$d.log 2>&1; log "$m rows $d exit $?"
   fi
   if [ $d = xu_livshits_1h ] && [ ! -f $R/kronos_rows/$d/study_test.npz ]; then
-    chk; log "$m study-rows $d start"; python scripts/run_kronos_rows.py --dataset $d --study --draws 5 --rows-from $S/mini/kronos_rows/$d --caps $ALL >> $L/rows_$d.log 2>&1; log "$m study-rows $d exit $?"
+    chk; log "$m study-rows $d start"; py scripts/run_kronos_rows.py --dataset $d --study --draws 5 --rows-from $S/mini/kronos_rows/$d --caps $ALL >> $L/rows_$d.log 2>&1; log "$m study-rows $d exit $?"
   fi
   if [ ! -f $R/knowledge_boundary_kronos_$d/results.json ]; then
-    chk; log "$m boundary $d start"; python scripts/run_boundary_kronos_rows.py --dataset $d --intervention-cap $(icap $d) >> $L/boundary_$d.log 2>&1; log "$m boundary $d exit $?"
+    chk; log "$m boundary $d start"; py scripts/run_boundary_kronos_rows.py --dataset $d --intervention-cap $(icap $d) >> $L/boundary_$d.log 2>&1; log "$m boundary $d exit $?"
   fi
   if [ ! -f $R/knowledge_boundary_missrate_kronos_$d/missrate.csv ]; then
-    chk; log "$m missrate $d start"; python scripts/boundary_missrate.py --dataset $d --model kronos > $L/missrate_$d.log 2>&1; log "$m missrate $d exit $?"
-    python scripts/explain_missrate.py $d --model kronos > $L/explain_$d.log 2>&1; log "$m explain $d exit $?"
+    chk; log "$m missrate $d start"; py scripts/boundary_missrate.py --dataset $d --model kronos > $L/missrate_$d.log 2>&1; log "$m missrate $d exit $?"
+    py scripts/explain_missrate.py $d --model kronos > $L/explain_$d.log 2>&1; log "$m explain $d exit $?"
   fi
   if [ ! -f $R/detector_study_$d/results.json ]; then
-    chk; log "$m study $d start"; python scripts/detector_study.py --dataset $d > $L/study_$d.log 2>&1; log "$m study $d exit $?"
+    chk; log "$m study $d start"; py scripts/detector_study.py --dataset $d > $L/study_$d.log 2>&1; log "$m study $d exit $?"
   fi
 }
 
