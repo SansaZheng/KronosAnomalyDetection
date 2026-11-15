@@ -1,0 +1,37 @@
+banksim: Kronos-base (proxy, prescale True), features ['customer_reference_frequency', 'age_reference_frequency', 'gender_reference_frequency', 'merchant_reference_frequency', 'category_reference_frequency', 'amount']; pool rows 12258 (reference 7243 + calibration 5015), test rows 8998; hidden states (13, 832)
+Loading weights from local directory
+Loading weights from local directory
+teacher-forced NLL: calibration median 30.114, error threshold (90th pct, normal rows) 46.695; fraud positives pool 5760, test 1440
+  error: logistic probe balanced accuracy 0.5511 (176s)
+  error: mlp probe balanced accuracy 0.5663 (33s)
+  error: cnn probe balanced accuracy 0.5367 (1332s)
+  error: knob set k=1 dims=[292] acc=0.5679 (full 0.5367; random-1 mean 0.5504, fraction >= top-k 0.20)
+  error: tau -1.00 dlogp normal +0.2265 (y0 +0.0158, y1 +0.4371) tangent +0.0371 random -0.0248
+  error: tau -0.50 dlogp normal +0.1166 (y0 +0.0154, y1 +0.2177) tangent +0.0213 random -0.0094
+  error: tau -0.25 dlogp normal +0.0590 (y0 +0.0095, y1 +0.1086) tangent +0.0113 random -0.0040
+  error: tau -0.10 dlogp normal +0.0238 (y0 +0.0042, y1 +0.0434) tangent +0.0047 random -0.0014
+  error: tau +0.10 dlogp normal -0.0240 (y0 -0.0047, y1 -0.0433) tangent -0.0049 random +0.0012
+  error: tau +0.25 dlogp normal -0.0604 (y0 -0.0128, y1 -0.1079) tangent -0.0125 random +0.0026
+  error: tau +0.50 dlogp normal -0.1220 (y0 -0.0288, y1 -0.2151) tangent -0.0261 random +0.0040
+  error: tau +1.00 dlogp normal -0.2483 (y0 -0.0699, y1 -0.4267) tangent -0.0565 random +0.0030
+  error: done in 43.4 min (interventions on 200 balanced rows)
+  fraud: logistic probe balanced accuracy 0.6257 (336s)
+  fraud: mlp probe balanced accuracy 0.6802 (41s)
+banksim: Kronos-base (proxy, prescale True), features ['customer_reference_frequency', 'age_reference_frequency', 'gender_reference_frequency', 'merchant_reference_frequency', 'category_reference_frequency', 'amount']; pool rows 12258 (reference 7243 + calibration 5015), test rows 8998; hidden states (13, 832)
+Loading weights from local directory
+Loading weights from local directory
+teacher-forced NLL: calibration median 30.114, error threshold (90th pct, normal rows) 46.695; fraud positives pool 5760, test 1440
+  error: loaded from error_state.pkl (previous run)
+  fraud: logistic probe balanced accuracy 0.6257 (324s)
+  fraud: mlp probe balanced accuracy 0.6802 (39s)
+  fraud: cnn probe balanced accuracy 0.6483 (2510s)
+  fraud: knob set k=1 dims=[240] acc=0.7000 (full 0.6483; random-1 mean 0.6406, fraction >= top-k 0.00)
+  fraud: tau -1.00 dlogp normal -0.3929 (y0 -0.0004, y1 -0.7854) tangent -0.2394 random -0.2346
+  fraud: tau -0.50 dlogp normal -0.1298 (y0 +0.0079, y1 -0.2675) tangent -0.0563 random -0.0679
+  fraud: tau -0.25 dlogp normal -0.0418 (y0 +0.0057, y1 -0.0893) tangent -0.0128 random -0.0195
+  fraud: tau -0.10 dlogp normal -0.0136 (y0 +0.0026, y1 -0.0298) tangent -0.0030 random -0.0055
+  fraud: tau +0.10 dlogp normal +0.0109 (y0 -0.0031, y1 +0.0249) tangent +0.0010 random +0.0028
+  fraud: tau +0.25 dlogp normal +0.0227 (y0 -0.0087, y1 +0.0541) tangent -0.0008 random +0.0004
+  fraud: tau +0.50 dlogp normal +0.0305 (y0 -0.0201, y1 +0.0811) tangent -0.0135 random -0.0313
+  fraud: tau +1.00 dlogp normal +0.0270 (y0 -0.0510, y1 +0.1049) tangent -0.0559 random -0.1313
+  fraud: done in 68.1 min (interventions on 200 balanced rows)
