@@ -1,0 +1,177 @@
+{
+ "dataset": "s_ffsd",
+ "rows": 77881,
+ "representation": "proxy",
+ "draws": 5,
+ "prescale": true,
+ "model_sha256": "abff193acab6db1a0368e9773e75799d11403b6d054ee6d5f0a11aeabc5f4b83",
+ "tokenizer_sha256": "59d85f6af76a2c3b8240ea06cb21db4213b4eeca053f246b23e29cf832fc6bee",
+ "calibration_rows": 4534,
+ "test_rows": 9164,
+ "test_positives": 2394,
+ "bootstrap_units": 144,
+ "reference_rows": 46728,
+ "standin": "/home/claude/work/KronosAnomalyDetection/results/2026-11-08/knowledge_boundary_standin_s_ffsd",
+ "seed": 20261110,
+ "stack_weights": {
+  "fusion_r1_kronos": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.75,
+    0.25,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05,
+    0.0
+   ]
+  ],
+  "fusion_r1_standin": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.75,
+    0.25,
+    0.0
+   ],
+   [
+    0.0,
+    0.65,
+    0.35
+   ],
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05,
+    0.0
+   ]
+  ],
+  "fusion_r1_no_forecaster": [
+   [
+    0.05,
+    0.95
+   ],
+   [
+    0.75,
+    0.25
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    1.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05
+   ]
+  ],
+  "fusion_r2_kronos": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.75,
+    0.25,
+    0.0
+   ],
+   [
+    0.0,
+    1.0,
+    0.0
+   ],
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05,
+    0.0
+   ]
+  ],
+  "fusion_r2_standin": [
+   [
+    0.05,
+    0.95,
+    0.0
+   ],
+   [
+    0.75,
+    0.25,
+    0.0
+   ],
+   [
+    0.0,
+    0.65,
+    0.35
+   ],
+   [
+    1.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05,
+    0.0
+   ]
+  ],
+  "fusion_r2_no_forecaster": [
+   [
+    0.05,
+    0.95
+   ],
+   [
+    0.75,
+    0.25
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    1.0,
+    0.0
+   ],
+   [
+    0.95,
+    0.05
+   ]
+  ]
+ },
+ "features": [
+  "Source_reference_frequency",
+  "Target_reference_frequency",
+  "Amount",
+  "Location_reference_frequency",
+  "Type_reference_frequency"
+ ]
+}
