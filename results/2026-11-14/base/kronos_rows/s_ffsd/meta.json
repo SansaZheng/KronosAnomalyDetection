@@ -1,0 +1,29 @@
+{
+ "dataset": "s_ffsd",
+ "representation": "proxy",
+ "features": [
+  "Source_reference_frequency",
+  "Target_reference_frequency",
+  "Amount",
+  "Location_reference_frequency",
+  "Type_reference_frequency"
+ ],
+ "lookback": 32,
+ "prescale": true,
+ "draws": 5,
+ "study": false,
+ "layers": 13,
+ "d_model": 832,
+ "model_sha256": "abff193acab6db1a0368e9773e75799d11403b6d054ee6d5f0a11aeabc5f4b83",
+ "tokenizer_sha256": "59d85f6af76a2c3b8240ea06cb21db4213b4eeca053f246b23e29cf832fc6bee",
+ "rows_per_batch": 204,
+ "sets": {
+  "test": {
+   "rows": 9164,
+   "positives": 2394,
+   "seconds": 2391.0,
+   "draws": 5,
+   "hidden_states": true
+  }
+ }
+}
