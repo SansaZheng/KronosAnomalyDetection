@@ -1,0 +1,159 @@
+2026-11-14 22:14:52 mini boundary xu_livshits_1h start
+2026-11-14 22:16:56 mini boundary xu_livshits_1h exit 0
+2026-11-14 22:16:56 mini missrate xu_livshits_1h start
+2026-11-14 22:17:48 mini missrate xu_livshits_1h exit 1
+2026-11-14 22:17:49 mini explain xu_livshits_1h exit 1
+2026-11-14 22:17:49 mini study xu_livshits_1h start
+2026-11-14 22:18:36 mini study xu_livshits_1h exit 0
+2026-11-14 22:18:36 mini boundary sapienza_15s start
+2026-11-14 22:31:24 mini boundary sapienza_15s exit 0
+2026-11-14 22:31:24 mini missrate sapienza_15s start
+2026-11-14 22:32:00 mini missrate sapienza_15s exit 0
+2026-11-14 22:32:03 mini explain sapienza_15s exit 0
+2026-11-14 22:32:03 mini study sapienza_15s start
+2026-11-14 22:32:21 mini study sapienza_15s exit 0
+2026-11-14 22:32:21 mini boundary s_ffsd start
+2026-11-14 22:37:52 mini boundary s_ffsd exit 0
+2026-11-14 22:37:52 mini missrate s_ffsd start
+2026-11-14 22:42:09 mini missrate s_ffsd exit 0
+2026-11-14 22:42:11 mini explain s_ffsd exit 0
+2026-11-14 22:42:11 mini study s_ffsd start
+2026-11-14 22:42:27 mini study s_ffsd exit 0
+2026-11-14 22:42:27 mini boundary banksim start
+2026-11-14 22:53:01 mini boundary banksim exit 0
+2026-11-14 22:53:01 mini missrate banksim start
+2026-11-14 23:01:38 mini missrate banksim exit 0
+2026-11-14 23:01:41 mini explain banksim exit 0
+2026-11-14 23:01:41 mini study banksim start
+2026-11-14 23:02:03 mini study banksim exit 0
+2026-11-14 23:02:03 mini boundary ulb_creditcard start
+2026-11-14 23:08:54 mini boundary ulb_creditcard exit 0
+2026-11-14 23:08:54 mini missrate ulb_creditcard start
+2026-11-14 23:09:38 mini missrate ulb_creditcard exit 0
+2026-11-14 23:09:41 mini explain ulb_creditcard exit 0
+2026-11-14 23:09:41 mini study ulb_creditcard start
+2026-11-14 23:10:17 mini study ulb_creditcard exit 0
+2026-11-14 23:10:17 small rows xu_livshits_1h start
+2026-11-14 23:14:56 small rows xu_livshits_1h exit 0
+2026-11-14 23:14:56 small study-rows xu_livshits_1h start
+2026-11-14 23:23:10 small study-rows xu_livshits_1h exit 0
+2026-11-14 23:23:10 small boundary xu_livshits_1h start
+2026-11-14 23:29:24 small boundary xu_livshits_1h exit 0
+2026-11-14 23:29:24 small missrate xu_livshits_1h start
+2026-11-14 23:31:14 small missrate xu_livshits_1h exit 0
+2026-11-14 23:31:34 small explain xu_livshits_1h exit 0
+2026-11-14 23:31:34 small study xu_livshits_1h start
+2026-11-14 23:32:23 small study xu_livshits_1h exit 0
+2026-11-14 23:32:23 small rows sapienza_15s start
+2026-11-15 00:14:57 small rows sapienza_15s start
+2026-11-15 00:25:17 small rows sapienza_15s exit 0
+2026-11-15 00:25:17 small boundary sapienza_15s start
+2026-11-15 00:41:21 small boundary sapienza_15s exit 0
+2026-11-15 00:41:21 small missrate sapienza_15s start
+2026-11-15 00:43:08 small missrate sapienza_15s exit 0
+2026-11-15 00:43:11 small explain sapienza_15s exit 0
+2026-11-15 00:43:11 small study sapienza_15s start
+2026-11-15 00:43:28 small study sapienza_15s exit 0
+2026-11-15 00:43:28 small rows s_ffsd start
+2026-11-15 01:12:27 small rows s_ffsd exit 0
+2026-11-15 01:12:27 small boundary s_ffsd start
+2026-11-15 01:31:12 small boundary s_ffsd exit 0
+2026-11-15 01:31:12 small missrate s_ffsd start
+2026-11-15 01:46:04 small missrate s_ffsd exit 0
+2026-11-15 01:46:05 small explain s_ffsd exit 0
+2026-11-15 01:46:05 small study s_ffsd start
+2026-11-15 01:46:19 small study s_ffsd exit 0
+2026-11-15 01:46:19 small rows banksim start
+2026-11-15 02:15:05 small rows banksim start
+2026-11-15 02:34:29 small rows banksim exit 0
+2026-11-15 02:34:29 small boundary banksim start
+2026-11-15 02:43:27 small boundary banksim exit 137
+2026-11-15 02:43:27 small missrate banksim start
+2026-11-15 02:44:16 small missrate banksim exit 1
+2026-11-15 02:44:17 small explain banksim exit 1
+2026-11-15 02:44:17 small study banksim start
+2026-11-15 02:44:43 small study banksim exit 0
+2026-11-15 02:44:43 small rows ulb_creditcard start
+2026-11-15 03:55:19 small rows ulb_creditcard exit 0
+2026-11-15 03:55:19 small boundary ulb_creditcard start
+2026-11-15 04:16:09 small boundary banksim start
+2026-11-15 04:51:18 small boundary banksim exit 0
+2026-11-15 04:51:18 small missrate banksim start
+2026-11-15 05:24:19 small missrate banksim exit 0
+2026-11-15 05:24:21 small explain banksim exit 0
+2026-11-15 05:24:21 small boundary ulb_creditcard start
+2026-11-15 05:35:50 small boundary ulb_creditcard exit 0
+2026-11-15 05:35:50 small missrate ulb_creditcard start
+2026-11-15 05:38:11 small missrate ulb_creditcard exit 0
+2026-11-15 05:38:13 small explain ulb_creditcard exit 0
+2026-11-15 05:38:13 small study ulb_creditcard start
+2026-11-15 05:38:50 small study ulb_creditcard exit 0
+2026-11-15 05:38:50 base rows xu_livshits_1h start
+2026-11-15 05:49:14 base rows xu_livshits_1h exit 0
+2026-11-15 05:49:14 base study-rows xu_livshits_1h start
+2026-11-15 06:06:59 base study-rows xu_livshits_1h exit 0
+2026-11-15 06:06:59 base boundary xu_livshits_1h start
+2026-11-15 06:14:01 base boundary xu_livshits_1h exit 137
+2026-11-15 06:14:01 base missrate xu_livshits_1h start
+2026-11-15 06:14:07 base missrate xu_livshits_1h exit 1
+2026-11-15 06:14:07 base explain xu_livshits_1h exit 1
+2026-11-15 06:14:07 base study xu_livshits_1h start
+2026-11-15 06:14:55 base study xu_livshits_1h exit 0
+2026-11-15 06:14:55 base rows sapienza_15s start
+2026-11-15 06:16:51 base boundary xu_livshits_1h start
+2026-11-15 06:34:55 base boundary xu_livshits_1h exit 0
+2026-11-15 06:34:55 base missrate xu_livshits_1h start
+2026-11-15 06:38:02 base missrate xu_livshits_1h exit 0
+2026-11-15 06:38:23 base explain xu_livshits_1h exit 0
+2026-11-15 06:38:23 base rows sapienza_15s start
+2026-11-15 08:17:13 base rows sapienza_15s start
+2026-11-15 08:37:01 base rows sapienza_15s exit 0
+2026-11-15 08:37:01 base boundary sapienza_15s start
+2026-11-15 09:25:10 base boundary sapienza_15s exit 0
+2026-11-15 09:25:10 base missrate sapienza_15s start
+2026-11-15 09:29:09 base missrate sapienza_15s exit 0
+2026-11-15 09:29:12 base explain sapienza_15s exit 0
+2026-11-15 09:29:12 base study sapienza_15s start
+2026-11-15 09:29:29 base study sapienza_15s exit 0
+2026-11-15 09:29:29 base rows s_ffsd start
+2026-11-15 10:17:38 base rows s_ffsd start
+2026-11-15 10:57:34 base rows s_ffsd exit 0
+2026-11-15 10:57:34 base boundary s_ffsd start
+2026-11-15 11:59:47 base boundary s_ffsd exit 0
+2026-11-15 11:59:47 base missrate s_ffsd start
+2026-11-15 12:10:58 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 12:11:15 base missrate s_ffsd start
+2026-11-15 12:51:05 base missrate s_ffsd exit 0
+2026-11-15 12:51:06 base explain s_ffsd exit 0
+2026-11-15 12:51:06 base study s_ffsd start
+2026-11-15 12:51:21 base study s_ffsd exit 0
+2026-11-15 12:51:21 base rows banksim start
+2026-11-15 14:04:34 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 14:04:48 base rows banksim start
+2026-11-15 14:51:33 base rows banksim exit 0
+2026-11-15 14:51:33 base boundary banksim start
+2026-11-15 15:58:08 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 15:58:25 base boundary banksim start
+2026-11-15 17:07:17 base boundary banksim exit 0
+2026-11-15 17:07:17 base missrate banksim start
+2026-11-15 17:51:45 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 17:52:02 base missrate banksim start
+2026-11-15 19:21:39 base missrate banksim exit 0
+2026-11-15 19:21:41 base explain banksim exit 0
+2026-11-15 19:21:41 base study banksim start
+2026-11-15 19:22:04 base study banksim exit 0
+2026-11-15 19:22:04 base rows ulb_creditcard start
+2026-11-15 19:45:22 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 19:45:34 base rows ulb_creditcard start
+2026-11-15 21:38:54 QUEUE_PAUSE (time budget of this launch used mid-step; re-launch resumes from the checkpoint)
+2026-11-15 21:39:08 base rows ulb_creditcard start
+2026-11-15 23:28:20 base rows ulb_creditcard exit 0
+2026-11-15 23:28:20 QUEUE_PAUSE (time budget of this launch used; re-launch to continue)
+2026-11-15 23:28:34 base boundary ulb_creditcard start
+2026-11-16 01:06:38 base boundary ulb_creditcard exit 0
+2026-11-16 01:06:38 base missrate ulb_creditcard start
+2026-11-16 01:12:38 base missrate ulb_creditcard exit 0
+2026-11-16 01:12:41 base explain ulb_creditcard exit 0
+2026-11-16 01:12:41 base study ulb_creditcard start
+2026-11-16 01:13:18 base study ulb_creditcard exit 0
+2026-11-16 01:13:18 QUEUE_DONE
