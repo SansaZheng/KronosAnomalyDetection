@@ -1,0 +1,38 @@
+sapienza_15s: label knob "pump" reads hidden dimensions [63, 74]; layer weights alpha [0.16, 0.005, 0.002, 0.82, 0.014]
+  closed form: Phi = +0.436 -0.695*log(2.353 +2.204*x1) +0.873*log(1.153 +0.250*x1) -0.668*log(2.000 +0.699*x2) +0.728*log(1.988 -1.149*x2)
+  z1 (dim 63): normal median +0.33 [-0.49, +1.03], anomaly median +0.04 [-2.96, +1.03]; AUROC alone 0.348; Phi rises with z on 1% of rows
+  z2 (dim 74): normal median +0.43 [-0.86, +1.65], anomaly median -0.56 [-1.89, +0.62]; AUROC alone 0.180; Phi rises with z on 0% of rows
+  K = Phi(z): normal median -0.41, anomaly median +0.35; AUROC 0.805
+  Spearman correlation of the knob with what the row and its context look like:
+               covariate     z1     z2      K
+          B_nll_surprise -0.107 -0.329  0.326
+       L_level_magnitude -0.071 -0.242  0.238
+anomaly_share_in_context -0.010 -0.089  0.084
+ position_in_anomaly_run -0.027 -0.057  0.055
+      context_mean_abs_z -0.145 -0.352  0.356
+      row_std_rush_order -0.016 -0.018  0.017
+  context_std_rush_order -0.136 -0.144  0.162
+      row_avg_rush_order -0.030 -0.028  0.032
+  context_avg_rush_order -0.145 -0.152  0.173
+          row_std_trades -0.010  0.009 -0.008
+      context_std_trades -0.130 -0.123  0.141
+          row_std_volume -0.003  0.001 -0.002
+      context_std_volume -0.137 -0.130  0.151
+          row_avg_volume -0.035 -0.007  0.015
+      context_avg_volume -0.183 -0.119  0.153
+           row_std_price -0.103 -0.072  0.091
+       context_std_price -0.083 -0.038  0.055
+           row_avg_price -0.094 -0.193  0.201
+       context_avg_price  0.022 -0.099  0.083
+       row_avg_price_max -0.090 -0.187  0.195
+   context_avg_price_max  0.021 -0.108  0.091
+  steering on 6064 rows (64 anomalies, 6000 normal); unsteered B recomputed in 117s, max |difference to cached NLL| 0.0000
+  tau  0.0 (unsteered): AP 0.567 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 at FPR 0.0098
+  normal tau -2.0: AP 0.570 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal +0.077, anomaly +0.793 (124s)
+  normal tau -1.0: AP 0.566 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal +0.034, anomaly +0.400 (120s)
+  normal tau -0.5: AP 0.567 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal +0.016, anomaly +0.201 (122s)
+  normal tau +0.5: AP 0.568 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal -0.015, anomaly -0.204 (122s)
+  normal tau +1.0: AP 0.568 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal -0.028, anomaly -0.411 (123s)
+  normal tau +2.0: AP 0.568 AUROC 0.962 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal -0.051, anomaly -0.833 (122s)
+  random tau -2.0: AP 0.570 AUROC 0.961 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal +0.015, anomaly +0.009 (127s)
+  random tau +2.0: AP 0.567 AUROC 0.962 recall@1% 0.594 | B or K recall 0.766 | mean change of B: normal +0.012, anomaly -0.177 (128s)

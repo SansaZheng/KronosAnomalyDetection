@@ -1,0 +1,31 @@
+s_ffsd: label knob "fraud" reads hidden dimensions [220]; layer weights alpha [0.007, 0.117, 0.022, 0.111, 0.743]
+  closed form: Phi = -0.358 -1.191*log(0.622 +0.142*x1) +0.300*log(0.458 -0.047*x1)
+  z1 (dim 220): normal median -0.36 [-3.42, +1.30], anomaly median -3.57 [-5.33, +0.38]; AUROC alone 0.142; Phi rises with z on 0% of rows
+  K = Phi(z): normal median +0.09, anomaly median +2.07; AUROC 0.858
+  Spearman correlation of the knob with what the row and its context look like:
+                           covariate     z1      K
+                      B_nll_surprise  0.549 -0.549
+                   L_level_magnitude -0.156  0.156
+            anomaly_share_in_context -0.613  0.613
+             position_in_anomaly_run -0.647  0.647
+                  context_mean_abs_z  0.180 -0.180
+      row_Source_reference_frequency  0.237 -0.237
+  context_Source_reference_frequency  0.709 -0.709
+      row_Target_reference_frequency  0.506 -0.506
+  context_Target_reference_frequency  0.649 -0.649
+                          row_Amount  0.269 -0.269
+                      context_Amount  0.728 -0.728
+    row_Location_reference_frequency  0.212 -0.212
+context_Location_reference_frequency  0.060 -0.060
+        row_Type_reference_frequency  0.362 -0.362
+    context_Type_reference_frequency  0.434 -0.434
+  steering on 6159 rows (2394 anomalies, 3765 normal); unsteered B recomputed in 81s, max |difference to cached NLL| 0.0000
+  tau  0.0 (unsteered): AP 0.284 AUROC 0.317 recall@1% 0.001 | B or K recall 0.104 at FPR 0.0098
+  normal tau -2.0: AP 0.345 AUROC 0.442 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.539, anomaly +5.408 (81s)
+  normal tau -1.0: AP 0.296 AUROC 0.358 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.127, anomaly +1.524 (80s)
+  normal tau -0.5: AP 0.285 AUROC 0.323 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.012, anomaly +0.243 (81s)
+  normal tau +0.5: AP 0.285 AUROC 0.323 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.023, anomaly +0.188 (82s)
+  normal tau +1.0: AP 0.289 AUROC 0.336 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.086, anomaly +0.654 (84s)
+  normal tau +2.0: AP 0.303 AUROC 0.378 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.317, anomaly +2.176 (82s)
+  random tau -2.0: AP 0.320 AUROC 0.407 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.425, anomaly +3.745 (78s)
+  random tau +2.0: AP 0.322 AUROC 0.410 recall@1% 0.001 | B or K recall 0.104 | mean change of B: normal +0.431, anomaly +3.840 (82s)
