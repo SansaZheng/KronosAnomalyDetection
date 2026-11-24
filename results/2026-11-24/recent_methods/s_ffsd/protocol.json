@@ -1,0 +1,18 @@
+{
+ "dataset": "s_ffsd",
+ "finad_repo": "/home/claude/sansazheng/financial_unsuperviesdad",
+ "finad_commit": "2741cb7086998f65a87b29e77eaf22dd30e1c649",
+ "train_rows": 8192,
+ "reference_rows": 46728,
+ "features": 5,
+ "test_rows": 6159,
+ "anomalies": 2394,
+ "null_rows": 4434,
+ "seeds": [
+  42,
+  43,
+  44
+ ],
+ "neural_steps": 400,
+ "pretrain_steps": 200
+}

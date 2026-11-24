@@ -1,0 +1,14 @@
+remedy,variant,ap,auroc,recall_1pct_fpr,seconds_per_1000_rows,rows_with_changed_history,flagged_share_of_all_rows,train_seconds,first_loss,last_loss
+baseline,B: Kronos NLL surprise,0.5671639338670754,0.9611354166666667,0.59375,,,,,,
+baseline,B + K (Fisher),0.47011383136073565,0.9897161458333333,0.8125,,,,,,
+baseline,B + L + K (Fisher),0.872494322562512,0.9981901041666666,0.953125,,,,,,
+clean_context,history without rows above L 95th pct: B,0.5581609100561902,0.9943411458333333,0.875,26.275542135986072,0.3502638522427441,0.05071699560352266,,,
+clean_context,history without rows above L 95th pct: B + K (Fisher),0.34410303985631624,0.9880130208333332,0.453125,,,,,,
+clean_context,history without rows above L 95th pct: B + L + K (Fisher),0.8399477830092212,0.9981744791666667,0.984375,,,,,,
+clean_context,history without rows above L 99th pct: B,0.58524135730952,0.9797447916666666,0.78125,25.294387713074684,0.10257255936675462,0.009460643994905017,,,
+clean_context,history without rows above L 99th pct: B + K (Fisher),0.5024637410378606,0.9909791666666667,0.78125,,,,,,
+clean_context,history without rows above L 99th pct: B + L + K (Fisher),0.8448738393341056,0.9978515625,0.953125,,,,,,
+joint_input,8 features in 2 sequence(s) per row instead of 8: B,0.1731154352256832,0.9547369791666667,0.3125,4.721911091889654,,,,,
+joint_input,8 features in 2 sequence(s) per row instead of 8: B + L (Fisher),0.8321468088478033,0.9976119791666667,0.953125,,,,,,
+finetune,predictor fine-tuned 600 steps on unlabelled reference rows: B,0.841202794387442,0.9975286458333333,0.90625,22.90015741591416,,,1065.4126689434052,2.2720005393028258,1.0414588660001756
+finetune,predictor fine-tuned 600 steps on unlabelled reference rows: B + L (Fisher),0.8881736158195309,0.9990390625000001,0.984375,,,,,,

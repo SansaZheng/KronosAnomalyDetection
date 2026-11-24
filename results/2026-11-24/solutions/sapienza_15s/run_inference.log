@@ -1,0 +1,23 @@
+sapienza_15s: 24040 labelled test rows, 64 anomalies; 11987 normal calibration rows for p-values
+  re-scoring 6064 evaluation rows (64 anomalies) and 2000 normal calibration rows
+  baseline       B: Kronos NLL surprise                     AP 0.567 AUROC 0.961 recall@1% 0.594 
+  baseline       B + K (Fisher)                             AP 0.470 AUROC 0.990 recall@1% 0.812 
+  baseline       B + L + K (Fisher)                         AP 0.872 AUROC 0.998 recall@1% 0.953 
+  unchanged Kronos recomputed in 189s (31.2s per 1,000 rows); max |difference to cached NLL| 0.0000
+  clean_context  history without rows above L 95th pct: B   AP 0.558 AUROC 0.994 recall@1% 0.875 seconds_per_1000_rows 26.28 rows_with_changed_history 0.3503 flagged_share_of_all_rows 0.05072
+  clean_context  history without rows above L 95th pct: B + K (Fisher) AP 0.344 AUROC 0.988 recall@1% 0.453 
+  clean_context  history without rows above L 95th pct: B + L + K (Fisher) AP 0.840 AUROC 0.998 recall@1% 0.984 
+  clean_context  history without rows above L 99th pct: B   AP 0.585 AUROC 0.980 recall@1% 0.781 seconds_per_1000_rows 25.29 rows_with_changed_history 0.1026 flagged_share_of_all_rows 0.009461
+  clean_context  history without rows above L 99th pct: B + K (Fisher) AP 0.502 AUROC 0.991 recall@1% 0.781 
+  clean_context  history without rows above L 99th pct: B + L + K (Fisher) AP 0.845 AUROC 0.998 recall@1% 0.953 
+  joint_input    8 features in 2 sequence(s) per row instead of 8: B AP 0.173 AUROC 0.955 recall@1% 0.312 seconds_per_1000_rows 4.722
+  joint_input    8 features in 2 sequence(s) per row instead of 8: B + L (Fisher) AP 0.832 AUROC 0.998 recall@1% 0.953 
+  finetune step 0: loss 2.5085 (3s)
+  finetune step 100: loss 1.8368 (182s)
+  finetune step 200: loss 1.5641 (355s)
+  finetune step 300: loss 1.3397 (532s)
+  finetune step 400: loss 1.2048 (714s)
+  finetune step 500: loss 1.1050 (891s)
+  finetune step 599: loss 1.0592 (1065s)
+  finetune       predictor fine-tuned 600 steps on unlabelled reference rows: B AP 0.841 AUROC 0.998 recall@1% 0.906 seconds_per_1000_rows 22.9 train_seconds 1065 first_loss 2.272 last_loss 1.041
+  finetune       predictor fine-tuned 600 steps on unlabelled reference rows: B + L (Fisher) AP 0.888 AUROC 0.999 recall@1% 0.984 

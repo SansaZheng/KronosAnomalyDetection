@@ -1,0 +1,18 @@
+{
+ "dataset": "sapienza_15s",
+ "finad_repo": "/home/claude/sansazheng/financial_unsuperviesdad",
+ "finad_commit": "2741cb7086998f65a87b29e77eaf22dd30e1c649",
+ "train_rows": 8192,
+ "reference_rows": 385738,
+ "features": 8,
+ "test_rows": 24040,
+ "anomalies": 64,
+ "null_rows": 11987,
+ "seeds": [
+  42,
+  43,
+  44
+ ],
+ "neural_steps": 400,
+ "pretrain_steps": 200
+}

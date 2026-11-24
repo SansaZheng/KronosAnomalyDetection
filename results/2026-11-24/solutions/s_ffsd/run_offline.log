@@ -1,0 +1,23 @@
+s_ffsd: 6159 labelled test rows, 2394 anomalies; 4434 normal calibration rows for p-values
+  fusion         B: Kronos NLL surprise                     AP 0.284 AUROC 0.317 recall@1% 0.001 
+  fusion         L: ordinary level magnitude                AP 0.673 AUROC 0.766 recall@1% 0.000 
+  fusion         K: Kronos knob                             AP 0.815 AUROC 0.858 recall@1% 0.190 
+  fusion         B + K (Fisher)                             AP 0.780 AUROC 0.841 recall@1% 0.126 
+  fusion         B + L (Fisher)                             AP 0.417 AUROC 0.631 recall@1% 0.000 
+  fusion         L + K (Fisher)                             AP 0.843 AUROC 0.877 recall@1% 0.269 
+  fusion         B + L + K (Fisher)                         AP 0.800 AUROC 0.860 recall@1% 0.242 
+  two_stage      Kronos on rows above the reference 99th pct of L AP 0.673 AUROC 0.766 recall@1% 0.000 kronos_share_of_test_rows 0.006677 anomalies_screened_in 0.0004177
+  two_stage      Kronos on rows above the reference 98th pct of L AP 0.673 AUROC 0.766 recall@1% 0.000 kronos_share_of_test_rows 0.006677 anomalies_screened_in 0.0004177
+  two_stage      Kronos on rows above the reference 95th pct of L AP 0.673 AUROC 0.766 recall@1% 0.000 kronos_share_of_test_rows 0.03794 anomalies_screened_in 0.002506
+  two_stage      Kronos on rows above the reference 90th pct of L AP 0.673 AUROC 0.766 recall@1% 0.000 kronos_share_of_test_rows 0.06176 anomalies_screened_in 0.002924
+  two_stage      Kronos on rows above the reference 80th pct of L AP 0.673 AUROC 0.766 recall@1% 0.000 kronos_share_of_test_rows 0.1056 anomalies_screened_in 0.01044
+  two_stage      Kronos on rows above the reference 50th pct of L AP 0.857 AUROC 0.911 recall@1% 0.266 kronos_share_of_test_rows 0.4587 anomalies_screened_in 0.8797
+  two_stage      Kronos on every row                        AP 0.800 AUROC 0.860 recall@1% 0.242 kronos_share_of_test_rows 1 anomalies_screened_in 1
+  rolling        B                    fixed on calibration       false-alarm rate 0.0085 recall 0.001 alarm share 0.0119
+  rolling        B                    rolling, last 500 rows     false-alarm rate 0.0109 recall 0.005 alarm share 0.0131
+  rolling        B                    rolling, last 2000 rows    false-alarm rate 0.0072 recall 0.001 alarm share 0.0113
+  rolling        B                    rolling, last 5000 rows    false-alarm rate 0.0074 recall 0.000 alarm share 0.0112
+  rolling        B + L + K (Fisher)   fixed on calibration       false-alarm rate 0.0356 recall 0.385 alarm share 0.0862
+  rolling        B + L + K (Fisher)   rolling, last 500 rows     false-alarm rate 0.0127 recall 0.016 alarm share 0.0143
+  rolling        B + L + K (Fisher)   rolling, last 2000 rows    false-alarm rate 0.0114 recall 0.024 alarm share 0.0138
+  rolling        B + L + K (Fisher)   rolling, last 5000 rows    false-alarm rate 0.0101 recall 0.040 alarm share 0.0153
