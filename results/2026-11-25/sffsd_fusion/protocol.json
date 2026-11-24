@@ -1,0 +1,57 @@
+{
+ "dataset": "s_ffsd",
+ "test_rows": 6159,
+ "test_fraud": 2394,
+ "seeds": [
+  42,
+  43,
+  44
+ ],
+ "selections": [
+  {
+   "seed": 42,
+   "without_knob": [
+    "hbos",
+    "lof",
+    "L"
+   ],
+   "with_knob": [
+    "hbos",
+    "lof",
+    "K",
+    "L",
+    "ocsvm"
+   ],
+   "null_rows": 2217,
+   "selection_rows": 2989,
+   "selection_fraud": 772
+  },
+  {
+   "seed": 43,
+   "without_knob": [
+    "hbos"
+   ],
+   "with_knob": [
+    "hbos",
+    "K",
+    "ocsvm"
+   ],
+   "null_rows": 2217,
+   "selection_rows": 2989,
+   "selection_fraud": 772
+  },
+  {
+   "seed": 44,
+   "without_knob": [
+    "hbos"
+   ],
+   "with_knob": [
+    "hbos"
+   ],
+   "null_rows": 2217,
+   "selection_rows": 2989,
+   "selection_fraud": 772
+  }
+ ],
+ "finad_commit": "2741cb7086998f65a87b29e77eaf22dd30e1c649"
+}
