@@ -18,3 +18,4 @@ results/2026-11-10/kronos_rows/*/*.npz
 results/2026-11-10/knowledge_boundary_kronos_*/*_state.pkl
 results/2026-11-14/*/kronos_rows/*/*.npz
 results/2026-11-14/*/knowledge_boundary_kronos_*/*_state.pkl
+results/2026-11-26/sffsd_best/*.npz
