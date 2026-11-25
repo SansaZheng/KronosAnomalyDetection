@@ -1,5 +1,6 @@
-  no states for lookback 128; Kronos blocks@128 skipped
 labelled rows: reference 16939 (2089 fraud), calibration 6519 (772 fraud), test 6159 (2394 fraud)
+second validation rule: validate on the last 3260 calibration rows (374 fraud)
+test burst bins [7, 8, 9]: 1889 of 2394 fraud rows; outside the burst 3983 rows, 505 fraud
   without Kronos     ordinary detectors                                         logistic C=1     val AP 0.088 R@1% 0.001 | test AP 0.731 AUROC 0.809 R@1% 0.003 R@5% 0.544
   without Kronos     ordinary detectors                                         logistic C=0.05  val AP 0.089 R@1% 0.001 | test AP 0.712 AUROC 0.775 R@1% 0.003 R@5% 0.541
   without Kronos     ordinary detectors                                         boosting         val AP 0.351 R@1% 0.089 | test AP 0.413 AUROC 0.540 R@1% 0.001 R@5% 0.001
@@ -33,6 +34,18 @@ labelled rows: reference 16939 (2089 fraud), calibration 6519 (772 fraud), test 
   Kronos only        B + K + twenty dimensions + PCA, with context              logistic C=1     val AP 0.222 R@1% 0.038 | test AP 0.878 AUROC 0.893 R@1% 0.533 R@5% 0.682
   Kronos only        B + K + twenty dimensions + PCA, with context              logistic C=0.05  val AP 0.220 R@1% 0.028 | test AP 0.869 AUROC 0.888 R@1% 0.492 R@5% 0.663
   Kronos only        B + K + twenty dimensions + PCA, with context              boosting         val AP 0.217 R@1% 0.028 | test AP 0.572 AUROC 0.777 R@1% 0.000 R@5% 0.004
+  Kronos only        knob K, 128-row context                                    logistic C=1     val AP 0.218 R@1% 0.078 | test AP 0.843 AUROC 0.862 R@1% 0.553 R@5% 0.612
+  Kronos only        knob K, 128-row context                                    logistic C=0.05  val AP 0.211 R@1% 0.075 | test AP 0.844 AUROC 0.863 R@1% 0.553 R@5% 0.614
+  Kronos only        knob K, 128-row context                                    boosting         val AP 0.170 R@1% 0.030 | test AP 0.594 AUROC 0.778 R@1% 0.001 R@5% 0.034
+  Kronos only        knob K with context, 128-row context                       logistic C=1     val AP 0.210 R@1% 0.052 | test AP 0.844 AUROC 0.859 R@1% 0.571 R@5% 0.602
+  Kronos only        knob K with context, 128-row context                       logistic C=0.05  val AP 0.211 R@1% 0.053 | test AP 0.846 AUROC 0.861 R@1% 0.571 R@5% 0.602
+  Kronos only        knob K with context, 128-row context                       boosting         val AP 0.205 R@1% 0.053 | test AP 0.808 AUROC 0.847 R@1% 0.252 R@5% 0.533
+  Kronos only        B + K, 32- and 128-row contexts                            logistic C=1     val AP 0.255 R@1% 0.071 | test AP 0.835 AUROC 0.850 R@1% 0.491 R@5% 0.607
+  Kronos only        B + K, 32- and 128-row contexts                            logistic C=0.05  val AP 0.252 R@1% 0.071 | test AP 0.836 AUROC 0.850 R@1% 0.491 R@5% 0.612
+  Kronos only        B + K, 32- and 128-row contexts                            boosting         val AP 0.225 R@1% 0.040 | test AP 0.577 AUROC 0.770 R@1% 0.000 R@5% 0.000
+  Kronos only        B + K with context, 32- and 128-row contexts               logistic C=1     val AP 0.202 R@1% 0.018 | test AP 0.882 AUROC 0.897 R@1% 0.619 R@5% 0.696
+  Kronos only        B + K with context, 32- and 128-row contexts               logistic C=0.05  val AP 0.205 R@1% 0.019 | test AP 0.883 AUROC 0.898 R@1% 0.624 R@5% 0.696
+  Kronos only        B + K with context, 32- and 128-row contexts               boosting         val AP 0.226 R@1% 0.035 | test AP 0.818 AUROC 0.864 R@1% 0.306 R@5% 0.457
   Kronos only        day-frozen surprise, 32-row days                           logistic C=1     val AP 0.189 R@1% 0.021 | test AP 0.706 AUROC 0.761 R@1% 0.057 R@5% 0.462
   Kronos only        day-frozen surprise, 32-row days                           logistic C=0.05  val AP 0.189 R@1% 0.021 | test AP 0.707 AUROC 0.761 R@1% 0.058 R@5% 0.462
   Kronos only        day-frozen surprise, 32-row days                           boosting         val AP 0.199 R@1% 0.039 | test AP 0.485 AUROC 0.651 R@1% 0.000 R@5% 0.000
@@ -66,9 +79,18 @@ labelled rows: reference 16939 (2089 fraud), calibration 6519 (772 fraud), test 
   Kronos + ordinary  ordinary detectors + raw + B + K, all context              logistic C=1     val AP 0.223 R@1% 0.035 | test AP 0.854 AUROC 0.888 R@1% 0.411 R@5% 0.545
   Kronos + ordinary  ordinary detectors + raw + B + K, all context              logistic C=0.05  val AP 0.276 R@1% 0.053 | test AP 0.868 AUROC 0.894 R@1% 0.472 R@5% 0.626
   Kronos + ordinary  ordinary detectors + raw + B + K, all context              boosting         val AP 0.396 R@1% 0.126 | test AP 0.733 AUROC 0.835 R@1% 0.116 R@5% 0.248
+  Kronos + ordinary  ordinary + raw + B + K, 32- and 128-row contexts           logistic C=1     val AP 0.159 R@1% 0.006 | test AP 0.905 AUROC 0.915 R@1% 0.653 R@5% 0.768
+  Kronos + ordinary  ordinary + raw + B + K, 32- and 128-row contexts           logistic C=0.05  val AP 0.203 R@1% 0.010 | test AP 0.901 AUROC 0.912 R@1% 0.645 R@5% 0.753
+  Kronos + ordinary  ordinary + raw + B + K, 32- and 128-row contexts           boosting         val AP 0.377 R@1% 0.117 | test AP 0.705 AUROC 0.825 R@1% 0.076 R@5% 0.215
+  Kronos + ordinary  ordinary + raw + B + K with Kronos context, 32 and 128     logistic C=1     val AP 0.194 R@1% 0.009 | test AP 0.904 AUROC 0.917 R@1% 0.696 R@5% 0.751
+  Kronos + ordinary  ordinary + raw + B + K with Kronos context, 32 and 128     logistic C=0.05  val AP 0.218 R@1% 0.022 | test AP 0.903 AUROC 0.916 R@1% 0.697 R@5% 0.746
+  Kronos + ordinary  ordinary + raw + B + K with Kronos context, 32 and 128     boosting         val AP 0.368 R@1% 0.104 | test AP 0.718 AUROC 0.847 R@1% 0.017 R@5% 0.368
   Kronos + ordinary  everything                                                 logistic C=1     val AP 0.253 R@1% 0.058 | test AP 0.866 AUROC 0.891 R@1% 0.475 R@5% 0.622
   Kronos + ordinary  everything                                                 logistic C=0.05  val AP 0.307 R@1% 0.093 | test AP 0.864 AUROC 0.890 R@1% 0.447 R@5% 0.616
   Kronos + ordinary  everything                                                 boosting         val AP 0.376 R@1% 0.096 | test AP 0.662 AUROC 0.832 R@1% 0.002 R@5% 0.195
-selected on validation, without Kronos: ordinary detectors + raw features, with context / boosting -> test AP 0.652 AUROC 0.818 R@1% 0.011 R@5% 0.040
-selected on validation, Kronos only: B + K with context + day-frozen surprise / boosting -> test AP 0.459 AUROC 0.671 R@1% 0.000 R@5% 0.000
-selected on validation, Kronos + ordinary: ordinary detectors + raw + B + K, all context / boosting -> test AP 0.733 AUROC 0.835 R@1% 0.116 R@5% 0.248
+selected by [reference -> calibration], without Kronos: ordinary detectors + raw features, with context / boosting (val_ap 0.427) -> test AP 0.652 AUROC 0.818 R@1% 0.011 R@5% 0.040
+selected by [reference -> calibration], Kronos only: B + K with context + day-frozen surprise / boosting (val_ap 0.262) -> test AP 0.459 AUROC 0.671 R@1% 0.000 R@5% 0.000
+selected by [reference -> calibration], Kronos + ordinary: ordinary detectors + raw + B + K, all context / boosting (val_ap 0.396) -> test AP 0.733 AUROC 0.835 R@1% 0.116 R@5% 0.248
+selected by [reference + first half of calibration -> second half], without Kronos: ordinary detectors / boosting (val2_ap 0.238) -> test AP 0.413 AUROC 0.540 R@1% 0.001 R@5% 0.001
+selected by [reference + first half of calibration -> second half], Kronos only: B + K + day-frozen surprise / boosting (val2_ap 0.282) -> test AP 0.470 AUROC 0.672 R@1% 0.000 R@5% 0.000
+selected by [reference + first half of calibration -> second half], Kronos + ordinary: everything / logistic C=0.05 (val2_ap 0.269) -> test AP 0.864 AUROC 0.890 R@1% 0.447 R@5% 0.616
