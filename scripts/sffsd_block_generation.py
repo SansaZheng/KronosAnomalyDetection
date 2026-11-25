@@ -67,12 +67,13 @@ def frozen(D):
     print(f'frozen D={D} standalone on labelled test rows:', {k: round(v, 3) for k, v in metrics(labels[targets][test], nll[test].sum(axis=1)).items()})
 
 
-def generate(D, S, part):
+def generate(D, S, part, max_blocks=None):
     z_raw, parts, labels, states = setup()
     F, model, tok = z_raw.shape[1], states.model, states.tokenizer
     part_rows = np.flatnonzero(parts == part)
     starts = np.arange((part_rows[0] // D) * D, part_rows[-1] + 1, D)
     starts = starts[(starts >= LOOK) & (starts + D <= len(z_raw))]
+    starts = starts[:max_blocks]
     score, block_of, t0 = np.full((len(z_raw), F), np.nan, np.float32), np.full(len(z_raw), -1), time.time()
     batch = max(1, 4096 // (F * S))                                   # blocks per batch
     for a in range(0, len(starts), batch):
@@ -128,6 +129,7 @@ if __name__ == '__main__':
     parser.add_argument('--block', type=int, default=32)
     parser.add_argument('--samples', type=int, default=8)
     parser.add_argument('--part', default='test')
+    parser.add_argument('--max-blocks', type=int)
     a = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
-    frozen(a.block) if a.mode == 'frozen' else generate(a.block, a.samples, a.part)
+    frozen(a.block) if a.mode == 'frozen' else generate(a.block, a.samples, a.part, a.max_blocks)

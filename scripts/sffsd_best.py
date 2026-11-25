@@ -15,6 +15,7 @@ Feature blocks
   PCA     sixteen principal components of the last-layer hidden state (fitted on reference rows)
   *_ctx   rolling means (previous 8 / 32 / 128 rows) and an exponential average of a block, labels unseen
   @128    the same Kronos block computed with a 128-row context instead of 32
+  F32/F128  NLL surprise with the context frozen at the start of each 32- / 128-row "day"
 
 Outputs: results/2026-11-26/sffsd_best/{candidates.csv, selected.json, run.log}.
 """
@@ -112,6 +113,12 @@ def build_blocks(log):
         ok = reference[reference >= lookback]
         pca = PCA(16, random_state=SEED).fit(Hs[ok, -1])
         blocks['PCA' + tag] = (np.column_stack([pca.transform(np.nan_to_num(Hs[:, -1]))]), [f'pc{i}' for i in range(16)])
+    for D in (32, 128):                       # "day"-frozen reconstruction: scripts/sffsd_block_generation.py --mode frozen
+        path = OUT / f'frozen_D{D}.npz'
+        if path.exists():
+            fz = np.load(path)
+            nllf = np.concatenate([np.full((fz['targets'][0], fz['nll_feature'].shape[1]), np.nan, np.float32), fz['nll_feature']])
+            blocks[f'F{D}'] = (np.column_stack([nllf.sum(axis=1), nllf]), [f'F{D}'] + [f'F{D}_f{i}' for i in range(nllf.shape[1])])
     for name in list(blocks):
         if name.startswith(('ORD', 'RAW', 'B', 'K')) and not name.startswith('K20'):
             blocks[name + '_ctx'] = context(*blocks[name])
@@ -134,6 +141,13 @@ CANDIDATES = [
     ('Kronos only', 'knob K with context, 128-row context', ['K@128', 'K@128_ctx']),
     ('Kronos only', 'B + K, 32- and 128-row contexts', ['B', 'K', 'B@128', 'K@128']),
     ('Kronos only', 'B + K with context, 32- and 128-row contexts', ['B', 'K', 'B_ctx', 'K_ctx', 'B@128', 'K@128', 'B@128_ctx', 'K@128_ctx']),
+    ('Kronos only', 'day-frozen surprise, 32-row days', ['F32']),
+    ('Kronos only', 'day-frozen surprise, 128-row days', ['F128']),
+    ('Kronos only', 'B + day-frozen surprise (32 and 128)', ['B', 'F32', 'F128']),
+    ('Kronos only', 'B + K + day-frozen surprise', ['B', 'K', 'F32', 'F128']),
+    ('Kronos only', 'B + K with context + day-frozen surprise', ['B', 'K', 'B_ctx', 'K_ctx', 'F32', 'F128']),
+    ('Kronos + ordinary', 'ordinary + raw + B + K + day-frozen surprise', ['ORD', 'RAW', 'B', 'K', 'F32', 'F128']),
+    ('Kronos + ordinary', 'ordinary + raw + B + K with Kronos context + day-frozen', ['ORD', 'RAW', 'B', 'K', 'B_ctx', 'K_ctx', 'F32', 'F128']),
     ('Kronos + ordinary', 'ordinary detectors + B + K', ['ORD', 'B', 'K']),
     ('Kronos + ordinary', 'ordinary detectors + raw + B + K', ['ORD', 'RAW', 'B', 'K']),
     ('Kronos + ordinary', 'ordinary detectors + raw + B + K, Kronos context', ['ORD', 'RAW', 'B', 'K', 'B_ctx', 'K_ctx']),
