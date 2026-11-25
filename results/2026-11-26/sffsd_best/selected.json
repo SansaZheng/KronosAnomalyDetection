@@ -1,0 +1,50 @@
+{
+ "without Kronos": {
+  "family": "without Kronos",
+  "features": "ordinary detectors + raw features, with context",
+  "model": "boosting",
+  "n_features": 90,
+  "val_ap": 0.42673958927058364,
+  "val_auroc": 0.781887441161011,
+  "val_recall_1pct": 0.1878238341968912,
+  "val_recall_5pct": 0.33678756476683935,
+  "val_recall_10pct": 0.41968911917098445,
+  "test_ap": 0.6523516401588602,
+  "test_auroc": 0.8179530277664058,
+  "test_recall_1pct": 0.01086048454469507,
+  "test_recall_5pct": 0.03968253968253968,
+  "test_recall_10pct": 0.366750208855472
+ },
+ "Kronos only": {
+  "family": "Kronos only",
+  "features": "B + K with context + day-frozen surprise",
+  "model": "boosting",
+  "n_features": 67,
+  "val_ap": 0.2622675929251772,
+  "val_auroc": 0.7161340541719897,
+  "val_recall_1pct": 0.04792746113989637,
+  "val_recall_5pct": 0.17357512953367876,
+  "val_recall_10pct": 0.3018134715025907,
+  "test_ap": 0.4589344311167053,
+  "test_auroc": 0.6709925544272368,
+  "test_recall_1pct": 0.0,
+  "test_recall_5pct": 0.0,
+  "test_recall_10pct": 0.003341687552213868
+ },
+ "Kronos + ordinary": {
+  "family": "Kronos + ordinary",
+  "features": "ordinary detectors + raw + B + K, all context",
+  "model": "boosting",
+  "n_features": 145,
+  "val_ap": 0.39630646425931687,
+  "val_auroc": 0.8189851925447023,
+  "val_recall_1pct": 0.12564766839378239,
+  "val_recall_5pct": 0.2759067357512953,
+  "val_recall_10pct": 0.44430051813471505,
+  "test_ap": 0.7331789024090666,
+  "test_auroc": 0.8347380736036639,
+  "test_recall_1pct": 0.1161236424394319,
+  "test_recall_5pct": 0.24770258980785295,
+  "test_recall_10pct": 0.4223057644110276
+ }
+}
