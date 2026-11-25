@@ -180,6 +180,17 @@ def main():
     split = {p: np.flatnonzero(usable & (parts == p)) for p in ('reference', 'calibration', 'test')}
     log('labelled rows: ' + ', '.join(f'{p} {len(i)} ({int(labels[i].sum())} fraud)' for p, i in split.items()))
     fit_all = np.r_[split['reference'], split['calibration']]
+    half = len(split['calibration']) // 2               # second rule: reference + first half of calibration -> second half
+    fit_half, val_half = np.r_[split['reference'], split['calibration'][:half]], split['calibration'][half:]
+    log(f'second validation rule: validate on the last {len(val_half)} calibration rows ({int(labels[val_half].sum())} fraud)')
+    # The test period holds one long fraud burst: 1,000-row bins where more than half of the labelled rows are fraud.
+    # Rows outside it are scored separately, because detecting "we are inside the burst" is a different skill.
+    t0 = np.flatnonzero(parts == 'test')[0]
+    bins = (split['test'] - t0) // 1000
+    share = pd.Series(labels[split['test']]).groupby(bins).mean()
+    outside = ~np.isin(bins, share.index[share > 0.5])
+    log(f'test burst bins {share.index[share > 0.5].tolist()}: {int(labels[split["test"]][~outside].sum())} of {int(labels[split["test"]].sum())} '
+        f'fraud rows; outside the burst {int(outside.sum())} rows, {int(labels[split["test"]][outside].sum())} fraud')
     table = []
     for family, name, keys in CANDIDATES:
         if any(k not in blocks for k in keys):
@@ -188,19 +199,22 @@ def main():
         for model_name, make in MODELS.items():
             val = make().fit(Xc[split['reference']], labels[split['reference']]).predict_proba(Xc[split['calibration']])[:, 1]
             test = make().fit(Xc[fit_all], labels[fit_all]).predict_proba(Xc[split['test']])[:, 1]
+            val2 = make().fit(Xc[fit_half], labels[fit_half]).predict_proba(Xc[val_half])[:, 1]
             row = dict(family=family, features=name, model=model_name, n_features=Xc.shape[1],
-                       **metrics(labels[split['calibration']], val, 'val_'), **metrics(labels[split['test']], test, 'test_'))
+                       **metrics(labels[split['calibration']], val, 'val_'), **metrics(labels[val_half], val2, 'val2_'),
+                       **metrics(labels[split['test']], test, 'test_'), **metrics(labels[split['test']][outside], test[outside], 'outside_'))
             table.append(row)
             pd.DataFrame(table).to_csv(OUT / 'candidates.csv', index=False)
             log(f'  {family:18s} {name:58s} {model_name:16s} val AP {row["val_ap"]:.3f} R@1% {row["val_recall_1pct"]:.3f} '
                 f'| test AP {row["test_ap"]:.3f} AUROC {row["test_auroc"]:.3f} R@1% {row["test_recall_1pct"]:.3f} R@5% {row["test_recall_5pct"]:.3f}')
     frame = pd.DataFrame(table)
     chosen = {}
-    for family, part in frame.groupby('family', sort=False):
-        best = part.sort_values('val_ap', ascending=False).iloc[0]
-        chosen[family] = best.to_dict()
-        log(f'selected on validation, {family}: {best.features} / {best.model} -> test AP {best.test_ap:.3f} '
-            f'AUROC {best.test_auroc:.3f} R@1% {best.test_recall_1pct:.3f} R@5% {best.test_recall_5pct:.3f}')
+    for rule, column in (('reference -> calibration', 'val_ap'), ('reference + first half of calibration -> second half', 'val2_ap')):
+        for family, part in frame.groupby('family', sort=False):
+            best = part.sort_values(column, ascending=False).iloc[0]
+            chosen[f'{rule} | {family}'] = best.to_dict()
+            log(f'selected by [{rule}], {family}: {best.features} / {best.model} ({column} {best[column]:.3f}) -> test AP {best.test_ap:.3f} '
+                f'AUROC {best.test_auroc:.3f} R@1% {best.test_recall_1pct:.3f} R@5% {best.test_recall_5pct:.3f}')
     (OUT / 'selected.json').write_text(json.dumps(chosen, indent=1) + '\n')
     (OUT / 'run.log').write_text('\n'.join(lines) + '\n')
 
